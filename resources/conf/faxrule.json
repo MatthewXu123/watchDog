@@ -1,0 +1,122 @@
+[
+    {
+        "ruleCode":"#1",
+        "alarmFaxRuleDTOList" : [
+        {
+            "alarmCode": "Al_Com_High_Press_L1",
+            "description" :"高压报警(开关量)",
+            "count":1,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        },
+        {
+            "alarmCode": "Al_High_Cond_Press_L1",
+            "description":"排气压力高",
+            "count":1,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        },
+        {
+            "alarmCode": "AL_Com_Phase_Error_L1",
+            "description":"机组电源报警",
+            "count":1,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        },
+        {
+            "alarmCode": "AL_High_Suct_Press",
+            "description":"L1 - 吸气压力高",
+            "count":1,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        },
+	{
+            "alarmCode": "Tag_High_Temp",
+            "description":"特定柜子高温报警",
+            "count":1,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        }
+        ]
+    },
+    {
+        "ruleCode":"#2",
+        "alarmFaxRuleDTOList" : [
+        {
+            "alarmCode": "OFFLINE",
+            "description":"机组离线",
+            "count":1,
+            "minCallDelay":30,
+            "dayQueryDelay":10,
+            "nightQueryDelay":10,
+            "maxCallTimes":2
+        }
+        ]
+    },
+    {
+        "ruleCode":"#3",
+        "alarmFaxRuleDTOList" : [
+        {
+            "alarmCode": "High_Temp",
+            "description":"高温报警",
+            "count":1,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        }
+        ]
+    },
+    {
+        "ruleCode":"#4",
+        "alarmFaxRuleDTOList" : [
+        {
+            "alarmCode": "LT_High_Temp",
+            "description":"低温柜高温报警",
+            "count":3,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        }
+        ]
+    },
+    {
+        "ruleCode":"#5",
+        "alarmFaxRuleDTOList" : [
+        {
+            "alarmCode": "LT_High_Temp",
+            "description":"低温柜高温报警",
+            "count":3,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        }
+        ]
+    },
+    {
+        "ruleCode":"#6",
+        "alarmFaxRuleDTOList" : [
+        {
+            "alarmCode": "MT_High_Temp",
+            "description":"中温柜高温报警",
+            "count":3,
+            "minCallDelay":30,
+            "dayQueryDelay":15,
+            "nightQueryDelay":25,
+            "maxCallTimes":2
+        }
+        ]
+    }
+]

@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: lib/weixin-java-cp.jar lib/weixin-java-common.jar lib/xstream.jar lib/xmlpull.jar lib/xpp3_min.jar lib/slf4j-api.jar lib/fluent-hc.jar lib/httpclient.jar lib/httpcore.jar lib/commons-logging.jar lib/httpmime.jar lib/gson.jar lib/commons-codec.jar lib/commons-io.jar lib/json-simple.jar lib/junit.jar lib/hamcrest-core.jar lib/postgresql-8.2.jar lib/waffle-jna.jar lib/jna.jar lib/jna-platform.jar lib/guava.jar lib/slf4j-simple.jar lib/log4j.jar lib/dom4j.jar lib/xml-apis.jar lib/jaxen.jar
+Main-Class: watchDog.listener.Dog
+

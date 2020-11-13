@@ -1,0 +1,44 @@
+.tr-color {
+	background-color: #ccc;
+}
+
+.td-online {
+	background-color: #C7EDCC;
+}
+
+table, table tr th, table tr td {
+	border: 1px solid #c1b8b8ad;
+}
+
+table {
+	min-height: 25px;
+	line-height: 25px;
+	border-collapse: collapse;
+}
+
+.input-confirm {
+	position: fixed;
+	right: 10px;
+	top: 10px;
+}
+
+.button-import-csv {
+	position: fixed;
+	right: 85px;
+	top: 10px;
+}
+
+.button-import-log {
+	position: fixed;
+	right: 160px;
+	top: 10px;
+}
+.button-import-member {
+	position: fixed;
+    right: 260px;
+    top: 10px;
+}
+/* input{
+	background:transparent;
+	border:none;
+} */

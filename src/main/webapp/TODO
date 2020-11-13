@@ -1,0 +1,57 @@
+            重要报警符号
+
+设备变量自定义
+
+	回复的是idsite，而不是tag
+
+活动报警页面
+活动报警，复位报警分开
+活动报警隐藏细节
+
+门店经理每周报告
+1. weekly energy
+排名
+2. weekly high temp alarm
+排名
+3. weekly alarms
+排名
+4. out of SLA weekly
+5. 报警确认平均时间 
+   上午
+   下午
+ 半晚
+ 午夜
+
+HQ每周报告
+1. weekly energy 排名
+2. weekly high temp alarm 排名, weekly alarms排名
+3. out of SLA weekly  报警确认平均时间 
+   上午
+   下午
+ 半晚
+ 午夜
+
+
+门店经理每月报告
+1. weekly energy月趋势
+2. weekly high temp alarm月趋势
+3. weekly alarms月趋势
+4. out of SLA 月趋势
+
+					select a.idalarm, a.kidsupervisor,a.idvariable,d.iddevice,d.iddevmdl,v.code
+					from lgalarmactive a
+					inner join cfsupervisors s on a.kidsupervisor = s.id
+					inner join lgdevice d on d.kidsupervisor = s.id
+					inner join lgvariable v on v.iddevice = d.iddevice and v.idvariable=a.idvariable and v.kidsupervisor = s.id
+					inner join cfvarmdl on d.iddevmdl = cfvarmdl.iddevmdl and v.code = cfvarmdl.code
+					where a.ackremotetime is null 
+					and v.code in (select distinct(code) from cfvarmdl where parameter like 'hightempalarm')
+					order by d.iddevice
+					
+					select * from lgalarmactive where iddevmdl=1531 and code = 's_HI'
+					select * from cfvarmdl limit 100
+					select * from lgdevice where kidsupervisor =245 and iddevmdl=1531
+					
+					select * from lgalarmactive where idalarm = 40087
+					274 32 45898
+					select * from lgvariable where iddevice = 252 and idvariable=63086

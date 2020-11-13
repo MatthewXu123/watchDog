@@ -1,0 +1,322 @@
+body {
+	padding: 0;
+	margin: 0;
+}
+.more{
+	position: fixed;
+    top: 0.5rem;
+    right:0;
+    z-index:10;
+}
+.dummy{
+	height:0rem;
+	margin-bottom:7rem;
+}
+.row_alarm {
+	position: relative;
+	margin: 0 auto;
+	width: 98%;
+	height: 16rem;
+	background-color: #E8E8E8;
+	border-radius: 1rem;
+	margin-top: .5rem;
+	font-size: 2rem;
+}
+.row_spliter {
+	margin-top: 2.5rem;
+	margin-bottom: 2.5rem;
+	width: 98%;
+	text-align: center;
+	font-weight: bold;
+}
+
+.row_alarm_selected {
+	border-style: solid;
+	border-color: green;
+	border-width: 2px;
+}
+
+.circle_span {
+	height: 10rem;
+	width: 8rem;
+	position: absolute;
+	right: 0rem;
+	top: 0rem;
+	background-position: 75% 25%;
+	background-repeat: no-repeat;
+	background-image: url(../img/unselected.png);
+}
+
+.circle_selected {
+	background-image: url(../img/selected.png);
+}
+
+.alarm_description {
+	float: left;
+	margin-top: .5rem;
+	margin-left: 1.5rem;
+	font-size: 2rem;
+}
+.device_status{
+	float: left;
+    height: 3rem;
+    margin-left: 0.8rem;
+}
+.devicelist_status{
+    width: 5rem;
+    height: 5rem;
+    margin-left: 0.8rem;
+}
+.devicelist_div{
+	font-size:3rem;
+}
+.alarm_device {
+	float: left;
+	clear: both;
+	margin-left: 1.5rem;
+}
+.alarm_starttime {
+	float: left;
+	clear: left;
+	margin-left: 1.5rem;
+	width: 30rem;
+}
+
+.duration {
+	float: left;
+	clear: left;
+	margin-left: 1.5rem;
+}
+
+.alarm_handle {
+	float: left;
+	padding-left: 3rem;
+	clear: left;
+	margin-top: .3rem;
+	margin-left: 1.5rem;
+	background-size: 2rem;
+	background-repeat: no-repeat;
+	background-position: .2rem 1rem;
+}
+
+.led_green {
+	background-image: url(../img/led_green.png);
+}
+
+.led_red {
+	background-image: url(../img/led_red.png);
+}
+
+.short_row .alarm_handle_detail {
+	display: none;
+}
+
+.alarm_handle_detail {
+	float: right;
+	clear:right;
+}
+
+.short_row .alarm_last7 {
+	display: none;
+}
+
+.alarm_last7 {
+	float: right;
+	margin-top: 0rem;
+	margin-right: .5rem;
+	font-size: 2.5rem;
+	color: #13323c;
+	width: 8rem;
+	text-align: right;
+}
+
+.short_row .alarm_last7_ {
+	display: none;
+}
+
+.alarm_last7_ {
+	float: right;
+	margin-top: 0rem;
+	margin-right: .5rem;
+	color: #13323c;
+}
+
+.short_row .alarm_last30 {
+	display: none;
+}
+
+.alarm_last30 {
+	float: right;
+	clear: right;
+	margin-right: .5rem;
+	color: #13323c;
+	width: 8rem;
+	text-align: right;
+}
+
+.short_row .alarm_last30_ {
+	display: none;
+}
+
+.alarm_last30_ {
+	float: right;
+	margin-right: .5rem;
+	color: #13323c;
+}
+
+.reset_table {
+	width: 99%;
+	font-size: 2rem;
+}
+
+.reset_table th {
+	text-align: center;
+	background-color: gray;
+	color: white;
+}
+
+.reset_table td {
+	border: 1px solid gray;
+}
+
+.statistic_table {
+	width: 99%;
+	font-size: 2rem;
+}
+
+.statistic_table th {
+	text-align: center;
+	background-color: gray;
+	color: white;
+}
+
+.statistic_table td {
+	border: 1px solid gray;
+	font-size: 3rem;
+	height: 6rem;
+}
+
+.statistic_table td img {
+	height: 5rem;
+}
+
+.reset_help {
+	margin-top: 1rem;
+	text-align: center;
+	color: gray;
+	font-size: 5rem;
+}
+
+.c_red {
+	color: red;
+}
+
+.c_orange {
+	color: orange;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.i_boss {
+	height: 5rem;
+	margin-top: -.5rem;
+}
+
+.i_param {
+	height: 5rem;
+	margin-top: -.8rem;
+}
+
+.i_history {
+	height: 5.5rem;
+	margin-top: -1rem;
+}
+
+.i_history_reset {
+	height: 4rem;
+	margin-top: -.5rem;
+	margin-left: 2rem;
+}
+
+.statistic {
+	width: 100%;
+	float: left;
+}
+
+.statistic span {
+	float: right;
+}
+
+.statistic span img {
+	height: 5rem;
+	clear: both;
+}
+
+.statistic .can_container {
+	width: 100%;
+}
+
+.querycondition {
+	width: 100%;
+	text-align: left;
+}
+
+.month_switch {
+	width: 100%;
+	font-size: 3rem;
+	text-align: right;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+.table_head {
+	width: 100%;
+	height: 2rem;
+	font-size: 3rem;
+	text-align: center;
+	margin-top: 3rem;
+	margin-bottom: 5rem;
+	float: left;
+}
+
+.resetalarm_url {
+	float: left;
+	width: 100%;
+	font-size: 4rem;
+	text-align: right;
+}
+canvas {
+	margin-top: 2rem;
+}
+
+.modal-header {
+	display: inline;
+	padding-bottom: 0rem;
+	border-style: none;
+}
+.form-check img{
+	width:3rem;
+	float:none;
+	height:auto;
+	margin-left:0;
+	margin-top:0;
+}
+/* Modal Magnify */
+.form-check-label{
+	margin-left:3rem;
+}
+.form-check-input{
+	width:3rem;
+	height:3rem;
+}
+.modal-dialog{
+	width:100%;
+	max-width:1500rem;
+	font-size:3rem;
+}
+.form-control,.close span,.modal-dialog h4,.modal-footer button,.modal-footer input{
+	font-size:3rem;
+}
+/* Modal Magnify */

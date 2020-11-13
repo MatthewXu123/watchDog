@@ -1,0 +1,145 @@
+body {
+font-size: 3rem; padding:0; margin:0; background-color: #F0F0F0;
+}
+.more .form-control{
+	width:50%;
+	float:left;
+	height:6.5rem;
+	BACKGROUND-COLOR: transparent;
+	border-radius: .7rem;
+	font-size: 3rem;
+	display:none;
+	margin-top:0rem;
+	margin-left:0.5rem;
+}
+.row_site {
+    margin: 0 auto;
+    margin-top: 1rem;
+    width: 98%;
+    height: 15rem;
+    background-color: #E8E8E8;
+    border-radius: 1rem;
+}
+.short_row{
+	height: 11rem;
+}
+.short_row .alarm_high30
+{
+	display:none;
+}
+.short_row .alarm_all30
+{
+	display:none;
+}
+.site_name{
+	float:left;
+	margin-top: 1.5rem;
+	margin-left: 1.5rem;
+	font-size:3rem;
+	color:#13323c;
+}
+
+.alarm_img{
+	float:right;
+	height:5rem;
+	width:5rem;
+}
+
+.site_menu{
+	height:5rem;
+	width:4rem;
+	margin-top: 1.5rem;
+}
+
+.site_person{
+    height: 4rem;
+    width: 4rem;
+    margin-top: 2rem;
+    margin-left: 1rem;
+}
+
+.a_num1{
+	float:right;
+	margin-right:-3.3rem;
+	margin-top:0.4rem;
+	font-size:2.7rem;
+	color:white;
+}
+.a_num11{
+	float:right;
+	margin-right:-3.8rem;
+	margin-top:0.6rem;
+	font-size:2.3rem;
+	color:white;
+}
+.statistics{
+	float:left;
+	clear:left;
+	margin-top: 0.7rem;
+	margin-left: 1.5rem;
+	height:2.5rem;
+}
+.project_company
+{
+	clear:left;
+	margin-top: 0.7rem;
+	margin-left: 1.5rem;
+	height:2.5rem;
+	float:left;
+	font-size:2rem;
+	color:#13323c;
+}
+
+.alarm_high30{
+	float:left;
+	clear:left;
+	margin-top: 0.7rem;
+	margin-left: 1.5rem;
+	font-size:2rem;
+	color:#13323c;
+	<!--display:none;-->
+}
+.alarm_all30{
+	float:left;
+	margin-top: .7rem;
+	margin-left: 1.5rem;
+	font-size:2rem;
+	color:#13323c;
+	text-align:right;
+	<!--display:none;-->
+}
+.energy{
+	float:left;
+	margin-top: 0.7rem;
+	margin-left: 1.5rem;
+	font-size:2rem;
+	color:#13323c;
+}
+.hiddenSpan {
+	display:none;
+}
+.close{
+	font-size:3.5rem;
+}
+.table_head{
+	text-align:center;
+}
+.site_head{
+	display: block;
+	font-size: 1.5rem;
+	margin-left:1.5rem;
+	margin-right:1.5rem;
+}
+.site_head_div{
+	float: left;
+	/* margin: auto; */
+	background-color: #E8E8E8;
+	border-radius: 1rem;
+	margin-left: 1rem;
+}
+#container{
+	margin-top: 3rem;
+}
+.more img{
+	margin-top:1rem;
+}

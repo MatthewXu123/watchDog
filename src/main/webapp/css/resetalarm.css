@@ -1,0 +1,92 @@
+body {
+	font-size:2rem;
+	padding: 0;
+	margin: 0;
+}
+.table th,.table td{
+	font-size:2rem;
+}
+#reset_table{
+	margin-top:6rem;
+}
+.reset_help {
+	margin-top: 1rem;
+	text-align: center;
+	color: gray;
+	font-size: 2rem;
+}
+input[class="resetbox"] + label::before {
+    content: "\a0";  /*不换行空格*/
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: .2rem;
+    background-color: gray;
+    text-indent: .15rem;
+    line-height: .65;  /*行高不加单位，子元素将继承数字乘以自身字体尺寸而非父元素行高*/
+}
+input[class="resetbox_green"] + label::before {
+    content: "\a0";  /*不换行空格*/
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: .2rem;
+    background-color: green;
+    text-indent: .15rem;
+    line-height: .65;  /*行高不加单位，子元素将继承数字乘以自身字体尺寸而非父元素行高*/
+}
+input[type="checkbox"]:checked + label::before {
+    content: "\2713";
+    background-color: yellow;
+    font-size:1.5rem;
+}
+.resetbox {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+.resetbox_green {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+td:nth-child(5){
+	text-align:center;
+}
+.dropdown-item{
+	font-size:1.5rem;
+}
+.handleresult {
+	width:1.5rem;
+	heigt:1.5rem;
+}
+.form-check img{
+	width:3rem;
+}
+.i_history_reset {
+	height: 1.5rem;
+}
+/* Modal Magnify */
+.form-check-label{
+	margin-left:3rem;
+}
+.form-check-input{
+	width:3rem;
+	height:3rem;
+}
+.modal-dialog{
+	width:100%;
+	max-width:1500rem;
+	font-size:3rem;
+}
+.modal-dialog h4,.modal-footer button,.modal-footer input{
+	font-size:3rem;
+}
+
+#exampleFormControlTextarea2{
+	font-size:2rem;
+}
+.close span{
+	font-size:3rem;
+}
+/* Modal Magnify */

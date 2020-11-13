@@ -1,0 +1,17 @@
+    
+[
+    {"code":"MAN.Carrier","isActive":true,"deptId":"81","generalId":"","officerIds":["SangCaiHeng"],"soldierIds":[],"faxRuleCodes":[]},
+    {"code":"MAN.panasonic","isActive":true,"deptId":"28","generalId":"","officerIds":["SongXiaLengLian"],"soldierIds":[],"faxRuleCodes":[]},
+    {"code":"MAN.XINGX","isActive":true,"deptId":"36","generalId":"","officerIds":["GaoYanCai_c"],"soldierIds":[],"faxRuleCodes":[]},
+    {"code":"MAN.Fushi_maint","isActive":true,"deptId":"7","generalId":"116","officerIds":["fushi-mahongyan"],"soldierIds":[],"faxRuleCodes":[]},
+    {"code":"MAN.EPTA","isActive":true,"deptId":"4","generalId":"","officerIds":["HuangZhengHao"],"soldierIds":[],"faxRuleCodes":[]},
+    {"code":"CUS.ALDI","isActive":true,"deptId":"95","generalId":"","officerIds":["LiBingLei"],"soldierIds":["13818811141"],"faxRuleCodes":["#1","#2","#3"]},
+    {"code":"CUS.hema","isActive":true,"deptId":"8","generalId":"111","officerIds":[],"soldierIds":[],"faxRuleCodes":["#1","#2","#5"]},
+    {"code":"CUS.Walmart","isActive":true,"deptId":"6","generalId":"113","officerIds":[],"soldierIds":[],"faxRuleCodes":["#1","#2","#4"]},
+    {"code":"CUS.SUNING","isActive":true,"deptId":"91","generalId":"110","officerIds":[],"soldierIds":[],"faxRuleCodes":["#1","#2","#4"]},
+    {"code":"CUS.Yonghui","isActive":true,"deptId":"40","generalId":"115","officerIds":[],"soldierIds":[],"faxRuleCodes":["#1","#2","#4"]},
+    {"code":"CUS.Metro","isActive":true,"deptId":"93","generalId":"","officerIds":[],"soldierIds":[],"faxRuleCodes":["#1","#2","#4"]},
+    {"code":"CUS.DEFAULTCUSTOMER","isActive":true,"deptId":"105","generalId":"","officerIds":[],"soldierIds":[],"faxRuleCodes":["#1","#2","#4"]},
+    {"code":"Default","isActive":true,"deptId":"105","generalId":"","officerIds":[],"soldierIds":[],"faxRuleCodes":["#1","#2","#4"]},
+    {"code":"CUS.Carel_SZ","isActive":true,"deptId":"105","generalId":"","officerIds":[],"soldierIds":[],"faxRuleCodes":["#1","#2","#4"]}
+]

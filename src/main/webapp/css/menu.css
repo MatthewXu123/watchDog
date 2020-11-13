@@ -1,0 +1,46 @@
+#menu_icon {
+background:#FFF;
+color:#fff;
+font-size:3rem;
+position:absolute;
+opacity:.7;
+filter:alpha(opacity=70);
+}
+.dropdown {
+color:#fff;
+font-size:3rem;
+filter:alpha(opacity=70);
+float:right;
+margin-left: 1.5rem;
+width:5rem;
+height:5rem;
+}
+.dropdownList {
+color:#fff;
+font-size:3rem;
+filter:alpha(opacity=70);
+float:left;
+margin-left: 1.5rem;
+width:3.5rem;
+height:5rem;
+}
+.dropdown-menu>li>a {
+	font-size:3rem;
+}
+.btn-secondary1 {
+    background-color: transparent; 
+    border-color: transparent;
+    padding:0;
+}
+.more{
+	margin: 1rem auto 1.5rem;
+	height:5rem;
+} 
+.more img {
+	/* position: fixed; */
+    z-index:10;  
+    float: right;
+    height: 5rem;
+    margin-right: 1.5rem;
+    margin-top: -.5rem;
+}

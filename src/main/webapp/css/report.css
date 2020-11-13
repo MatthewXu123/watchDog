@@ -1,0 +1,63 @@
+.table_head{
+	float:left;
+	width:100%;
+	text-align:center;
+	font-weight: bold;
+	font-size: 18px;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+.navi_left{
+	float:left;
+	height:5rem;
+}
+.navi_right{
+	float:right;
+	height:5rem;
+	display:none;
+}
+span.color_under_critical{
+	/* Under Critical */
+	background-color: #2E3092 ;
+	color: #FFFFFF ;
+	display:inline-block;
+	text-align: center;
+}
+span.color_under_setpoint{
+	/* Under setpoint */
+	background-color: #0096FF ;
+	color: #FFFFFF ;
+	display:inline-block;
+	text-align: center;
+}
+span.color_over_setpoint{
+	/* Between setpoint & differential */
+	background-color: #6CFF00 ;
+	color: #000000 ;
+	display:inline-block;
+	text-align: center;
+}
+span.color_over_differential{
+	/* Over differential */
+	background-color: #FCFF00 ;
+	color: #000000 ;
+	display:inline-block;
+	text-align: center;
+}
+span.color_over_critical{
+	/* Over critical */
+	background-color: #ED1E24 ;
+	color: #FFFFFF ;
+	display:inline-block;
+	text-align: center;
+}
+span.color_undefined  {
+	/* Undefined */
+	background-color: #555555 ;
+	color: #FFFFFF ;
+	display:inline-block;
+	text-align: center;
+}
+tr.textcenter{
+	text-align: center;
+}

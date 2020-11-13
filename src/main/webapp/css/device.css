@@ -1,0 +1,116 @@
+.status_row{
+	float:left;
+	margin:auto auto;
+    margin-top: .5rem;
+    margin-left: .5rem;
+    width: 49%;
+    height: 6rem;
+    background-color: #337ab7;
+    color: white;
+    border-radius: 1rem;
+    background-repeat:no-repeat;
+    background-size:4rem;
+    background-position:2rem 0.5rem;
+}
+.status_row_new{
+	float:left;
+	margin:auto auto;
+    width: 50%;
+    height: 6rem;
+    line-height:6rem;
+	font-size:2.2rem;
+	font-weight: 400;
+	border-bottom:solid #000 1px;
+	border-right:solid #000 1px; 
+}
+.v_span{
+	float:right;
+	margin-right:.5rem;
+	font-weight:bold;
+	font-size:3rem;
+}
+
+
+.status_description{
+	float:left;
+	font-size:3rem;
+	margin-left:7rem;
+	margin-top: .3rem;
+}
+.value_table
+{
+	float:left;
+	margin-top:1rem;
+	width:100%;
+	font-size:3rem;
+	font-weight: 400;
+	border-collapse:collapse;
+	border:none;
+}
+.notop{
+	margin-top:0;
+}
+.value_table tr:first-child{
+	text-align:center;
+	background-color:#337ab7;
+	color:white;
+	font-weight:bold;
+}
+.value_table tr td:nth-child(2){
+	border-left:solid #000 1px;
+}
+.value_table tr:nth-child(even)
+{
+
+}
+.value_table td{
+	padding:1rem;
+	border-bottom:solid #000 1px;
+}
+/* .value_table tr td .v_span{
+	float:right;
+	margin-right:.5rem;
+	font-weight:bold;
+	font-size:2.2rem;
+} */
+
+
+.device_on{
+	background-image:url(../img/on.svg);
+}
+.device_off{
+	background-image:url(../img/off.svg);
+	background-size:4.5rem;
+}
+/* .cooling_on{
+	background-image:url(../img/on.svg);
+}
+.cooling_off{
+	background-image:url(../img/off.svg);
+	background-size:4.5rem;
+}
+.df_on{
+	background-image:url(../img/on.svg);
+}
+.df_off{
+	background-image:url(../img/off.svg);
+	background-size:4.5rem;
+}
+.fan_on{
+	background-image:url(../img/on.svg);
+}
+.fan_off{
+	background-image:url(../img/off.svg);
+	background-size:4.5rem;
+}
+.light_on{
+	background-image:url(../img/on.svg);
+}
+.light_off{
+	background-image:url(../img/off.svg);
+	background-size:4.5rem;
+} */
+.device_url{
+	width:100%;
+	font-size:3rem;
+}
