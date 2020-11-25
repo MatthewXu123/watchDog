@@ -1,7 +1,5 @@
 package watchDog.wechat.util;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,13 +13,12 @@ import com.alibaba.fastjson.JSONObject;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import watchDog.bean.Property;
 import watchDog.service.PropertyMgr;
-import watchDog.util.DateTool;
 import watchDog.util.HttpSendUtil;
 import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatDept;
 import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatResult;
 import watchDog.wechat.service.WechatService;
-import watchDog.wechat.util.sender.Sender;
 
 public class WechatUtil {
 	private static final Logger logger = Logger.getLogger(WechatUtil.class);
@@ -38,6 +35,7 @@ public class WechatUtil {
 	private static String getWechatDeptListURL = "https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN&id=ID";
 	private static String getUserInfo = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=ACCESS_TOKEN&code=CODE";
 	private static String deleteDeptURL = "https://qyapi.weixin.qq.com/cgi-bin/department/delete?access_token=ACCESS_TOKEN&id=ID";
+	private static String updateWechatDeptURL = "https://qyapi.weixin.qq.com/cgi-bin/department/update?access_token=ACCESS_TOKEN";
 	
 	private static String createDeptURL = "https://qyapi.weixin.qq.com/cgi-bin/department/create?access_token=ACCESS_TOKEN";
 	
@@ -74,8 +72,10 @@ public class WechatUtil {
 		try {
 			long expireTime = System.currentTimeMillis() + 7200 * 1000;
 			accessToken = WechatService.getInstance().getWxCpService().getAccessToken();
-			propertyMgr.update(PropertyMgr.WECHAT_EXPIRE_TIME, String.valueOf(expireTime));
-			propertyMgr.update(PropertyMgr.WECHAT_ACCESS_TOKEN, accessToken);
+			if(!accessToken.equals(propertyMgr.getProperty(PropertyMgr.WECHAT_ACCESS_TOKEN).getValue())){
+				propertyMgr.update(PropertyMgr.WECHAT_EXPIRE_TIME, String.valueOf(expireTime));
+				propertyMgr.update(PropertyMgr.WECHAT_ACCESS_TOKEN, accessToken);
+			}
 			
 		} catch (WxErrorException e) {
 			logger.error("",e);
@@ -179,6 +179,27 @@ public class WechatUtil {
 				wechatDept.setWechatMemberList(wechatMemberList);
 			}
 			return wechatDeptList;
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return null;
+	}
+	
+	/**
+	 * 
+	 * Description:
+	 * @param wechatDeptId
+	 * @return
+	 * @author Matthew Xu
+	 * @date Nov 25, 2020
+	 */
+	public static WechatDept getWechatDeptById(String wechatDeptId){
+		try {
+			List<WechatDept> wechatDepts =  getDeptListByDeptId(wechatDeptId);
+			for (WechatDept wechatDept : wechatDepts) {
+				if(wechatDept.getId().equals(wechatDeptId))
+					return wechatDept;
+			}
 		} catch (Exception e) {
 			logger.error("",e);
 		}
@@ -353,6 +374,26 @@ public class WechatUtil {
 	/**
 	 * 
 	 * Description:
+	 * @param wechatDept
+	 * @return
+	 * @author Matthew Xu
+	 * @date Nov 25, 2020
+	 */
+	public static WechatResult updateWechatDept(WechatDept wechatDept){
+		try {
+			String params = JSON.toJSONString(wechatDept);
+			return JSONObject.parseObject(HttpSendUtil.INSTANCE
+					.sendPost(updateWechatDeptURL.replace("ACCESS_TOKEN", getAccessToken()), params, HttpSendUtil.CHAR_ENCODING_UTF8, HttpSendUtil.APPLICATION_JSON), WechatResult.class);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return null;
+		
+	}
+	
+	/**
+	 * 
+	 * Description:
 	 * @param deptId
 	 * @return
 	 * @author Matthew Xu
@@ -370,5 +411,5 @@ public class WechatUtil {
 		return null;
 		
 	}
-
+	
 }

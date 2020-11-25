@@ -177,9 +177,6 @@ public class AlarmNotificationMain {
 
 	public Map<String, List<String>> checkSite(int alarmType, String idents, int messagePurposeType,
 			String lastQueryTime) throws Exception {
-		//TEST
-		if(alarmType == RESET)
-			lastQueryTime = "2019-11-09 12:55:35";
 		if (idents == null || idents.length() == 0)
 			return null;
 		Map<String, List<String>> result = new HashMap<String, List<String>>();
@@ -284,12 +281,6 @@ public class AlarmNotificationMain {
 					}
 					tempSiteId = alarm.getIdSite();
 				}
-				//TEST
-				if(alarmType == RESET){
-					List<Alarm> newPlantAlarms = siteMap.get(501);
-					testLogger.info("CAREL new plant reset alarm==>" + newPlantAlarms.size());
-				}
-				
 				List<Alarm> secondLevelToSave = new ArrayList<Alarm>();
 				Iterator it = siteMap.entrySet().iterator();
 				while (it.hasNext()) {
@@ -298,10 +289,6 @@ public class AlarmNotificationMain {
 					SiteInfo s = Dog.getInstance().getSiteInfoByIdSite(idsite);
 					list = entry.getValue();
 					list = orderList(list);
-					//TEST
-					if(alarmType == RESET && idsite == 501){
-						testLogger.info("CAREL new plant reset alarm line303==>" + list.size());
-					}
 					Map<Integer, Integer> offlineMap = lineOfflineNum.get(entry.getKey());
 					offlineMap = updateOfflineMap(offlineMap);
 					String msg = "";
@@ -325,10 +312,6 @@ public class AlarmNotificationMain {
 						l.add(msg);
 						result.put(list.get(0).getIdent(), l);
 						continue;
-					}
-					//TEST
-					if(alarmType == RESET && idsite == 501){
-						testLogger.info("CAREL new plant reset alarm line331==>" + list.size());
 					}
 					for (Alarm alarm : list) {
 						if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL2
@@ -443,12 +426,6 @@ public class AlarmNotificationMain {
 							ex.printStackTrace();
 						}
 					}
-					//TEST
-					if(alarmType == RESET && idsite == 501){
-						testLogger.info("CAREL new plant reset alarm line448==>" + list.size());
-						testLogger.info("CAREL new plant reset alarm line449==>" + msg);
-						
-					}
 					if (counter == 0)
 						msg = null;
 					if (msg != null && msg.length() > 0) {
@@ -470,12 +447,6 @@ public class AlarmNotificationMain {
 							l.add(msg);
 							result.put(ident, l);
 						}
-					}
-					//TEST
-					if(alarmType == RESET && idsite == 501){
-						testLogger.info("CAREL new plant reset alarm line476==>" + list.size());
-						testLogger.info("CAREL new plant reset alarm line477==>" + msg);
-						
 					}
 				}
 				if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL2
@@ -595,16 +566,6 @@ public class AlarmNotificationMain {
 	}
 
 	public static boolean sendIM(int type, Map<String, List<String>> msgMap, int messagePurposeType) {
-		//TEST
-		if(type == RESET){
-			List<String> list = msgMap.get("501");
-			if(list != null && list.size() != 0){
-				for (String string : list) {
-					testLogger.info("msg:" + string);
-				}
-			}
-				
-		}
 		Dog dog = Dog.getInstance();
 		boolean sendOK = true;
 		if (msgMap.size() > 0) {

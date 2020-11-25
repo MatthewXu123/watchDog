@@ -102,7 +102,9 @@ public class ScheduledTask {
     Calendar wechatMemberCheckTaskTime  = Calendar.getInstance();
     wechatMemberCheckTaskTime.set(Calendar.HOUR_OF_DAY, 14);
     Timer wechatMemberCheckTaskTimer = new Timer("WechatMemberCheckTaskTimer");
-    wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), PERIOD_MAINTAINER_CHECK_TASK);
+    // TEST BY MAT
+    //wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), PERIOD_MAINTAINER_CHECK_TASK);
+    wechatMemberCheckTaskTimer.schedule(WechatMemberCheckTask.INSTANCE, 0, PERIOD_ALARM_FAXINFO_CHECK);
     
     Timer alarmFaxInfoCheckTaskTimer = new Timer("AlarmFaxInfoCheckTaskTimer");
     alarmFaxInfoCheckTaskTimer.schedule(AlarmFaxInfoCheckTask.INSTANCE, DELAY_ALARM_FAXINFO_CHECK, PERIOD_ALARM_FAXINFO_CHECK);

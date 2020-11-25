@@ -15,11 +15,13 @@ import watchDog.bean.SiteInfo;
 import watchDog.dao.SiteInfoDAO;
 import watchDog.listener.Dog;
 import watchDog.property.template.CommonMsgLogTemplate;
+import watchDog.property.template.WechatDeptLogTemplate;
 import watchDog.util.DateTool;
 import watchDog.util.ObjectUtils;
 import watchDog.util.RegexUtil;
 import watchDog.wechat.bean.WechatDept;
 import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatResult;
 import watchDog.wechat.config.CommunityConfig;
 import watchDog.wechat.util.WechatUtil;
 import watchDog.wechat.util.sender.Sender;
@@ -38,7 +40,7 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 
 	public static final WechatDeptCheckTask INSTANCE = new WechatDeptCheckTask();
 
-	private static final String SOLIDER_DEPT_SUFFIX = "_士兵";
+	private static final String SOLDIER_DEPT_SUFFIX = "_士兵";
 
 	private static final String OFFICER_DEPT_SUFFIX = "_军官";
 
@@ -63,7 +65,7 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 						// dept doesn't exist, we will create the dept.
 						if (StringUtils.isBlank(tagId) && StringUtils.isBlank(tagId2)) {
 							Map<String, String> createDept = createDept(siteInfo);
-							tagId = createDept.get(SOLIDER_DEPT_SUFFIX);
+							tagId = createDept.get(SOLDIER_DEPT_SUFFIX);
 							tagId2 = createDept.get(OFFICER_DEPT_SUFFIX);
 							if (!siteInfoDAO.isSiteExist(siteInfo.getSupervisorId()))
 								siteInfoDAO.saveOne(siteInfo.getSupervisorId(), deadLine, false, "6", 1, tagId, tagId2,
@@ -147,7 +149,7 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 		String tagId = createDept2(siteInfo, baseId, true);
 		// Example: create the department 'xxx_军官' here.
 		String tagId2 = createDept2(siteInfo, baseId, false);
-		map.put(SOLIDER_DEPT_SUFFIX, tagId);
+		map.put(SOLDIER_DEPT_SUFFIX, tagId);
 		map.put(OFFICER_DEPT_SUFFIX, tagId2);
 		return map;
 	}
@@ -168,7 +170,7 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 			tagId = isSoldierGroup ? siteInfo.getTagId() : siteInfo.getTagId2();
 		String siteDesc = siteInfo.getDescription();
 		if (isSoldierGroup != null)
-			siteDesc += isSoldierGroup ? SOLIDER_DEPT_SUFFIX : OFFICER_DEPT_SUFFIX;
+			siteDesc += isSoldierGroup ? SOLDIER_DEPT_SUFFIX : OFFICER_DEPT_SUFFIX;
 		String createdDeptId = "";
 
 		String deptId = WechatUtil.isDeptExistByName(parentId, siteDesc);
