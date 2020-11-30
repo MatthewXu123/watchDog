@@ -30,7 +30,7 @@ public class SIMCardDAO extends BaseDAO{
 		
 	}
 	
-	public boolean saveOne(SIMCard simCard){
+	public void saveOne(SIMCard simCard){
 		String sql = "INSERT INTO private_simcard(card_number, simcard_type, simcard_status) VALUES(?,?,?)";
 		try {
 			dataBaseMgr.executeUpdate(sql, new Object[]{simCard.getCardNumber()
@@ -39,10 +39,9 @@ public class SIMCardDAO extends BaseDAO{
         } catch (DataBaseException e) {
         	LOGGER.error("",e);
         }
-        return false;
 	}
 	
-	public boolean saveAll(Collection<SIMCard> simCards){
+	public void saveAll(Collection<SIMCard> simCards){
 		String sql = "INSERT INTO private_simcard(card_number, simcard_type, simcard_status) VALUES(?,?,?)";
 		List<Object[]> paramsList = new ArrayList<>();
 		try {
@@ -56,7 +55,6 @@ public class SIMCardDAO extends BaseDAO{
         } catch (DataBaseException e) {
         	LOGGER.error("",e);
         }
-        return false;
 	}
 	
 	public SIMCard getOneById(int id){

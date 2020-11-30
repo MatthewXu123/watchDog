@@ -19,11 +19,11 @@ CREATE TABLE public.private_registeration_info
     product_code text NOT NULL,
     product_mac text NOT NULL,
     original_version text NOT NULL,
-    is_4GConnection boolean NOT NULL DEFAULT false,
+    is_connected boolean NOT NULL DEFAULT false,
     is_updated boolean NOT NULL DEFAULT false,
     router_mac text NOT NULL,
     router_manufacturer text NOT NULL,
-    sim_card_id integer,
+    simcard_id integer,
     comment text NOT NULL,
     inserttime timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT private_registeration_info__pk PRIMARY KEY (id)

@@ -46,7 +46,7 @@ public class RegisterationInfo {
 	private boolean isUpdated;
 	
 	//是否是4G链接
-	private boolean is4GConnection;
+	private boolean isConnected;
 	
 	private SIMCard simCard;
 	
@@ -149,15 +149,7 @@ public class RegisterationInfo {
 	public void setIsUpdated(boolean isUpdated) {
 		this.isUpdated = isUpdated;
 	}
-
-	public boolean getIs4GConnection() {
-		return is4GConnection;
-	}
-
-	public void setIs4GConnection(boolean is4gConnection) {
-		is4GConnection = is4gConnection;
-	}
-
+	
 	public Date getInsertTime() {
 		return insertTime;
 	}
@@ -182,13 +174,21 @@ public class RegisterationInfo {
 		this.comment = comment;
 	}
 
+	public boolean getIsConnected() {
+		return isConnected;
+	}
+
+	public void setIsConnected(boolean isConnected) {
+		this.isConnected = isConnected;
+	}
+
 	@Override
 	public String toString() {
 		return "RegisterationInfo [id=" + id + ", vpnAddress=" + vpnAddress + ", registerationDate=" + registerationDate
 				+ ", purchaser=" + purchaser + ", endUser=" + endUser + ", servicePeriod=" + servicePeriod
 				+ ", productCode=" + productCode + ", productMac=" + productMac + ", routerMac=" + routerMac
 				+ ", routerManufacturer=" + routerManufacturer + ", originalVersion=" + originalVersion + ", isUpdated="
-				+ isUpdated + ", is4GConnection=" + is4GConnection + ", simCard=" + simCard + ", comment=" + comment
+				+ isUpdated + ", isConnected=" + isConnected + ", simCard=" + simCard + ", comment=" + comment
 				+ ", insertTime=" + insertTime + "]";
 	}
 
