@@ -21,6 +21,20 @@ public enum SIMCardStatus {
 		this.description = description;
 	}
 
+	public static SIMCardStatus getOneByCode(int code){
+		switch (code) {
+		case 0:
+			return ENABLED;
+		case 1:
+			return DISABLED;
+		case 2:
+			return DELETED;
+		default:
+			break;
+		}
+		return null;
+	}
+	
 	private SIMCardStatus(int code){
 		this.code = code;
 	}

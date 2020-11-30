@@ -29,7 +29,7 @@ public class SiteInfoDAO extends BaseDAO{
 		Object[] params = {supervisorId};
 		RecordSet rs = null;
         try{
-	        rs = dateBaseMgr.executeQuery(sql,params);
+	        rs = dataBaseMgr.executeQuery(sql,params);
 	        if((int)rs.get(0).get(0)>0)
 	        	return true;
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class SiteInfoDAO extends BaseDAO{
 				sql += " order by cfsupervisors.ipaddress ";
 		RecordSet rs = null;
         try{
-	        rs = dateBaseMgr.executeQuery(sql);
+	        rs = dataBaseMgr.executeQuery(sql);
 	        boolean loadEnergy = false;
 	        for(int i=0;i<rs.size();i++)
 	        {
@@ -115,7 +115,7 @@ public class SiteInfoDAO extends BaseDAO{
 		Object[] params = new Object[]{supervisorId,deadline,checkNetWorkFlag,agentId,channel,tagId,tagId2,tagId3,comment};
 		String sql="insert into private_wechat_receiver(supervisor_id,deadline,checknetwork,agent_id,channel,tag_id,tag_id2,tag_id3,comment) values(?,?,?,?,?,?,?,?,?);";
 		try {
-			dateBaseMgr.executeUpdate(sql, params);
+			dataBaseMgr.executeUpdate(sql, params);
 		} catch (DataBaseException e) {
 			e.printStackTrace();
 		}
@@ -125,7 +125,7 @@ public class SiteInfoDAO extends BaseDAO{
 		String sql="update private_wechat_receiver set deadline = ?,checknetwork = ?,agent_id=?,channel=?,tag_id=?,tag_id2=?,tag_id3=?,comment=? where supervisor_id=?;";
 		Object[] params = new Object[]{deadline,checkNetWorkFlag,agentId,channel,tagId,tagId2,tagId3,comment,supervisorId};
 		try {
-			dateBaseMgr.executeUpdate(sql, params);
+			dataBaseMgr.executeUpdate(sql, params);
 		} catch (DataBaseException e) {
 			e.printStackTrace();
 		}
@@ -134,7 +134,7 @@ public class SiteInfoDAO extends BaseDAO{
         String sql="update private_wechat_receiver set deadline = ? where supervisor_id=?;";
         Object[] params = new Object[]{deadline,supervisorId};
         try {
-            dateBaseMgr.executeUpdate(sql, params);
+            dataBaseMgr.executeUpdate(sql, params);
         } catch (DataBaseException e) {
             e.printStackTrace();
         }
@@ -143,7 +143,7 @@ public class SiteInfoDAO extends BaseDAO{
         String sql="update private_wechat_receiver set checknetwork = ? where supervisor_id=?;";
         Object[] params = new Object[]{checkNetWorkFlag,supervisorId};
         try {
-            dateBaseMgr.executeUpdate(sql, params);
+            dataBaseMgr.executeUpdate(sql, params);
         } catch (DataBaseException e) {
             e.printStackTrace();
         }

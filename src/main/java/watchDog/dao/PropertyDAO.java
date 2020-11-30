@@ -18,7 +18,7 @@ public class PropertyDAO extends BaseDAO{
 		String sql = "select value from private_property where key = ?";
 		Object[] params = {key};
         try{
-        	RecordSet rs = dateBaseMgr.executeQuery(sql,params);
+        	RecordSet rs = dataBaseMgr.executeQuery(sql,params);
         	return (String)rs.get(0).get(0);
         } catch (Exception e) {
 		}
@@ -29,7 +29,7 @@ public class PropertyDAO extends BaseDAO{
 		String sql = "insert into private_property values(?,?,now())";
 		Object[] params = {key, value};
         try{
-        	dateBaseMgr.executeUpdate(sql,params);
+        	dataBaseMgr.executeUpdate(sql,params);
         } catch (Exception e) {
 		}
 	}
@@ -38,7 +38,7 @@ public class PropertyDAO extends BaseDAO{
 		String sql = "update private_property set value = ? where key = ?";
 		Object[] params = {value, key};
         try{
-        	dateBaseMgr.executeUpdate(sql,params);
+        	dataBaseMgr.executeUpdate(sql,params);
         } catch (Exception e) {
 		}
 	}

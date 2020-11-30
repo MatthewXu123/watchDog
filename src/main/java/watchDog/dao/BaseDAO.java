@@ -10,6 +10,6 @@ import watchDog.database.DatabaseMgr;
  */
 public abstract class BaseDAO {
 
-	protected DatabaseMgr dateBaseMgr =  DatabaseMgr.getInstance();
+	protected DatabaseMgr dataBaseMgr =  DatabaseMgr.getInstance();
 	
 }

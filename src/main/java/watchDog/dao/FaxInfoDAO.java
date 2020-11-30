@@ -131,7 +131,7 @@ public class FaxInfoDAO extends BaseDAO {
 	private List<FaxInfoDO> getList(String alarmCode, String sql) {
 		List<FaxInfoDO> list = new ArrayList<>();
 		try {
-			RecordSet rs = dateBaseMgr.executeQuery(sql);
+			RecordSet rs = dataBaseMgr.executeQuery(sql);
 			if (rs != null && rs.size() > 0) {
 				for (int i = 0; i < rs.size(); i++) {
 					int kidsupervisor = (int) rs.get(i).get("idsite");
@@ -245,7 +245,7 @@ public class FaxInfoDAO extends BaseDAO {
 					+ " and (d.devmodcode like 'mpxprov4' or d.devmodcode like 'IR 33 - C' or d.devmodcode like 'mpxprostep2'  )"
 					+ cabinetCondition
 					+ " and d.kidsupervisor = ? order by random() limit 10";
-			RecordSet rs = dateBaseMgr.executeQuery(sql, new Object[]{idsite});
+			RecordSet rs = dataBaseMgr.executeQuery(sql, new Object[]{idsite});
 			if (rs != null && rs.size() > 0) {
 				for(int i = 0; i < rs.size(); i++){
 					// Get the real-time value of the specified variables.

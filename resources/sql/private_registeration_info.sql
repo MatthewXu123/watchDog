@@ -1,5 +1,5 @@
 -- 2020.11.26
-CREATE SEQUENCE public.private__registeration_info_seq
+CREATE SEQUENCE public.private_registeration_info_seq
     INCREMENT 1
     START 1
     MINVALUE 1
@@ -10,10 +10,21 @@ CREATE SEQUENCE public.private__registeration_info_seq
 
 CREATE TABLE public.private_registeration_info
 (
-    id integer NOT NULL DEFAULT nextval('public.private__registeration_info_seq'::regclass),
-    card_number text NOT NULL,
-    simcard_type integer NOT NULL DEFAULT 0,
-    simcard_status integer NOT NULL DEFAULT 0,
+    id integer NOT NULL DEFAULT nextval('public.private_registeration_info_seq'::regclass),
+    vpn_address text NOT NULL,
+    registeration_date timestamp without time zone NOT NULL,
+    purchaser text NOT NULL,
+    end_user text NOT NULL,
+    service_period integer NOT NULL,
+    product_code text NOT NULL,
+    product_mac text NOT NULL,
+    original_version text NOT NULL,
+    is_4GConnection boolean NOT NULL DEFAULT false,
+    is_updated boolean NOT NULL DEFAULT false,
+    router_mac text NOT NULL,
+    router_manufacturer text NOT NULL,
+    sim_card_id integer,
+    comment text NOT NULL,
     inserttime timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT private_simcard_pk PRIMARY KEY (id)
+    CONSTRAINT private_registeration_info__pk PRIMARY KEY (id)
 )

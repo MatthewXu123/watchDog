@@ -20,10 +20,18 @@ public enum SIMCardType {
 		this.description = description;
 	}
 
-	private SIMCardType(int code){
-		this.code = code;
+	public static SIMCardType getOneByCode(int code){
+		switch (code) {
+		case 0:
+			return CHINA_MOBILE;
+		case 1:
+			return CHINA_TELECOM;
+		default:
+			break;
+		}
+		return null;
 	}
-
+	
 	public int getCode() {
 		return code;
 	}

@@ -24,18 +24,22 @@ public class RegisterationInfo {
 	// 终端用户
 	private String endUser;
 	
-	//服务年限
+	// 服务年限
 	private int servicePeriod;
 	
-	//型号
+	// 型号
 	private String productCode;
 	
 	// BOSS Mac
 	private String productMac;
 	
+	// Router Mac
 	private String routerMac;
 	
-	// 出厂地址
+	// 路由器厂商
+	private String routerManufacturer;
+	
+	// 出厂版本
 	private String originalVersion;
 	
 	// 是否升级
@@ -45,6 +49,8 @@ public class RegisterationInfo {
 	private boolean is4GConnection;
 	
 	private SIMCard simCard;
+	
+	private String comment;
 
 	private Date insertTime;
 	
@@ -160,13 +166,31 @@ public class RegisterationInfo {
 		this.insertTime = insertTime;
 	}
 
+	public String getRouterManufacturer() {
+		return routerManufacturer;
+	}
+
+	public void setRouterManufacturer(String routerManufacturer) {
+		this.routerManufacturer = routerManufacturer;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
 	@Override
 	public String toString() {
 		return "RegisterationInfo [id=" + id + ", vpnAddress=" + vpnAddress + ", registerationDate=" + registerationDate
 				+ ", purchaser=" + purchaser + ", endUser=" + endUser + ", servicePeriod=" + servicePeriod
 				+ ", productCode=" + productCode + ", productMac=" + productMac + ", routerMac=" + routerMac
-				+ ", originalVersion=" + originalVersion + ", isUpdated=" + isUpdated + ", is4GConnection="
-				+ is4GConnection + ", simCard=" + simCard + "]";
+				+ ", routerManufacturer=" + routerManufacturer + ", originalVersion=" + originalVersion + ", isUpdated="
+				+ isUpdated + ", is4GConnection=" + is4GConnection + ", simCard=" + simCard + ", comment=" + comment
+				+ ", insertTime=" + insertTime + "]";
 	}
+
 	
 }
