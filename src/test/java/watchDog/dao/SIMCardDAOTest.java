@@ -3,6 +3,9 @@ package watchDog.dao;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 
 import watchDog.bean.register.SIMCard;
@@ -30,6 +33,25 @@ public class SIMCardDAOTest {
 		simCardDAO.saveOne(simCard);
 	}
 
+	/**
+	 * Test method for {@link watchDog.dao.SIMCardDAO#saveAll(watchDog.bean.register.SIMCard)}.
+	 */
+	@Test
+	public void testSaveAll(){
+		SIMCard simCard = new SIMCard();
+		simCard.setCardNumber("card_number4");
+		simCard.setSimCardStatus(SIMCardStatus.getOneByCode(0));
+		simCard.setSimCardType(SIMCardType.getOneByCode(0));
+		
+		SIMCard simCard2 = new SIMCard();
+		simCard2.setCardNumber("card_number5");
+		simCard2.setSimCardStatus(SIMCardStatus.getOneByCode(0));
+		simCard2.setSimCardType(SIMCardType.getOneByCode(0));
+		
+		List<SIMCard> list = Arrays.asList(simCard, simCard2);
+		simCardDAO.saveAll(list);
+	}
+	
 	/**
 	 * Test method for {@link watchDog.dao.SIMCardDAO#getOneById(int)}.
 	 */

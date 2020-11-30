@@ -12,7 +12,6 @@ import watchDog.bean.register.SIMCard;
 import watchDog.bean.register.SIMCardStatus;
 import watchDog.bean.register.SIMCardType;
 import watchDog.database.DataBaseException;
-import watchDog.database.DatabaseMgr;
 import watchDog.database.Record;
 import watchDog.database.RecordSet;
 

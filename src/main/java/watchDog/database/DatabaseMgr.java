@@ -168,10 +168,13 @@ public class DatabaseMgr {
 				if(params != null && params.length>0)
 				{
 					setParameter(pstmt,params);
-					pstmt.execute();
+					//pstmt.execute();
+					pstmt.addBatch();
 				}
 			}
+			pstmt.executeBatch();
 			c.commit();
+			pstmt.clearBatch();
 			pstmt.close();
 			c.close();
 		}
