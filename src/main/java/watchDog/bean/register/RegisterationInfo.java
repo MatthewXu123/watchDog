@@ -22,7 +22,7 @@ public class RegisterationInfo {
 	private String purchaser;
 	
 	// 终端用户
-	private String endUser;
+	private String project;
 	
 	// 服务年限
 	private int servicePeriod;
@@ -86,12 +86,12 @@ public class RegisterationInfo {
 		this.purchaser = purchaser;
 	}
 
-	public String getEndUser() {
-		return endUser;
+	public String getProject() {
+		return project;
 	}
 
-	public void setEndUser(String endUser) {
-		this.endUser = endUser;
+	public void setProject(String project) {
+		this.project = project;
 	}
 
 	public int getServicePeriod() {
@@ -180,16 +180,6 @@ public class RegisterationInfo {
 
 	public void setIsConnected(boolean isConnected) {
 		this.isConnected = isConnected;
-	}
-
-	@Override
-	public String toString() {
-		return "RegisterationInfo [id=" + id + ", vpnAddress=" + vpnAddress + ", registerationDate=" + registerationDate
-				+ ", purchaser=" + purchaser + ", endUser=" + endUser + ", servicePeriod=" + servicePeriod
-				+ ", productCode=" + productCode + ", productMac=" + productMac + ", routerMac=" + routerMac
-				+ ", routerManufacturer=" + routerManufacturer + ", originalVersion=" + originalVersion + ", isUpdated="
-				+ isUpdated + ", isConnected=" + isConnected + ", simCard=" + simCard + ", comment=" + comment
-				+ ", insertTime=" + insertTime + "]";
 	}
 
 	

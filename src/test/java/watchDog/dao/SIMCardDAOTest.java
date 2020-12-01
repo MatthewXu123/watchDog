@@ -57,8 +57,8 @@ public class SIMCardDAOTest {
 	 */
 	@Test
 	public void testGetOneById() {
-		SIMCard simCard = simCardDAO.getOneById(2);
-		assertTrue(simCard.getId() == 2);
+		SIMCard simCard = simCardDAO.getOneById(170);
+		assertTrue(simCard.getId() == 170);
 	}
 
 }

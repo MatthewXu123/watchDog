@@ -8,9 +8,10 @@ package watchDog.bean.register;
  */
 public enum SIMCardStatus {
 
-	ENABLED(0, "正常"),
-	DISABLED(1, "停用"),
-	DELETED(2, "销户");
+	UNUSED(0,"未使用"),
+	ENABLED(1, "正常"),
+	DISABLED(2, "停用"),
+	DELETED(3, "销户");
 	
 	private int code;
 	
@@ -24,10 +25,12 @@ public enum SIMCardStatus {
 	public static SIMCardStatus getOneByCode(int code){
 		switch (code) {
 		case 0:
-			return ENABLED;
+			return UNUSED;
 		case 1:
-			return DISABLED;
+			return ENABLED;
 		case 2:
+			return DISABLED;
+		case 3:
 			return DELETED;
 		default:
 			break;

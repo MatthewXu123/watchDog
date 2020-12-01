@@ -14,7 +14,7 @@ CREATE TABLE public.private_registeration_info
     vpn_address text NOT NULL,
     registeration_date timestamp without time zone NOT NULL,
     purchaser text NOT NULL,
-    end_user text NOT NULL,
+    project text NOT NULL,
     service_period integer NOT NULL,
     product_code text NOT NULL,
     product_mac text NOT NULL,
