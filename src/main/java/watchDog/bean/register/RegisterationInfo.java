@@ -51,6 +51,9 @@ public class RegisterationInfo {
 	private SIMCard simCard;
 	
 	private String comment;
+	
+	//删除标志位
+	private boolean isDeleted;
 
 	private Date insertTime;
 	
@@ -181,6 +184,23 @@ public class RegisterationInfo {
 	public void setIsConnected(boolean isConnected) {
 		this.isConnected = isConnected;
 	}
-
 	
+	public boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	@Override
+	public String toString() {
+		return "RegisterationInfo [id=" + id + ", vpnAddress=" + vpnAddress + ", registerationDate=" + registerationDate
+				+ ", purchaser=" + purchaser + ", project=" + project + ", servicePeriod=" + servicePeriod
+				+ ", productCode=" + productCode + ", productMac=" + productMac + ", routerMac=" + routerMac
+				+ ", routerManufacturer=" + routerManufacturer + ", originalVersion=" + originalVersion + ", isUpdated="
+				+ isUpdated + ", isConnected=" + isConnected + ", simCard=" + simCard + ", comment=" + comment
+				+ ", isDeleted=" + isDeleted + ", insertTime=" + insertTime + "]";
+	}
+
 }

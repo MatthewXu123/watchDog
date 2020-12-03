@@ -12,4 +12,9 @@ public abstract class BaseDAO {
 
 	protected DatabaseMgr dataBaseMgr =  DatabaseMgr.getInstance();
 	
+	protected RegisterationInfoDAO registerationInfoDAO = RegisterationInfoDAO.INSTANCE;
+	
+	protected SIMCardDAO simCardDAO  = SIMCardDAO.INSTANCE;
+
+	
 }

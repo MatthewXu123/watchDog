@@ -559,7 +559,8 @@ public class AlarmNotificationMain {
 	}
 
 	private boolean isOfflineAlarm(Alarm alarm) {
-		if ("OFFLINE".equalsIgnoreCase(alarm.getCode()) || alarm.getAddressIn() == 0)
+		if ("OFFLINE".equalsIgnoreCase(alarm.getCode()) || alarm.getAddressIn() == 0
+				&& (alarm.getPriority().equals("1") || alarm.getPriority().equals("2")))
 			return true;
 		else
 			return false;

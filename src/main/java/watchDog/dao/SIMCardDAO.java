@@ -57,7 +57,7 @@ public class SIMCardDAO extends BaseDAO{
         }
 	}
 	
-	public SIMCard getOneById(int id){
+	public SIMCard getOneById(Integer id){
 		String sql = "SELECT * FROM private_simcard WHERE id = ?";
 		return getOne(sql, id);
 	}
@@ -68,12 +68,13 @@ public class SIMCardDAO extends BaseDAO{
 	}
 	
 	private SIMCard getOne(String sql, Object object){
-		SIMCard simCard = new SIMCard();
+		SIMCard simCard = null;
 		try {
             RecordSet rs = dataBaseMgr.executeQuery(sql, new Object[]{object});
             if(rs != null && rs.size() > 0){
             	Record record = rs.get(0);
             	
+            	simCard = new SIMCard();
             	simCard.setId((int)record.get(0));
             	simCard.setCardNumber((String)record.get(1));
             	simCard.setSimCardType(SIMCardType.getOneByCode((int)record.get(2)));

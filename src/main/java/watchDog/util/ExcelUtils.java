@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,7 +44,13 @@ public class ExcelUtils {
 	public static Integer getIntFromCell(Cell cell){
 		if(cell != null)
 			return Integer.valueOf(cell.toString());
-		return null;
+		return 0;
+	}
+	
+	public static Integer getIntFromCell2(Cell cell){
+		if(cell != null && StringUtils.isNotBlank(cell.toString()))
+			return Double.valueOf(cell.toString()).intValue();
+		return 0;
 	}
 	
 	public static void main(String[] args) throws EncryptedDocumentException, IOException {

@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import watchDog.bean.register.RegisterationInfo;
 import watchDog.bean.register.SIMCard;
@@ -18,6 +20,8 @@ import watchDog.bean.register.SIMCard;
 public class RegisterationInfoDAOTest {
 
 	private RegisterationInfoDAO registerationInfoDAO = RegisterationInfoDAO.INSTANCE;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterationInfoDAOTest.class);
 	
 	/**
 	 * Test method for {@link watchDog.dao.RegisterationInfoDAO#saveOne(watchDog.bean.register.RegisterationInfo)}.
@@ -87,6 +91,17 @@ public class RegisterationInfoDAOTest {
 		list.add(registerationInfo);
 		list.add(registerationInfo2);
 		registerationInfoDAO.saveAll(list);
+	}
+	
+	/**
+	 * Test method for {@link watchDog.dao.RegisterationInfoDAO#getAll(watchDog.bean.register.RegisterationInfo)}.
+	 */
+	@Test
+	public void testGetAll(){
+		List<RegisterationInfo> list = registerationInfoDAO.getAll();
+		for (RegisterationInfo registerationInfo : list) {
+			System.out.println(registerationInfo);
+		}
 	}
 
 }

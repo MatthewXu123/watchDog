@@ -60,5 +60,14 @@ public class SIMCardDAOTest {
 		SIMCard simCard = simCardDAO.getOneById(170);
 		assertTrue(simCard.getId() == 170);
 	}
+	
+	/**
+	 * Test method for {@link watchDog.dao.SIMCardDAO#getOneByCardNumber(String)}.
+	 */
+	@Test
+	public void testGetOneByCardNumber() {
+		SIMCard simCard = simCardDAO.getOneByCardNumber(null);
+		assertTrue(simCard.getCardNumber().equals("89860427102090710200"));
+	}
 
 }
