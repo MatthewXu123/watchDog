@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <link href="../css/bootstrap.min.css" rel="stylesheet">
+<link href="../css/font-awesome.min.css" rel="stylesheet">
 <link href="../css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="../css/plugins/bootstrap-table/bootstrap-editable.css" rel="stylesheet">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -32,12 +34,14 @@
 	</div>
 
 	<script src="../js/framework/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../js/plugins/bootstrap-table/popper.min.js"></script>
+	<script src="../js/table.js"></script>
 	<script src="../js/framework/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 	<!-- Bootstrap table -->
 	<script src="../js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-	<script
-		src="../js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-	<script
-		src="../js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script src="../js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="../js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="../js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
 </body>
 </html>

@@ -109,7 +109,7 @@ public class RouterController extends HttpServlet implements BaseController{
 		OutputStream outputStream;
 		try {
 			outputStream = resp.getOutputStream();
-			Writer outputStreamWriter = new OutputStreamWriter(outputStream, "UTF8");
+			Writer outputStreamWriter = new OutputStreamWriter(outputStream, CHAR_ENCODING_UTF8);
 			PrintWriter printWriter = new PrintWriter(outputStreamWriter);
 			Map<String, String> map = new HashMap<>();
 			map.put("username", username);

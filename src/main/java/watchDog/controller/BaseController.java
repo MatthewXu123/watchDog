@@ -10,7 +10,7 @@ import watchDog.dao.SiteInfoDAO;
  */
 public interface BaseController {
 
-	static final String CHAR_ENCODING_UTF8 = "utf-8";
+	static final String CHAR_ENCODING_UTF8 = "UTF-8";
 	
 	static final SiteInfoDAO siteInfoDAO = SiteInfoDAO.INSTANCE;
 }

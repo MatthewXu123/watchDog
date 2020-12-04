@@ -4,37 +4,34 @@ $(function() {
 	var oTable = new TableInit();
 	oTable.Init();
 	
-	 var oButtonInit = new ButtonInit();
-	 oButtonInit.Init();
+	var oButtonInit = new ButtonInit();
+	oButtonInit.Init();
 });
 var TableInit = function() {
 	var oTableInit = new Object();
 	oTableInit.Init = function() {
 		$('#table').bootstrapTable({
-			url : '/rinfo/get', // 请求后台的URL（*）
+			url : '/watchDog/rinfo/getData', // 请求后台的URL（*）
 			editable: true,
 			method : 'get', // 请求方式（*）
 			toolbar : '#toolbar', // 工具按钮用哪个容器
 			striped : true, // 是否显示行间隔色
-			cache : true, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+			cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 			pagination : true, // 是否显示分页（*）
 			sortable : true, // 是否启用排序
 			sortOrder : "asc", // 排序方式
-			queryParams : oTableInit.queryParams,// 传递参数（*）
-			/*queryParams : function (param){
-				return {};
-			},*/
+			//queryParams : oTableInit.queryParams,// 传递参数（*）
 			sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）
 			pageNumber : 1, // 初始化加载第一页，默认第一页
 			pageSize : 10, // 每页的记录行数（*）
 			pageList : [ 10, 25, 50, 100 ], // 可供选择的每页的行数（*）
 			search : true,// 是否显示表格搜索，此搜索是客户端搜索,也可以是服务端检索
-			strictSearch : true,
+			//strictSearch : true,
 			showColumns : true, // 是否显示所有的列
 			showRefresh : true, // 是否显示刷新按钮
 			//minimumCountColumns : 1, // 最少允许的列数
 			clickToSelect : true, // 是否启用点击选中行
-			height : 500, // 行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+			//height : 700, // 行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
 			uniqueId : "id", // 每一行的唯一标识，一般为主键列
 			showToggle : true, // 是否显示详细视图和列表视图的切换按钮
 			cardView : false, // 是否显示详细视图
@@ -44,11 +41,11 @@ var TableInit = function() {
 				checkbox : true
 			}, 
 			{
-				field : 'salesName',
-				title : '姓名',
+				field : 'vpnAddress',
+				title : 'VPN',
 				editable : {
 					type : 'text',
-					title : '姓名',
+					title : 'VPN',
 					mode: "inline",  
 					validate : function(v) {
 						if (!v)
@@ -57,11 +54,11 @@ var TableInit = function() {
 				}
 			},
 			{
-				field : 'phone',
-				title : '电话',
+				field : 'registerationDate',
+				title : '注册日期',
 				editable : {
 					type : 'text',
-					title : '电话',
+					title : '注册日期',
 					mode: "inline",  
 					validate : function(v) {
 						if (!v)
@@ -70,11 +67,11 @@ var TableInit = function() {
 				}
 			}, 
 			{
-				field : 'email',
-				title : '邮箱',
+				field : 'purchaser',
+				title : '采购方',
 				editable : {
 					type : 'text',
-					title : '邮箱',
+					title : '采购方',
 					mode: "inline",  
 					validate : function(v) {
 						if (!v)
@@ -83,11 +80,11 @@ var TableInit = function() {
 				}
 			}, 
 			{
-				field : 'bu',
-				title : 'BU',
+				field : 'project',
+				title : '项目名',
 				editable : {
 					type : 'text',
-					title : 'BU',
+					title : '项目名',
 					mode: "inline",  
 					validate : function(v) {
 						if (!v)
@@ -96,16 +93,124 @@ var TableInit = function() {
 				}
 			}, 
 			{
-				field : 'role',
-				title : '角色',
+				field : 'servicePeriod',
+				title : '服务年限',
 				editable : {
-					type: 'select',
-					title: '部门',
+					type : 'number',
+					title : '服务年限',
 					mode: "inline",  
-					source: [{ value: "Branch Manager", text: "Branch Manager" }, { value: "Account Manager", text:
-					"Account Manager" }, { value: "Sales Manager", text: "Sales Manager" }]
+					validate: function (v) {
+						if (isNaN(v)) return '服务年限必须是数字';
+						var age = parseInt(v);
+						if (age <= 0) return '服务年限必须是正整数';
 					}
-			}
+				}
+			}, 
+			{
+				field : 'productCode',
+				title : '产品型号',
+				editable : {
+					type : 'text',
+					title : '产品型号',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			}, 
+			{
+				field : 'productMac',
+				title : '产品Mac',
+				editable : {
+					type : 'text',
+					title : '产品Mac',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			}, 
+			{
+				field : 'routerMac',
+				title : '路由器Mac',
+				editable : {
+					type : 'text',
+					title : '路由器Mac',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			}, 
+			{
+				field : 'routerManufacturer',
+				title : '路由器厂商',
+				editable : {
+					type : 'text',
+					title : '路由器厂商',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			}, 
+			{
+				field : 'originalVersion',
+				title : '出厂设置',
+				editable : {
+					type : 'text',
+					title : '出厂设置',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			}, 
+			{
+				field : 'isUpdated',
+				title : '是否升级',
+				editable : {
+					//type : 'checkbox',
+					title : '是否升级',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			},
+			{
+				field : 'isConnected',
+				title : '是否4G连接',
+				editable : {
+					//type : 'checkbox',
+					title : '是否4G连接',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			},
+			{
+				field : 'comment',
+				title : '备注',
+				editable : {
+					type : 'text',
+					title : '备注',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			},
+			
 			],
 			// 验证数字
 			// editable: {
@@ -166,8 +271,10 @@ var TableInit = function() {
 				// 可进行异步操作
 				$.ajax({
 					type : "post",
-					url : "/index/Edit",
-					data : row,
+					url : "/watchDog/rinfo/edit",
+					data : {
+						"row": JSON.stringify(row)
+					},
 					dataType : 'JSON',
 					success : function(data, status) {
 						if (status == "success") {
@@ -188,13 +295,13 @@ var TableInit = function() {
 	};
 
 	// 得到查询的参数
-	oTableInit.queryParams = function(params) {
+	/*oTableInit.queryParams = function(params) {
 		var temp = { // 这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
 			limit : params.limit, // 页面大小
 			offset : params.offset, // 页码
 		};
 		return temp;
-	};
+	};*/
 	return oTableInit;
 };
 

@@ -56,7 +56,7 @@ public class RegisterationInfoDAO extends BaseDAO{
 	}
 	
 	public List<RegisterationInfo> getAll(){
-		String sql = "select * from private_registeration_info";
+		String sql = "select * from private_registeration_info where is_deleted = false";
 		List<RegisterationInfo> infoList = new ArrayList<>();
 		try {
 			RecordSet recordSet = dataBaseMgr.executeQuery(sql);

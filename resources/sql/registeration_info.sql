@@ -1,16 +1,6 @@
--- 2020.11.26
-CREATE SEQUENCE public.private_registeration_info_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 2147483647
-    CACHE 1;
-
--- Table: public.private_simcard
-
-CREATE TABLE public.private_registeration_info
+CREATE TABLE wechat.registeration_info
 (
-    id integer NOT NULL DEFAULT nextval('public.private_registeration_info_seq'::regclass),
+    id SERIAL,
     vpn_address text,
     registeration_date timestamp without time zone,
     purchaser text,
