@@ -3,6 +3,7 @@ package watchDog.dao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,7 @@ public class RegisterationInfoDAO extends BaseDAO{
 			+ ",service_period,product_code,product_mac,router_mac"
 			+ ",router_manufacturer,original_version,is_updated,is_connected, simcard_id, comment,is_deleted";
 	
-	private static final String SQL_SAVE = "INSERT INTO private_registeration_info(" + COLUMNS + ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	private static final String SQL_SAVE = "INSERT INTO wechat.registeration_info(" + COLUMNS + ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	
 	private RegisterationInfoDAO(){
 		
@@ -56,7 +57,7 @@ public class RegisterationInfoDAO extends BaseDAO{
 	}
 	
 	public List<RegisterationInfo> getAll(){
-		String sql = "select * from private_registeration_info where is_deleted = false";
+		String sql = "select * from wechat.registeration_info where is_deleted = false";
 		List<RegisterationInfo> infoList = new ArrayList<>();
 		try {
 			RecordSet recordSet = dataBaseMgr.executeQuery(sql);
@@ -68,6 +69,19 @@ public class RegisterationInfoDAO extends BaseDAO{
 			LOGGER.error("", e);
 		}
 		return infoList;
+	}
+	
+	public void updateOne(RegisterationInfo registerationInfo){
+		String updateSql = "UPDATE wechat.registeration_info SET ";
+		for(String column : COLUMNS.split(",")){
+			updateSql += column.trim() + " = ?,";
+		}
+		updateSql = updateSql.substring(0, updateSql.length() - 1) + " WHERE id = ?";
+		try {
+			dataBaseMgr.executeUpdate(updateSql, getUpdateParams(registerationInfo));
+		} catch (Exception e) {
+			LOGGER.error("", e);
+		}
 	}
 	
 	private RegisterationInfo constructRegisterationInfo(Record record){
@@ -113,5 +127,13 @@ public class RegisterationInfoDAO extends BaseDAO{
 				, registerationInfo.getComment()
 				, registerationInfo.getIsDeleted()
 		};
+	}
+	
+	private Object[] getUpdateParams(RegisterationInfo registerationInfo){
+		Object[] params = getParams(registerationInfo);
+		int updateParamLength = params.length + 1;
+		Object[] updateParams = new Object[updateParamLength];
+		updateParams[updateParamLength - 1] = registerationInfo.getId();
+		return updateParams;
 	}
 }

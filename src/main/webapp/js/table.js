@@ -197,6 +197,19 @@ var TableInit = function() {
 					}
 				}
 			},
+			/*{
+				field : 'simCard',
+				title : 'sim卡号',
+				editable : {
+					//type : 'checkbox',
+					title : 'sim卡号',
+					mode: "inline",  
+					validate : function(v) {
+						if (!v)
+							return '不能为空';
+					}
+				}
+			},*/
 			{
 				field : 'comment',
 				title : '备注',

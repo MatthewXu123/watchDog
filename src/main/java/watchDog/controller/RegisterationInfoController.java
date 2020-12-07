@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import watchDog.bean.register.RegisterationInfo;
 import watchDog.dao.RegisterationInfoDAO;
@@ -102,6 +103,7 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 			Writer outputStreamWriter = new OutputStreamWriter(ops, CHAR_ENCODING_UTF8);
 			PrintWriter printWriter = new PrintWriter(outputStreamWriter);
 			printWriter.write(JSON.toJSONString(rInfos));
+			//LOGGER.info(JSON.toJSONString(rInfos, SerializerFeature.WriteMapNullValue));
 			printWriter.flush();
 		} catch (Exception e) {
 			LOGGER.error("",e);
@@ -111,8 +113,8 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 	
 	private void edit(HttpServletRequest req, HttpServletResponse resp){
 		try {
-			String parameter = req.getParameter("row");
-			String attr = (String) req.getAttribute("row");
+			RegisterationInfo registerationInfo = JSONObject.parseObject(req.getParameter("row"), RegisterationInfo.class);
+			registerationInfoDAO.updateOne(registerationInfo);
 		} catch (Exception e) {
 			LOGGER.error("",e);
 		}

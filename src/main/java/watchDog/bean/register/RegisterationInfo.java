@@ -192,7 +192,7 @@ public class RegisterationInfo {
 	public void setIsDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "RegisterationInfo [id=" + id + ", vpnAddress=" + vpnAddress + ", registerationDate=" + registerationDate
@@ -202,5 +202,5 @@ public class RegisterationInfo {
 				+ isUpdated + ", isConnected=" + isConnected + ", simCard=" + simCard + ", comment=" + comment
 				+ ", isDeleted=" + isDeleted + ", insertTime=" + insertTime + "]";
 	}
-
+	
 }

@@ -31,7 +31,7 @@ public class SIMCardDAO extends BaseDAO{
 	}
 	
 	public void saveOne(SIMCard simCard){
-		String sql = "INSERT INTO private_simcard(card_number, simcard_type, simcard_status) VALUES(?,?,?)";
+		String sql = "INSERT INTO wechat.simcard(card_number, simcard_type, simcard_status) VALUES(?,?,?)";
 		try {
 			dataBaseMgr.executeUpdate(sql, new Object[]{simCard.getCardNumber()
             		, simCard.getSimCardType().getCode()
@@ -42,7 +42,7 @@ public class SIMCardDAO extends BaseDAO{
 	}
 	
 	public void saveAll(Collection<SIMCard> simCards){
-		String sql = "INSERT INTO private_simcard(card_number, simcard_type, simcard_status) VALUES(?,?,?)";
+		String sql = "INSERT INTO wechat.simcard(card_number, simcard_type, simcard_status) VALUES(?,?,?)";
 		List<Object[]> paramsList = new ArrayList<>();
 		try {
 			for(SIMCard simCard : simCards){
@@ -58,12 +58,12 @@ public class SIMCardDAO extends BaseDAO{
 	}
 	
 	public SIMCard getOneById(Integer id){
-		String sql = "SELECT * FROM private_simcard WHERE id = ?";
+		String sql = "SELECT * FROM wechat.simcard WHERE id = ?";
 		return getOne(sql, id);
 	}
 	
 	public SIMCard getOneByCardNumber(String cardNumber){
-		String sql = "SELECT * FROM private_simcard WHERE card_number = ?";
+		String sql = "SELECT * FROM wechat.simcard WHERE card_number = ?";
 		return getOne(sql, cardNumber);
 	}
 	
