@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,8 +112,23 @@ public class RegisterationInfoDAO extends BaseDAO{
 		return info;
 	}
 	
-	private Object[] getParams(RegisterationInfo registerationInfo){
-		return new Object[]{
+	private List<Object> getParams(RegisterationInfo registerationInfo){
+		return Stream.of(registerationInfo.getVpnAddress()
+				, registerationInfo.getRegisterationDate()
+				, registerationInfo.getPurchaser()
+				, registerationInfo.getProject()
+				, registerationInfo.getServicePeriod()
+				, registerationInfo.getProductCode()
+				, registerationInfo.getProductMac()
+				, registerationInfo.getRouterMac()
+				, registerationInfo.getRouterManufacturer()
+				, registerationInfo.getOriginalVersion()
+				, registerationInfo.getIsUpdated()
+				, registerationInfo.getIsConnected()
+				, registerationInfo.getSimCard() == null ? null : registerationInfo.getSimCard().getId()
+				, registerationInfo.getComment()
+				, registerationInfo.getIsDeleted()).collect(Collectors.toList());
+		/*return new Object[]{
 				registerationInfo.getVpnAddress()
 				, registerationInfo.getRegisterationDate()
 				, registerationInfo.getPurchaser()
@@ -126,14 +144,16 @@ public class RegisterationInfoDAO extends BaseDAO{
 				, registerationInfo.getSimCard() == null ? null : registerationInfo.getSimCard().getId()
 				, registerationInfo.getComment()
 				, registerationInfo.getIsDeleted()
-		};
+		};*/
 	}
 	
 	private Object[] getUpdateParams(RegisterationInfo registerationInfo){
 		Object[] params = getParams(registerationInfo);
-		int updateParamLength = params.length + 1;
-		Object[] updateParams = new Object[updateParamLength];
-		updateParams[updateParamLength - 1] = registerationInfo.getId();
+		
+		int paramsLength = params.length;
+		Object[] updateParams = new Object[paramsLength + 1];
+		updateParams = Arrays.copyOf(params, params.length);
+		updateParams[paramsLength] = registerationInfo.getId();
 		return updateParams;
 	}
 }

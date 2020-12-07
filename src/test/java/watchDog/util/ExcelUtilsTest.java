@@ -57,7 +57,7 @@ public class ExcelUtilsTest {
 			// Find the SIM card.
 			String cardNumber = getStringFromCell(row.getCell(11));
 			SIMCard simCard = simCardDAO.getOneByCardNumber(cardNumber);
-			if(simCard == null)
+			if(simCard.getId() == 0)
 				unsavedCardNumber.add(cardNumber);
 			info.setSimCard(simCard);
 			info.setRouterManufacturer(getStringFromCell(row.getCell(12)));

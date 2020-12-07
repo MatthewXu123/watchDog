@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
 import watchDog.bean.register.RegisterationInfo;
 import watchDog.bean.register.SIMCard;
 
@@ -99,9 +102,8 @@ public class RegisterationInfoDAOTest {
 	@Test
 	public void testGetAll(){
 		List<RegisterationInfo> list = registerationInfoDAO.getAll();
-		for (RegisterationInfo registerationInfo : list) {
-			System.out.println(registerationInfo);
-		}
+		String string = JSONObject.toJSONString(list, SerializerFeature.WriteMapNullValue);
+		System.out.println(string);
 	}
 
 }

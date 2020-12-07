@@ -68,13 +68,12 @@ public class SIMCardDAO extends BaseDAO{
 	}
 	
 	private SIMCard getOne(String sql, Object object){
-		SIMCard simCard = null;
+		SIMCard simCard = new SIMCard();
 		try {
             RecordSet rs = dataBaseMgr.executeQuery(sql, new Object[]{object});
             if(rs != null && rs.size() > 0){
             	Record record = rs.get(0);
             	
-            	simCard = new SIMCard();
             	simCard.setId((int)record.get(0));
             	simCard.setCardNumber((String)record.get(1));
             	simCard.setSimCardType(SIMCardType.getOneByCode((int)record.get(2)));

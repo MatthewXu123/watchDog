@@ -102,8 +102,7 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 			OutputStream ops = resp.getOutputStream();
 			Writer outputStreamWriter = new OutputStreamWriter(ops, CHAR_ENCODING_UTF8);
 			PrintWriter printWriter = new PrintWriter(outputStreamWriter);
-			printWriter.write(JSON.toJSONString(rInfos));
-			//LOGGER.info(JSON.toJSONString(rInfos, SerializerFeature.WriteMapNullValue));
+			printWriter.write(JSONObject.toJSONString(rInfos, SerializerFeature.WriteMapNullValue));
 			printWriter.flush();
 		} catch (Exception e) {
 			LOGGER.error("",e);

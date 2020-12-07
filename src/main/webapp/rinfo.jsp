@@ -14,15 +14,15 @@
 	<div class="col-sm-12">
 		<!-- Example Events -->
 		<div class="example-wrap">
-			<h4 class="example-title">销售人员</h4>
+			<h4 class="example-title">项目信息管理</h4>
 			<div class="example">
 				<div id="toolbar" class="btn-group">
 					<button id="btn_add" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 					</button>
-					<button id="btn_edit" type="button" class="btn btn-default">
+					<!-- <button id="btn_edit" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
-					</button>
+					</button> -->
 					<button id="btn_delete" type="button" class="btn btn-default">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
 					</button>
