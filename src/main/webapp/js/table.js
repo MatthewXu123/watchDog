@@ -36,6 +36,8 @@ var TableInit = function() {
 			showToggle : true, // 是否显示详细视图和列表视图的切换按钮
 			cardView : false, // 是否显示详细视图
 			detailView : false, // 是否显示父子表
+			showExport: true,                     //是否显示导出
+            exportDataType: "basic",              //basic', 'all', 'selected'.
 			columns : [ 
 			{
 				checkbox : true
@@ -43,6 +45,7 @@ var TableInit = function() {
 			{
 				field : 'vpnAddress',
 				title : 'VPN',
+				sortable:true,
 				editable : {
 					type : 'text',
 					title : 'VPN',
@@ -57,6 +60,10 @@ var TableInit = function() {
 			{
 				field : 'registerationDate',
 				title : '注册日期',
+				sortable:true,
+				formatter(value,row,index){
+					return value == undefined ? "无" : new Date(value).format("yyyy-MM-dd");
+				},
 				editable : {
 					type : 'text',
 					title : '注册日期',
@@ -71,6 +78,7 @@ var TableInit = function() {
 			{
 				field : 'purchaser',
 				title : '采购方',
+				sortable:true,
 				editable : {
 					type : 'text',
 					title : '采购方',
@@ -85,6 +93,7 @@ var TableInit = function() {
 			{
 				field : 'project',
 				title : '项目名',
+				sortable:true,
 				editable : {
 					type : 'text',
 					title : '项目名',
@@ -99,6 +108,7 @@ var TableInit = function() {
 			{
 				field : 'servicePeriod',
 				title : '服务年限',
+				sortable:true,
 				editable : {
 					type : 'number',
 					title : '服务年限',
@@ -114,6 +124,7 @@ var TableInit = function() {
 			{
 				field : 'productCode',
 				title : '产品型号',
+				sortable:true,
 				editable : {
 					type : 'text',
 					title : '产品型号',
@@ -128,6 +139,7 @@ var TableInit = function() {
 			{
 				field : 'productMac',
 				title : '产品Mac',
+				sortable:true,
 				editable : {
 					type : 'text',
 					title : '产品Mac',
@@ -142,6 +154,7 @@ var TableInit = function() {
 			{
 				field : 'routerMac',
 				title : '路由器Mac',
+				sortable:true,
 				editable : {
 					type : 'text',
 					title : '路由器Mac',
@@ -156,6 +169,7 @@ var TableInit = function() {
 			{
 				field : 'routerManufacturer',
 				title : '路由器厂商',
+				sortable:true,
 				editable : {
 					type : 'text',
 					title : '路由器厂商',
@@ -170,6 +184,7 @@ var TableInit = function() {
 			{
 				field : 'originalVersion',
 				title : '出厂设置',
+				sortable:true,
 				editable : {
 					type : 'text',
 					title : '出厂设置',
@@ -184,8 +199,10 @@ var TableInit = function() {
 			{
 				field : 'isUpdated',
 				title : '是否升级',
+				formatter(value,row, index){
+					return value ? "已升级" : "未升级";
+				},
 				editable : {
-					//type : 'checkbox',
 					title : '是否升级',
 					mode: "inline",  
 					validate : function(v) {
@@ -197,8 +214,10 @@ var TableInit = function() {
 			{
 				field : 'isConnected',
 				title : '是否4G连接',
+				formatter(value,row,index){
+					return value ? "是" : "否";
+				},
 				editable : {
-					//type : 'checkbox',
 					title : '是否4G连接',
 					mode: "inline",  
 					validate : function(v) {
@@ -210,6 +229,7 @@ var TableInit = function() {
 			{
 				field : 'simCard.cardNumber',
 				title : 'sim卡号',
+				sortable:true,
 				editable : {
 					//type : 'checkbox',
 					title : 'sim卡号',
@@ -485,3 +505,23 @@ var ButtonInit = function () {
 
     return oInit;
 };
+Date.prototype.format = function(fmt) { 
+    var o = { 
+       "M+" : this.getMonth()+1,                 //月份 
+       "d+" : this.getDate(),                    //日 
+       "h+" : this.getHours(),                   //小时 
+       "m+" : this.getMinutes(),                 //分 
+       "s+" : this.getSeconds(),                 //秒 
+       "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+       "S"  : this.getMilliseconds()             //毫秒 
+   }; 
+   if(/(y+)/.test(fmt)) {
+           fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+   }
+    for(var k in o) {
+       if(new RegExp("("+ k +")").test(fmt)){
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        }
+    }
+   return fmt; 
+} 

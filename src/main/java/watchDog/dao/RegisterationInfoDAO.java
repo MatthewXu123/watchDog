@@ -3,11 +3,9 @@ package watchDog.dao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,7 +39,7 @@ public class RegisterationInfoDAO extends BaseDAO{
 	
 	public void saveOne(RegisterationInfo registerationInfo){
 		try {
-			dataBaseMgr.executeUpdate(SQL_SAVE, getParams(registerationInfo));
+			dataBaseMgr.executeUpdate(SQL_SAVE, getParams(registerationInfo).toArray());
 		} catch (Exception e) {
 			LOGGER.error("",e);
 		}
@@ -51,7 +49,7 @@ public class RegisterationInfoDAO extends BaseDAO{
 		try {
 			List<Object[]> paramsList = new ArrayList<>();
 			for (RegisterationInfo registerationInfo : registerationInfos) {
-				paramsList.add(getParams(registerationInfo));
+				paramsList.add(getParams(registerationInfo).toArray());
 			}
 			dataBaseMgr.executeMulUpdate(SQL_SAVE, paramsList);
 		} catch (Exception e) {
@@ -148,12 +146,8 @@ public class RegisterationInfoDAO extends BaseDAO{
 	}
 	
 	private Object[] getUpdateParams(RegisterationInfo registerationInfo){
-		Object[] params = getParams(registerationInfo);
-		
-		int paramsLength = params.length;
-		Object[] updateParams = new Object[paramsLength + 1];
-		updateParams = Arrays.copyOf(params, params.length);
-		updateParams[paramsLength] = registerationInfo.getId();
-		return updateParams;
+		List<Object> params = getParams(registerationInfo);
+		params.add(registerationInfo.getId());
+		return params.toArray();
 	}
 }
