@@ -57,6 +57,20 @@ public class RegisterationInfoDAO extends BaseDAO{
 		}
 	}
 	
+	public RegisterationInfo getOneById(int id){
+		String sql = "select * from wechat.registeration_info where id = ?";
+		RegisterationInfo info = new RegisterationInfo();
+		try {
+			RecordSet recordSet = dataBaseMgr.executeQuery(sql, new Object[]{id});
+			if(recordSet != null && recordSet.size() > 0){
+				info = constructRegisterationInfo(recordSet.get(0));
+			}
+		} catch (Exception e) {
+			LOGGER.error("", e);
+		}
+		return info;
+	}
+	
 	public List<RegisterationInfo> getAll(){
 		String sql = "select * from wechat.registeration_info where is_deleted = false";
 		List<RegisterationInfo> infoList = new ArrayList<>();

@@ -69,5 +69,22 @@ public class SIMCardDAOTest {
 		SIMCard simCard = simCardDAO.getOneByCardNumber(null);
 		assertTrue(simCard.getCardNumber().equals("89860427102090710200"));
 	}
+	
+	@Test
+	public void testGetAllByStatus(){
+		List<SIMCard> list = simCardDAO.getAllByStatus(0);
+		assertTrue(list.size() == 0);
+	}
+	
+	@Test
+	public void testGetAll(){
+		List<SIMCard> list = simCardDAO.getAll();
+		assertTrue(list.size() > 0);
+	}
+	
+	@Test
+	public void testUpdateStatus(){
+		simCardDAO.updateStatus(1, SIMCardStatus.DISABLED);
+	}
 
 }

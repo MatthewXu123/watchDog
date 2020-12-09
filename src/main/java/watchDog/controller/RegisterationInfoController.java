@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import watchDog.bean.register.RegisterationInfo;
+import watchDog.bean.register.SIMCardStatus;
 import watchDog.bean.result.ResultFactory;
 import watchDog.dao.RegisterationInfoDAO;
 import watchDog.dao.SIMCardDAO;
@@ -107,7 +108,15 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 	
 	private void edit(HttpServletRequest req, HttpServletResponse resp){
 		try {
+			int currentSimCardId = Integer.valueOf(req.getParameter("simCardId"));
 			RegisterationInfo registerationInfo = JSONObject.parseObject(req.getParameter("row"), RegisterationInfo.class);
+			int previousId = registerationInfo.getSimCard().getId();
+			if(currentSimCardId != previousId){
+				simCardDAO.updateStatus(previousId, SIMCardStatus.UNUSED);
+				simCardDAO.updateStatus(currentSimCardId, SIMCardStatus.ENABLED);
+				registerationInfo.setSimCard(simCardDAO.getOneById(currentSimCardId));
+			}
+			
 			registerationInfoDAO.updateOne(registerationInfo);
 			OutputStream ops = resp.getOutputStream();
 			Writer outputStreamWriter = new OutputStreamWriter(ops, CHAR_ENCODING_UTF8);

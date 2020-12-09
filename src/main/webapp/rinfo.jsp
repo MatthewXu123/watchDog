@@ -43,5 +43,6 @@
 	<script src="../js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 	<script src="../js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
 	<script src="../js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 </body>
 </html>

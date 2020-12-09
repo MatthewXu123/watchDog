@@ -62,13 +62,14 @@ var TableInit = function() {
 				title : '注册日期',
 				sortable:true,
 				formatter(value,row,index){
-					return value == undefined ? "无" : new Date(value).format("yyyy-MM-dd");
+					return value == undefined ? null : new Date(value).format("yyyy-MM-dd");
 				},
 				editable : {
-					type : 'text',
-					title : '注册日期',
-					emptytext:'无',
+					type : 'combodate',
+					format:'YYYY-MM-DD',
+					viewformat:'DD/MM/YY',
 					mode: "inline",  
+					emptytext:"无",
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -199,12 +200,14 @@ var TableInit = function() {
 			{
 				field : 'isUpdated',
 				title : '是否升级',
-				formatter(value,row, index){
-					return value ? "已升级" : "未升级";
-				},
 				editable : {
-					title : '是否升级',
 					mode: "inline",  
+					type: "select",
+					/*formatter(value,row, index){
+						return value ? "已升级" : "未升级";
+					},*/
+					source:[{value:true,text:"已升级"}
+					,{value:false,text:"未升级"}],
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -214,12 +217,14 @@ var TableInit = function() {
 			{
 				field : 'isConnected',
 				title : '是否4G连接',
-				formatter(value,row,index){
-					return value ? "是" : "否";
-				},
 				editable : {
-					title : '是否4G连接',
 					mode: "inline",  
+					type:"select",
+					/*formatter(value,row,index){
+						return value ? "已连接" : "未连接";
+					},*/
+					source:[{value:true,text:"已连接"}
+					,{value:false,text:"未连接"}],
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -227,19 +232,33 @@ var TableInit = function() {
 				}
 			},
 			{
-				field : 'simCard.cardNumber',
+				field : 'simCard.id',
 				title : 'sim卡号',
 				sortable:true,
-				editable : {
-					//type : 'checkbox',
-					title : 'sim卡号',
-					mode: "inline",  
-					emptytext:'无',
-					validate : function(v) {
-						if (!v)
-							return '不能为空';
-					}
-				}
+				 editable: {
+					 type: 'select',
+					 mode: "inline", 
+					 emptytext:"无",
+					 source: function () {
+						 var result = [];
+						 $.ajax({
+							 url: '/watchDog/simcard/get',
+							 async: false,
+							 type: "get",
+							 success: function (data, status) {
+								 var dataJson = JSON.parse(data);
+								 for(var p in dataJson){
+									var ele = dataJson[p];
+									result.push({ value: ele.id, text: ele.cardNumber + getSIMCardStatus(ele.simCardStatus)});
+								 }
+							 }
+						 });
+						 return result;
+					 },
+					 formatter(value,row,index){
+							return value;
+						},
+				 }
 			},
 			{
 				field : 'comment',
@@ -313,12 +332,14 @@ var TableInit = function() {
 			
 			// 保存的使用
 			onEditableSave:function(field, row, oldValue, $el) {
+				var ele = $el.value;
 				// 可进行异步操作
 				$.ajax({
 					type : "post",
 					url : "/watchDog/rinfo/edit",
 					data : {
-						"row": JSON.stringify(row)
+						"row": JSON.stringify(row),
+						"simCardId":simCard.id
 					},
 					dataType : 'JSON',
 					success : function(data, status) {
@@ -505,6 +526,18 @@ var ButtonInit = function () {
 
     return oInit;
 };
+
+function getSIMCardStatus(status){
+	if(status == "UNUSED")
+		return "未使用";
+	if(status == "ENABLED")
+		return "使用中";
+	if(status == "DISABLED")
+		return "停用";
+	if(status == "DELETED")
+		return "销户";
+	return "未知";
+}
 Date.prototype.format = function(fmt) { 
     var o = { 
        "M+" : this.getMonth()+1,                 //月份 
