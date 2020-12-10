@@ -3,9 +3,8 @@ $(function() {
 	//$('#table').editable();
 	var oTable = new TableInit();
 	oTable.Init();
-	
-	var oButtonInit = new ButtonInit();
-	oButtonInit.Init();
+	/*var oButtonInit = new ButtonInit();
+	oButtonInit.Init();*/
 });
 var TableInit = function() {
 	var oTableInit = new Object();
@@ -23,8 +22,8 @@ var TableInit = function() {
 			//queryParams : oTableInit.queryParams,// 传递参数（*）
 			sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）
 			pageNumber : 1, // 初始化加载第一页，默认第一页
-			pageSize : 50, // 每页的记录行数（*）
-			pageList : [ 10, 25, 50, 100 ], // 可供选择的每页的行数（*）
+			pageSize : 200, // 每页的记录行数（*）
+			pageList : [ 10, 25, 50, 100,200 ], // 可供选择的每页的行数（*）
 			search : true,// 是否显示表格搜索，此搜索是客户端搜索,也可以是服务端检索
 			//strictSearch : true,
 			showColumns : true, // 是否显示所有的列
@@ -39,9 +38,9 @@ var TableInit = function() {
 			showExport: true,                     //是否显示导出
             exportDataType: "basic",              //basic', 'all', 'selected'.
 			columns : [ 
-			{
+			/*{
 				checkbox : true
-			}, 
+			}, */
 			{
 				field : 'vpnAddress',
 				title : 'VPN',
@@ -66,8 +65,8 @@ var TableInit = function() {
 				},
 				editable : {
 					type : 'combodate',
-					format:'YYYY-MM-DD',
-					viewformat:'DD/MM/YY',
+					//format:'YYYY-MM-DD',
+					//viewformat:'DD/MM/YY',
 					mode: "inline",  
 					emptytext:"无",
 					validate : function(v) {
@@ -332,14 +331,13 @@ var TableInit = function() {
 			
 			// 保存的使用
 			onEditableSave:function(field, row, oldValue, $el) {
-				var ele = $el.value;
 				// 可进行异步操作
 				$.ajax({
 					type : "post",
 					url : "/watchDog/rinfo/edit",
 					data : {
 						"row": JSON.stringify(row),
-						"simCardId":simCard.id
+						"simCardId":field == "simCard.id" ? row[field] : null,
 					},
 					dataType : 'JSON',
 					success : function(data, status) {
@@ -426,19 +424,19 @@ var ButtonInit = function () {
     var postdata = {};
 
     oInit.Init = function () {
-        $("#btn_add").click(function () {
-            /*$("#myModalLabel").text("新增");
+        /*$("#btn_add").click(function () {
+            $("#addModal").text("新增");
             $("#myModal").find(".form-control").val("");
-            $('#myModal').modal()
+            $('#myModal').modal();
 
-            postdata.DEPARTMENT_ID = "";*/
-        	/**
+            postdata.DEPARTMENT_ID = "";
+        	*//**
         	 * 新增一行数据
-        	 */
+        	 *//*
         	var count = $('#table').bootstrapTable('getData').length;
     	    // newFlag == 1的数据为新规的数据
     	    $('#table').bootstrapTable('insertRow',{index:count,row:{}});
-        });
+        });*/
 
         //$("#btn_edit").click(function () {
         //    var arrselections = $("#tb_departments").bootstrapTable('getSelections');

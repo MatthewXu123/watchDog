@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,13 +109,17 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 	
 	private void edit(HttpServletRequest req, HttpServletResponse resp){
 		try {
-			int currentSimCardId = Integer.valueOf(req.getParameter("simCardId"));
+			String simCardId = req.getParameter("simCardId");
+			int currentSimCardId = StringUtils.isBlank(simCardId) ? 0 : Integer.valueOf(simCardId);
 			RegisterationInfo registerationInfo = JSONObject.parseObject(req.getParameter("row"), RegisterationInfo.class);
-			int previousId = registerationInfo.getSimCard().getId();
-			if(currentSimCardId != previousId){
-				simCardDAO.updateStatus(previousId, SIMCardStatus.UNUSED);
-				simCardDAO.updateStatus(currentSimCardId, SIMCardStatus.ENABLED);
-				registerationInfo.setSimCard(simCardDAO.getOneById(currentSimCardId));
+			if(currentSimCardId != 0){
+				int previousId = registerationInfo.getSimCard().getId();
+				if(currentSimCardId != previousId){
+					simCardDAO.updateStatus(previousId, SIMCardStatus.UNUSED);
+					simCardDAO.updateStatus(currentSimCardId, SIMCardStatus.ENABLED);
+					registerationInfo.setSimCard(simCardDAO.getOneById(currentSimCardId));
+				}
+				
 			}
 			
 			registerationInfoDAO.updateOne(registerationInfo);

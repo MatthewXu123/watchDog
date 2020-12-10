@@ -4416,9 +4416,9 @@ $(function(){
         //in this format items in dropdowns are displayed
         template: 'D / MMM / YYYY   H : mm',
         //initial value, can be `new Date()`    
-        value: null,                       
-        minYear: 1970,
-        maxYear: 2015,
+        value: new Date(),                       
+        minYear: 2010,
+        maxYear: (new Date()).getFullYear(),
         yearDescending: true,
         minuteStep: 5,
         secondStep: 1,
