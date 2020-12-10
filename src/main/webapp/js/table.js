@@ -22,8 +22,8 @@ var TableInit = function() {
 			//queryParams : oTableInit.queryParams,// 传递参数（*）
 			sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）
 			pageNumber : 1, // 初始化加载第一页，默认第一页
-			pageSize : 200, // 每页的记录行数（*）
-			pageList : [ 10, 25, 50, 100,200 ], // 可供选择的每页的行数（*）
+			pageSize : 10, // 每页的记录行数（*）
+			pageList : [ 10, 25, 50, 100], // 可供选择的每页的行数（*）
 			search : true,// 是否显示表格搜索，此搜索是客户端搜索,也可以是服务端检索
 			//strictSearch : true,
 			showColumns : true, // 是否显示所有的列
@@ -68,7 +68,7 @@ var TableInit = function() {
 					//format:'YYYY-MM-DD',
 					//viewformat:'DD/MM/YY',
 					mode: "inline",  
-					emptytext:"无",
+					emptytext:"暂无",
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -83,7 +83,7 @@ var TableInit = function() {
 					type : 'text',
 					title : '采购方',
 					mode: "inline",  
-					emptytext:'无',
+					emptytext:'暂无',
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -98,7 +98,7 @@ var TableInit = function() {
 					type : 'text',
 					title : '项目名',
 					mode: "inline",  
-					emptytext:'无',
+					emptytext:'暂无',
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -113,7 +113,7 @@ var TableInit = function() {
 					type : 'number',
 					title : '服务年限',
 					mode: "inline",  
-					emptytext:'无',
+					emptytext:'暂无',
 					validate: function (v) {
 						if (isNaN(v)) return '服务年限必须是数字';
 						var age = parseInt(v);
@@ -129,7 +129,7 @@ var TableInit = function() {
 					type : 'text',
 					title : '产品型号',
 					mode: "inline",  
-					emptytext:'无',
+					emptytext:'暂无',
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -144,7 +144,7 @@ var TableInit = function() {
 					type : 'text',
 					title : '产品Mac',
 					mode: "inline",  
-					emptytext:'无',
+					emptytext:'暂无',
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -159,7 +159,7 @@ var TableInit = function() {
 					type : 'text',
 					title : '路由器Mac',
 					mode: "inline",  
-					emptytext:'无',
+					emptytext:'暂无',
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -171,10 +171,11 @@ var TableInit = function() {
 				title : '路由器厂商',
 				sortable:true,
 				editable : {
-					type : 'text',
-					title : '路由器厂商',
 					mode: "inline",  
-					emptytext:'无',
+					type: "select",
+					emptytext:'暂无',
+					source:[{value:"树米",text:"树米"}
+					,{value:"有人",text:"有人"}],
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -183,13 +184,13 @@ var TableInit = function() {
 			}, 
 			{
 				field : 'originalVersion',
-				title : '出厂设置',
+				title : '出厂版本',
 				sortable:true,
 				editable : {
 					type : 'text',
 					title : '出厂设置',
 					mode: "inline",  
-					emptytext:'无',
+					emptytext:'暂无',
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
@@ -237,7 +238,7 @@ var TableInit = function() {
 				 editable: {
 					 type: 'select',
 					 mode: "inline", 
-					 emptytext:"无",
+					 emptytext:"暂无",
 					 source: function () {
 						 var result = [];
 						 $.ajax({
@@ -266,7 +267,7 @@ var TableInit = function() {
 					type : 'text',
 					title : '备注',
 					mode: "inline",  
-					emptytext:'无',
+					emptytext:'暂无',
 					validate : function(v) {
 						if (!v)
 							return '不能为空';
