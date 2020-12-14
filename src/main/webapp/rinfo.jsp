@@ -13,12 +13,15 @@
 	
 	<link href="../css/bootstrap.min.css" rel="stylesheet">
 	<link href="../css/font-awesome.min.css" rel="stylesheet">
+	<link href="../js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet">
 	<link href="../css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
 	<link href="../css/plugins/bootstrap-table/bootstrap-editable.css" rel="stylesheet">
 	<link href="../css/table.css" rel="stylesheet">
 	<script src="../js/plugins/bootstrap-table/popper.min.js"></script>
 	<script src="../js/table.js"></script>
 	<!-- Bootstrap table -->
+	<script src="../js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+	<script src="../js/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 	<script src="../js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 	<script src="../js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 	<script src="../js/plugins/bootstrap-table/bootstrap-editable.js?1"></script>
@@ -65,11 +68,12 @@
 					<h4 class="modal-title" id="myModalLabel">新增</h4>
 				</div>
 				<div class="modal-body">
-					<form>
+					<!-- <form action="/watchDog/rinfo/save" method="POST"> -->
+						<form id="save_form">
 						<div class="form-group">
 							<label for="vpnAddressInput" class="col-md-2">VPN地址</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="vpnAddressInput" name="vpnAddress">
+								<input type="text" class="form-control" id="vpnAddressInput" name="vpnAddress" value="192.168.">
 							</div>
 							<label for="registerationDateInput" class="col-md-2">注册日期</label>
 							<div class="col-md-4">
@@ -80,6 +84,11 @@
 							<label for="purchaserInput" class="col-md-2">采购方</label>
 							<div class="col-md-4">
 								<input type="text" class="form-control" id="purchaserInput" name="purchaser">
+								<datalist id="greetings" style="display:none;">
+    <option value="Good Morning">Good Morning</option>
+    <option value="Hello">Hello</option>
+    <option value="Good Afternoon">Good Afternoon</option>
+</datalist>
 							</div>
 							<label for="projectInput" class="col-md-2">项目名</label>
 							<div class="col-md-4">
@@ -133,7 +142,7 @@
 						<div class="form-group">
 							<label for="simCardInput" class="col-md-2">sim卡号</label>
 							<div class="col-md-10">
-								<select class="form-control" name="servicePeriod">
+								<select class="form-control" name="simCardId">
 									<c:forEach items="${simcardList}" var="item">
 										<option value="${item.id}">${item.cardNumber}</option>
 									</c:forEach>
@@ -150,7 +159,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary">提交</button>
+					<button id="btn_submit" type="button" class="btn btn-primary">提交</button>
 				</div>
 			</div>
 		</div>

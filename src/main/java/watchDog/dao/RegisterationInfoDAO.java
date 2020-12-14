@@ -86,6 +86,22 @@ public class RegisterationInfoDAO extends BaseDAO{
 		return infoList;
 	}
 	
+	public List<String> getAllPurchaser(){
+		String sql = "SELECT DISTINCT purchaser FROM wechat.registeration_info"
+				+ " WHERE purchaser IS NOT NULL AND purchaser <> ''";
+		List<String> purchaserList = new ArrayList<>();
+		try {
+			RecordSet recordSet = dataBaseMgr.executeQuery(sql);
+			if(recordSet != null && recordSet.size() > 0){
+				for(int i = 0; i < recordSet.size(); i++)
+					purchaserList.add((String)recordSet.get(i).get(0));
+			}
+		} catch (Exception e) {
+			LOGGER.error("", e);
+		}
+		return purchaserList;
+	}
+	
 	public void updateOne(RegisterationInfo registerationInfo){
 		String updateSql = "UPDATE wechat.registeration_info SET ";
 		for(String column : COLUMNS.split(",")){

@@ -111,5 +111,11 @@ public class RegisterationInfoDAOTest {
 		RegisterationInfo info = registerationInfoDAO.getOneById(10);
 		System.out.println(info);
 	}
+	
+	@Test
+	public void getAllPurchaser(){
+		List<String> allPurchaser = registerationInfoDAO.getAllPurchaser();
+		System.out.println(allPurchaser);
+	}
 
 }

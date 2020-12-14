@@ -3,6 +3,39 @@ $(function() {
 	//$('#table').editable();
 	var oTable = new TableInit();
 	oTable.Init();
+	$("#registerationDateInput").datepicker({
+		language:"zh-CN",
+	});
+	$('#registerationDateInput').datetimepicker('setDate', new Date());
+	$("#btn_submit").click(function(){
+		if($("#isUpdatedInput").prop("checked"))
+			$("#isUpdatedInput").val(true);
+		else
+			$("#isUpdatedInput").val(false);
+		
+		if($("#isConnectedInput").prop("checked"))
+			$("#isConnectedInput").val(true);
+		else
+			$("#isConnectedInput").val(false);
+		
+		$.ajax({
+			method:"post",
+			url:"/watchDog/rinfo/save",
+			data:{
+				"rinfo":JSON.stringify($('#save_form').serializeObject()),
+			},
+	        //contentType:"application/json",  //缺失会出现URL编码，无法转成json对象
+	        dataType : 'JSON',
+			success : function(data, status) {
+				if (status == "success") {
+					alert('提交数据成功');
+				}
+			},
+			error : function() {
+				alert('编辑失败');
+			},
+		})
+	})
 	/*var oButtonInit = new ButtonInit();
 	oButtonInit.Init();*/
 });
@@ -557,3 +590,18 @@ Date.prototype.format = function(fmt) {
     }
    return fmt; 
 } 
+$.fn.serializeObject = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name]) {
+            if (!o[this.name].push) {
+                o[this.name] = [ o[this.name] ];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};

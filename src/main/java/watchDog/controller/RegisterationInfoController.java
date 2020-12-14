@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
@@ -35,7 +36,7 @@ import watchDog.util.HttpServletUtil;
  * @author Matthew Xu
  * @date Dec 2, 2020
  */
-@WebServlet(urlPatterns = {"/rinfo/view", "/rinfo/getData","/rinfo/edit"})
+@WebServlet(urlPatterns = {"/rinfo/view", "/rinfo/getData","/rinfo/edit", "/rinfo/save"})
 public class RegisterationInfoController extends HttpServlet implements BaseController{
 
 	private static final long serialVersionUID = -5031685751594766916L;
@@ -123,13 +124,21 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 			}
 			
 			registerationInfoDAO.updateOne(registerationInfo);
-			OutputStream ops = resp.getOutputStream();
-			Writer outputStreamWriter = new OutputStreamWriter(ops, CHAR_ENCODING_UTF8);
-			PrintWriter printWriter = new PrintWriter(outputStreamWriter);
-			printWriter.write(JSONObject.toJSONString(ResultFactory.getSuccessResult()));
-			printWriter.flush();
+			BaseController.returnSuccess(resp);
 		} catch (Exception e) {
 			LOGGER.error("",e);
 		}
+	}
+	
+	private void save(HttpServletRequest req, HttpServletResponse resp){
+		try {
+			JSONObject infoObj = JSONObject.parseObject(req.getParameter("rinfo"));
+			RegisterationInfo info = infoObj.toJavaObject(RegisterationInfo.class);
+			info.setSimCard(simCardDAO.getOneById(infoObj.getInteger("simCardId")));
+			registerationInfoDAO.saveOne(info);
+		} catch (Exception e) {
+			LOGGER.error("",e);
+		}
+		
 	}
 }
