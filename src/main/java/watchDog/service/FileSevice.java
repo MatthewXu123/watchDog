@@ -13,7 +13,7 @@ import watchDog.bean.SiteInfo;
 import watchDog.listener.Dog;
 import watchDog.util.CSVUtils;
 import watchDog.util.DateTool;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatUser;
 
 /**
  * Description:
@@ -58,11 +58,11 @@ public class FileSevice {
 	 * @date Jul 16, 2020
 	 */
 	public static List<List<Object>> getSiteMemberList(){
-		Map<SiteInfo, List<WechatMember>> siteWechatMemberMap = Dog.getInstance().getWechatApplicationThread().getSiteWechatMemberMap();
+		Map<SiteInfo, List<WechatUser>> siteWechatMemberMap = Dog.getInstance().getWechatApplicationThread().getSiteWechatMemberMap();
 		List<List<Object>> dataList = new ArrayList<List<Object>>();
-		for (Entry<SiteInfo, List<WechatMember>> siteMemberMap : siteWechatMemberMap.entrySet()) {
+		for (Entry<SiteInfo, List<WechatUser>> siteMemberMap : siteWechatMemberMap.entrySet()) {
 			SiteInfo siteInfo = siteMemberMap.getKey();
-			List<WechatMember> members = siteMemberMap.getValue();
+			List<WechatUser> members = siteMemberMap.getValue();
 			
 			List<Object> row = new ArrayList<>();
 			row.add(siteInfo.getManDescription());
@@ -72,7 +72,7 @@ public class FileSevice {
 			String tagId2 = siteInfo.getTagId2();
 			String soldierGroupStr = "";
 			String officerGroupStr = "";
-			for (WechatMember member : members) {
+			for (WechatUser member : members) {
 				String[] department = member.getDepartment();
 				List<String> departmentList = Arrays.asList(department);
 				if(departmentList.contains(tagId))

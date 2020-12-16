@@ -38,7 +38,8 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 	}
 
 	@Override
-	public void run() {
+	public void run() {/*
+	//TO DELETE MATTEW
 		try {
 			if(DateTool.isTodayWorkday()){
 				logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_START.getKey(), new Object[]{this.getClass().getName()}));
@@ -94,7 +95,7 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 			}
 		} catch (Exception e) {
 			logger.error("", e);
-		}
+		}*/
 	}
 
 }

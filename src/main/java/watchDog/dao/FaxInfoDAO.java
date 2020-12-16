@@ -20,7 +20,7 @@ import watchDog.thread.WechatApplicationThread;
 import watchDog.util.DateTool;
 import watchDog.util.ObjectUtils;
 import watchDog.util.ValueRetrieve;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatUser;
 
 import static watchDog.util.LogUtil.*;
 /**
@@ -169,10 +169,10 @@ public class FaxInfoDAO extends BaseDAO {
 					faxInfo.setAgentId((String)rs.get(i).get("agentid"));
 					faxInfo.setAlarmFaxRuleDTO(alarmFaxRuleDTO);
 					faxInfo.setIdalarmList(idalarmList);
-					List<WechatMember> wechatMemberList = new ArrayList<>();
+					List<WechatUser> wechatMemberList = new ArrayList<>();
 					
 					if(StringUtils.isBlank(realAlarmCode) && realAlarmCode.equals(CODE_UNIT_OFFLINE)){
-						WechatMember wechatMember = new WechatMember();
+						WechatUser wechatMember = new WechatUser();
 						wechatMember.setName("Neil");
 						wechatMember.setUserid("Neil");
 						wechatMember.setMobile("18616686217");

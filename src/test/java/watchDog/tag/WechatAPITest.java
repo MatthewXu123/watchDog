@@ -1,16 +1,18 @@
 package watchDog.tag;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSON;
-
 import watchDog.wechat.bean.WechatDept;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatPostTag;
+import watchDog.wechat.bean.WechatResult;
+import watchDog.wechat.bean.WechatTag;
+import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.util.WechatUtil;
 
 public class WechatAPITest {
@@ -18,35 +20,35 @@ public class WechatAPITest {
 	@Test
 	public void testGetWechatDeptList(){
 		List<WechatDept> wechatDeptList = WechatUtil.getDeptListByDeptId("6");
-		WechatMember memberByUserId = WechatUtil.getMemberByUserId("15366203524");
+		WechatUser memberByUserId = WechatUtil.getMemberByUserId("15366203524");
 		assertTrue(true);
 	}
 	
 	@Test
 	public void testGetMemberByUserId(){
-		WechatMember memberByUserId = WechatUtil.getMemberByUserId("15366203524");
+		WechatUser memberByUserId = WechatUtil.getMemberByUserId("15366203524");
 		assertTrue(true);
 	}
 	
 	@Test
 	public void testGetWechatMemberByDeptId(){
-		List<WechatMember> WechatMemberList = WechatUtil.getMemberByDeptId("741", "0");
+		List<WechatUser> WechatMemberList = WechatUtil.getMemberByDeptId("741", "0");
 		assertTrue(WechatMemberList.size() > 0);
 	}
 	
 	@Test
 	public void testGetAllWeChatMember(){
-		List<WechatMember> allWeChatMember = WechatUtil.getAllMembers();
+		List<WechatUser> allWeChatMember = WechatUtil.getAllMembers();
 		assertTrue(allWeChatMember.size() > 0);
 	}
 	
 	@Test
 	public void testgetDeptIdWechatMemberMap(){
-		List<WechatMember> wechatMemberList = WechatUtil.getDeptIdMemberMap("103").get("741");
-		List<WechatMember> wechatMemberListCopy = wechatMemberList;
-		Iterator<WechatMember> iterator = wechatMemberListCopy.iterator();
+		List<WechatUser> wechatMemberList = WechatUtil.getDeptIdMemberMap("103").get("741");
+		List<WechatUser> wechatMemberListCopy = wechatMemberList;
+		Iterator<WechatUser> iterator = wechatMemberListCopy.iterator();
         while (iterator.hasNext()) {
-        	WechatMember wechatMember = iterator.next();
+        	WechatUser wechatMember = iterator.next();
             if (wechatMember.getName().indexOf("_i") >= 0)
                 iterator.remove();
         }
@@ -69,12 +71,12 @@ public class WechatAPITest {
 	
 	@Test
 	public void testUpdateMember(){
-		WechatMember wechatMember = new WechatMember();
+		WechatUser wechatMember = new WechatUser();
 		wechatMember.setUserid("matthewxu123");
 		wechatMember.setDepartment(new String[]{"11","741"});
 		String result = WechatUtil.updateMember(wechatMember);
 		
-		WechatMember wechatMember2 = new WechatMember();
+		WechatUser wechatMember2 = new WechatUser();
 		wechatMember2.setUserid("15366203524");
 		wechatMember2.setDepartment(new String[]{"11","741"});
 		WechatUtil.updateMember(wechatMember2);
@@ -93,12 +95,12 @@ public class WechatAPITest {
 	
 	@Test
 	public void clear(){
-		WechatMember wechatMember = new WechatMember();
+		WechatUser wechatMember = new WechatUser();
 		wechatMember.setUserid("matthewxu123");
 		wechatMember.setDepartment(new String[]{"11","741"});
 		String result = WechatUtil.updateMember(wechatMember);
 		
-		WechatMember wechatMember2 = new WechatMember();
+		WechatUser wechatMember2 = new WechatUser();
 		wechatMember2.setUserid("15366203524");
 		wechatMember2.setDepartment(new String[]{"11","741"});
 		WechatUtil.updateMember(wechatMember2);
@@ -125,5 +127,43 @@ public class WechatAPITest {
 	public void testIsDeptExistByName(){
 		String id = WechatUtil.isDeptExistByName("741", "军官");
 		assertTrue(id.equals("2526"));
+	}
+	
+	@Test
+	public void testGetTagList(){
+		List<WechatTag> tagList = WechatUtil.getTagList();
+		for (WechatTag wechatTag : tagList) {
+			WechatUtil.deleteTagById(wechatTag.getTagid());
+		}
+		System.out.println();
+	}
+	
+	@Test
+	public void testDeleteTagById(){
+		WechatResult wechatResult = WechatUtil.deleteTagById("20");
+		System.out.println(wechatResult);
+	}
+	
+	@Test
+	public void testGetTagUserList(){
+		List<WechatUser> tagUserList = WechatUtil.getTagUserList("20");
+		System.out.println();
+	}
+	
+	@Test
+	public void testAddTagUser(){
+		WechatPostTag wechatPostTag = new WechatPostTag();
+		wechatPostTag.setTagid("146");
+		wechatPostTag.setUserlist(Arrays.asList("matthewxu123"));
+		WechatResult wechatResult = WechatUtil.addTagUser(wechatPostTag);
+		System.out.println(wechatResult);
+	}
+	
+	@Test
+	public void testCreateTag(){
+		WechatPostTag wechatPostTag = new WechatPostTag();
+		wechatPostTag.setTagname("00必选人员-备选1");
+		WechatResult wechatResult = WechatUtil.createTag(wechatPostTag);
+		System.out.println();
 	}
 }

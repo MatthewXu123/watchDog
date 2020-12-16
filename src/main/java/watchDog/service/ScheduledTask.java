@@ -37,7 +37,7 @@ import watchDog.thread.scheduletask.SimpleCallingTask;
 import watchDog.thread.scheduletask.WechatDeptCheckTask;
 import watchDog.thread.scheduletask.WechatMemberCheckTask;
 import watchDog.util.DateTool;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.util.sender.Sender;
 
@@ -99,10 +99,11 @@ public class ScheduledTask {
     Timer wechatDeptCheckTaskTimer = new Timer("WechatDeptCheckTaskTimer");
     wechatDeptCheckTaskTimer.schedule(WechatDeptCheckTask.INSTANCE, 0, PERIOD_DEPT_CHECK_TASK);
     
-    Calendar wechatMemberCheckTaskTime  = Calendar.getInstance();
+  //TO DELETE MATTEW
+   /* Calendar wechatMemberCheckTaskTime  = Calendar.getInstance();
     wechatMemberCheckTaskTime.set(Calendar.HOUR_OF_DAY, 14);
     Timer wechatMemberCheckTaskTimer = new Timer("WechatMemberCheckTaskTimer");
-    wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), PERIOD_MAINTAINER_CHECK_TASK);
+    wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), PERIOD_MAINTAINER_CHECK_TASK);*/
     
     Timer alarmFaxInfoCheckTaskTimer = new Timer("AlarmFaxInfoCheckTaskTimer");
     alarmFaxInfoCheckTaskTimer.schedule(AlarmFaxInfoCheckTask.INSTANCE, DELAY_ALARM_FAXINFO_CHECK, PERIOD_ALARM_FAXINFO_CHECK);
@@ -224,10 +225,10 @@ public class ScheduledTask {
       } 
     } 
     logger.info("sending weekly/monthly general " + DateTool.format(new Date()));
-    List<WechatMember> generalWechatMember = Dog.getInstance().getWechatApplicationThread().getGeneralWechatMember();
+    List<WechatUser> generalWechatMember = Dog.getInstance().getWechatApplicationThread().getGeneralWechatMember();
     //String msgURLW = ShortURLMgr.getInstance().getReportHQ("w");
     //String msgURLM = ShortURLMgr.getInstance().getReportHQ("m");
-    for (WechatMember wechatMember : generalWechatMember) {
+    for (WechatUser wechatMember : generalWechatMember) {
     	if (isFirstOfMonth)
     		sender.sendIMReport(new WechatMsg.Builder(getMonthlyReportHQContent(), new String[]{wechatMember.getUserid()})
     				.title(MONTH_REPORT_TITLE)

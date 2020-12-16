@@ -84,11 +84,6 @@
 							<label for="purchaserInput" class="col-md-2">采购方</label>
 							<div class="col-md-4">
 								<input type="text" class="form-control" id="purchaserInput" name="purchaser">
-								<datalist id="greetings" style="display:none;">
-    <option value="Good Morning">Good Morning</option>
-    <option value="Hello">Hello</option>
-    <option value="Good Afternoon">Good Afternoon</option>
-</datalist>
 							</div>
 							<label for="projectInput" class="col-md-2">项目名</label>
 							<div class="col-md-4">
@@ -106,27 +101,27 @@
 							</div>
 							<label for="productCodeInput" class="col-md-2">产品型号</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="productCodeInput">
+								<input type="text" class="form-control" id="productCodeInput" name="productCode">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="productMacInput" class="col-md-2">产品Mac</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="productMacInput">
+								<input type="text" class="form-control" id="productMacInput" name="productMac">
 							</div>
 							<label for="routerMacInput" class="col-md-2">路由器Mac</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="routerMacInput">
+								<input type="text" class="form-control" id="routerMacInput" name="routerMac">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="routerManufacturerInput" class="col-md-2">路由器厂商</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="routerManufacturerInput">
+								<input type="text" class="form-control" id="routerManufacturerInput" name="routerManufacturer">
 							</div>
 							<label for="originalVersionInput" class="col-md-2">出厂版本</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="originalVersionInput">
+								<input type="text" class="form-control" id="originalVersionInput" name="originalVersion">
 							</div>
 						</div>
 						<div class="form-group">

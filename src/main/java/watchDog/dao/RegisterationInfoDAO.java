@@ -58,7 +58,7 @@ public class RegisterationInfoDAO extends BaseDAO{
 	}
 	
 	public RegisterationInfo getOneById(int id){
-		String sql = "select * from wechat.registeration_info where id = ?";
+		String sql = "SELECT * FROM wechat.registeration_info WHERE id = ?";
 		RegisterationInfo info = new RegisterationInfo();
 		try {
 			RecordSet recordSet = dataBaseMgr.executeQuery(sql, new Object[]{id});
@@ -72,19 +72,15 @@ public class RegisterationInfoDAO extends BaseDAO{
 	}
 	
 	public List<RegisterationInfo> getAll(){
-		String sql = "select * from wechat.registeration_info where is_deleted = false";
-		List<RegisterationInfo> infoList = new ArrayList<>();
-		try {
-			RecordSet recordSet = dataBaseMgr.executeQuery(sql);
-			if(recordSet != null && recordSet.size() > 0){
-				for(int i = 0; i < recordSet.size(); i++)
-					infoList.add(constructRegisterationInfo(recordSet.get(i)));
-			}
-		} catch (Exception e) {
-			LOGGER.error("", e);
-		}
-		return infoList;
+		String sql = "SELECT * FROM wechat.registeration_info WHERE is_deleted = false";
+		return getAll(sql);
 	}
+	
+	public List<RegisterationInfo> getAllOrderByRegisterationDate(){
+		String sql = "SELECT * FROM wechat.registeration_info WHERE is_deleted = false ORDER BY id desc";
+		return getAll(sql);
+	}
+	
 	
 	public List<String> getAllPurchaser(){
 		String sql = "SELECT DISTINCT purchaser FROM wechat.registeration_info"
@@ -113,6 +109,20 @@ public class RegisterationInfoDAO extends BaseDAO{
 		} catch (Exception e) {
 			LOGGER.error("", e);
 		}
+	}
+	
+	private List<RegisterationInfo> getAll(String sql){
+		List<RegisterationInfo> infoList = new ArrayList<>();
+		try {
+			RecordSet recordSet = dataBaseMgr.executeQuery(sql);
+			if(recordSet != null && recordSet.size() > 0){
+				for(int i = 0; i < recordSet.size(); i++)
+					infoList.add(constructRegisterationInfo(recordSet.get(i)));
+			}
+		} catch (Exception e) {
+			LOGGER.error("", e);
+		}
+		return infoList;
 	}
 	
 	private RegisterationInfo constructRegisterationInfo(Record record){

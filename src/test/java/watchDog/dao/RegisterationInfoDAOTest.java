@@ -107,6 +107,13 @@ public class RegisterationInfoDAOTest {
 	}
 	
 	@Test
+	public void testGetAllOrderByRegisterationDate(){
+		List<RegisterationInfo> list = registerationInfoDAO.getAllOrderByRegisterationDate();
+		String string = JSONObject.toJSONString(list, SerializerFeature.WriteMapNullValue);
+		System.out.println(string);
+	}
+	
+	@Test
 	public void testGetOneById(){
 		RegisterationInfo info = registerationInfoDAO.getOneById(10);
 		System.out.println(info);

@@ -20,7 +20,7 @@ import watchDog.util.DateTool;
 import watchDog.util.ObjectUtils;
 import watchDog.util.RegexUtil;
 import watchDog.wechat.bean.WechatDept;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.bean.WechatResult;
 import watchDog.wechat.config.CommunityConfig;
 import watchDog.wechat.util.WechatUtil;
@@ -202,7 +202,7 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 	 */
 	private void addMembersToDept(String deptId, List<String> memberGroup){
 		for (String userId : memberGroup) {
-			WechatMember wechatMember = WechatUtil.getMemberByUserId(userId);
+			WechatUser wechatMember = WechatUtil.getMemberByUserId(userId);
 			String[] deptIds = wechatMember.getDepartment();
 			boolean flag = ObjectUtils.isArrayNotEmpty(deptIds) ? true : false;
 			int length = 1;

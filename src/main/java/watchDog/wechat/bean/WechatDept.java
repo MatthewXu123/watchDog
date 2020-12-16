@@ -22,7 +22,7 @@ public class WechatDept implements Serializable{
 	
 	private int order;
 
-	private List<WechatMember> wechatMemberList;
+	private List<WechatUser> wechatMemberList;
 
 	public WechatDept() {
 			super();
@@ -77,14 +77,14 @@ public class WechatDept implements Serializable{
 	/**
 	 * @return the wechatMemberList
 	 */
-	public List<WechatMember> getWechatMemberList() {
+	public List<WechatUser> getWechatMemberList() {
 		return wechatMemberList;
 	}
 
 	/**
 	 * @param wechatMemberList the wechatMemberList to set
 	 */
-	public void setWechatMemberList(List<WechatMember> wechatMemberList) {
+	public void setWechatMemberList(List<WechatUser> wechatMemberList) {
 		this.wechatMemberList = wechatMemberList;
 	}
 

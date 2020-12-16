@@ -41,4 +41,10 @@ public class WechatResult {
 	public boolean isOK(){
 		return this.errcode == 0;
 	}
+
+	@Override
+	public String toString() {
+		return "WechatResult [errcode=" + errcode + ", errmsg=" + errmsg + ", id=" + id + "]";
+	}
+	
 }

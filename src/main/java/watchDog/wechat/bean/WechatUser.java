@@ -2,14 +2,13 @@
 package watchDog.wechat.bean;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Description:
  * @author Matthew Xu
  * @date May 10, 2020
  */
-public class WechatMember implements Serializable{
+public class WechatUser implements Serializable{
 
 	private static final long serialVersionUID = -738345649898689750L;
 	
@@ -37,7 +36,7 @@ public class WechatMember implements Serializable{
 	/**
 	 * 
 	 */
-	public WechatMember() {
+	public WechatUser() {
 		super();
 	}
 
@@ -45,7 +44,7 @@ public class WechatMember implements Serializable{
 	 * @param name
 	 * @param mobile
 	 */
-	public WechatMember(String name, String mobile) {
+	public WechatUser(String name, String mobile) {
 		super();
 		this.name = name;
 		this.mobile = mobile;
@@ -214,7 +213,7 @@ public class WechatMember implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WechatMember other = (WechatMember) obj;
+		WechatUser other = (WechatUser) obj;
 		if (userid == null) {
 			if (other.userid != null)
 				return false;

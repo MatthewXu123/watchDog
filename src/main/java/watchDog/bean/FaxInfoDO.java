@@ -7,7 +7,7 @@ import java.util.Set;
 
 import watchDog.bean.config.AlarmFaxRuleDTO;
 import watchDog.util.ObjectUtils;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatUser;
 
 public class FaxInfoDO implements Serializable{
 
@@ -27,7 +27,7 @@ public class FaxInfoDO implements Serializable{
 	
 	private Set<Device> devices;
 	
-	private List<WechatMember> wechatMemberList;
+	private List<WechatUser> wechatMemberList;
 	
 	private Date lastCallTime;
 	
@@ -53,11 +53,11 @@ public class FaxInfoDO implements Serializable{
 		this.sitename = sitename;
 	}
 
-	public List<WechatMember> getWechatMemberList() {
+	public List<WechatUser> getWechatMemberList() {
 		return wechatMemberList;
 	}
 
-	public void setWechatMemberList(List<WechatMember> wechatMemberList) {
+	public void setWechatMemberList(List<WechatUser> wechatMemberList) {
 		this.wechatMemberList = wechatMemberList;
 	}
 

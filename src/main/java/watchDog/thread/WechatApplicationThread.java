@@ -26,7 +26,7 @@ import watchDog.property.template.WechatMemberMsgTemplate;
 import watchDog.util.MyThread;
 import watchDog.util.SortList;
 import watchDog.util.StringTool;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.service.WechatService;
 import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
@@ -50,20 +50,21 @@ public class WechatApplicationThread extends MyThread {
 	public static final String[] SIMPLE_CALLING_SUFFIX_3 = {SIMPLE_CALLING_SUFFIX_SODIER,SIMPLE_CALLING_SUFFIX_OFFICER,SIMPLE_CALLING_SUFFIX_GENERAL};
 
 	// <deptId, wechatMember>
-	private Map<String, List<WechatMember>> deptIdWechatMemberMap = new HashMap<>();
+	private Map<String, List<WechatUser>> deptIdWechatMemberMap = new HashMap<>();
 	// <siteInfo, wechatMember>
-	private Map<SiteInfo, List<WechatMember>> siteWechatMemberMap = new ConcurrentHashMap<>();
+	private Map<SiteInfo, List<WechatUser>> siteWechatMemberMap = new ConcurrentHashMap<>();
 	// <siteInfo, wechatMember>
-	private Map<SiteInfo, List<WechatMember>> oldSiteWechatMemberMap = new ConcurrentHashMap<>();
+	private Map<SiteInfo, List<WechatUser>> oldSiteWechatMemberMap = new ConcurrentHashMap<>();
 	// <userId, WechatMember> all wechatMember
-	private Map<String, WechatMember> weChatMemberMap = new HashMap<>();
+	private Map<String, WechatUser> weChatMemberMap = new HashMap<>();
 	// all wechatMember in the general group
-	private List<WechatMember> generalWechatMember = new ArrayList<>();
+	private List<WechatUser> generalWechatMember = new ArrayList<>();
 	// <userId, siteId>
 	private Map<String, List<Integer>> allWechatMemberSiteMap = new HashMap<>();
 	// <userId, siteId>
 	private Map<String, List<Integer>> generalWechatMemberSiteMap = new HashMap<>();
-
+	// <tagId
+	
 	private Sender sender = Sender.getInstance();
 	
 	public static final int SLEEP_MINUTES = 5;
@@ -164,7 +165,7 @@ public class WechatApplicationThread extends MyThread {
 	 * @author Matthew Xu
 	 * @date May 13, 2020
 	 */
-	private Map<String, List<WechatMember>> initDeptIdWechatMemberMap() {
+	private Map<String, List<WechatUser>> initDeptIdWechatMemberMap() {
 		return WechatUtil.getDeptIdMemberMap(sender.getRootDepartmentId());
 	}
 
@@ -176,7 +177,7 @@ public class WechatApplicationThread extends MyThread {
 	 * @author Matthew Xu
 	 * @date May 13, 2020
 	 */
-	private Map<String, WechatMember> initWeChatMemberMap() {
+	private Map<String, WechatUser> initWeChatMemberMap() {
 		return WechatUtil.getMemberMap();
 	}
 
@@ -212,7 +213,7 @@ public class WechatApplicationThread extends MyThread {
 	 * @author Matthew Xu
 	 * @date May 13, 2020
 	 */
-	private List<WechatMember> initGeneralWechatMember() {
+	private List<WechatUser> initGeneralWechatMember() {
 		return WechatUtil.getMemberByDeptId(GNNERAL_DEPT_ID, WechatUtil.FECTH_CHILD);
 	}
 
@@ -223,20 +224,20 @@ public class WechatApplicationThread extends MyThread {
 	 * @author Matthew Xu
 	 * @date May 13, 2020
 	 */
-	private Map<SiteInfo, List<WechatMember>> initSiteWechatMemberMap() {
+	private Map<SiteInfo, List<WechatUser>> initSiteWechatMemberMap() {
 		List<SiteInfo> infos = Dog.getInfosWithTags();
 		if(isCollectionNotEmpty(infos)){
 			for (SiteInfo site : infos) {
-				List<WechatMember> allWechatMemberList = new ArrayList<>();
+				List<WechatUser> allWechatMemberList = new ArrayList<>();
 				// get the wechat members accoring to the tag_id
 				String tagId = site.getTagId();
-				List<WechatMember> soldierWechatMemberList = deptIdWechatMemberMap.get(tagId);
+				List<WechatUser> soldierWechatMemberList = deptIdWechatMemberMap.get(tagId);
 				if (isCollectionEmpty(soldierWechatMemberList))
 					soldierWechatMemberList = WechatUtil.getMemberByDeptId(tagId, WechatUtil.DONT_FECTH_CHILD);
 				
 				// get the wechat members accoring to the tag_id2
 				String tagId2 = site.getTagId2();
-				List<WechatMember> officerWechatMemberList = deptIdWechatMemberMap.get(tagId2);
+				List<WechatUser> officerWechatMemberList = deptIdWechatMemberMap.get(tagId2);
 				if (isCollectionEmpty(officerWechatMemberList))
 					officerWechatMemberList = WechatUtil.getMemberByDeptId(tagId2, WechatUtil.DONT_FECTH_CHILD);
 				
@@ -244,7 +245,7 @@ public class WechatApplicationThread extends MyThread {
 				if(runTime == 1 || (isCollectionNotEmpty(soldierWechatMemberList) && isCollectionNotEmpty(officerWechatMemberList))){
 					allWechatMemberList.addAll(soldierWechatMemberList);
 					if (isCollectionNotEmpty(officerWechatMemberList)) {
-						for (WechatMember officer : officerWechatMemberList) {
+						for (WechatUser officer : officerWechatMemberList) {
 							// in case that there are repeated persons
 							if (!allWechatMemberList.contains(officer))
 								allWechatMemberList.add(officer);
@@ -265,11 +266,11 @@ public class WechatApplicationThread extends MyThread {
 	 * @author Matthew Xu
 	 * @date May 10, 2020
 	 */
-	private Map<String, List<Integer>> getWechatMemberSiteMap(List<WechatMember> allWeChatMember) {
+	private Map<String, List<Integer>> getWechatMemberSiteMap(List<WechatUser> allWeChatMember) {
 		// get all members under the department whose id is 1
 		Map<String, List<Integer>> wechatMemberSiteMap = new HashMap<>();
 		if (isCollectionNotEmpty(allWeChatMember)) {
-			for (WechatMember wechatMember : allWeChatMember) {
+			for (WechatUser wechatMember : allWeChatMember) {
 				String[] allDeptId = wechatMember.getDepartment();
 				List<Integer> allDeptSiteInfo = new ArrayList<>();
 				for (String deptId : allDeptId) {
@@ -319,10 +320,10 @@ public class WechatApplicationThread extends MyThread {
 	 */
 	public String getTagUsers(String deptId) {
 
-		List<WechatMember> wechatMemberList = deptIdWechatMemberMap.get(deptId);
+		List<WechatUser> wechatMemberList = deptIdWechatMemberMap.get(deptId);
 		String deptMemberNameStr = "";
 		if (isCollectionNotEmpty(wechatMemberList)) {
-			for (WechatMember wechatMember : wechatMemberList) {
+			for (WechatUser wechatMember : wechatMemberList) {
 				String name = wechatMember.getName();
 				if (name.indexOf(SKIP_SUFFIX) >= 0)
 					continue;
@@ -344,13 +345,13 @@ public class WechatApplicationThread extends MyThread {
 	 * @date May 10, 2020
 	 */
 	public String getWechatMemberStrByDeptId(String deptId) {
-		List<WechatMember> wechatMemberList = deptIdWechatMemberMap.get(deptId);
-		List<WechatMember> allWechatMemberList = new ArrayList<>();
+		List<WechatUser> wechatMemberList = deptIdWechatMemberMap.get(deptId);
+		List<WechatUser> allWechatMemberList = new ArrayList<>();
 		if (isCollectionNotEmpty(wechatMemberList))
 			allWechatMemberList.addAll(wechatMemberList);
-		Iterator<WechatMember> iterator = allWechatMemberList.iterator();
+		Iterator<WechatUser> iterator = allWechatMemberList.iterator();
 		while (iterator.hasNext()) {
-			WechatMember wechatMember = iterator.next();
+			WechatUser wechatMember = iterator.next();
 			if (wechatMember.getName().indexOf(SKIP_SUFFIX) >= 0)
 				iterator.remove();
 		}
@@ -364,16 +365,16 @@ public class WechatApplicationThread extends MyThread {
 					oldSiteWechatMemberMap = new ConcurrentHashMap<>();
 					oldSiteWechatMemberMap.putAll(siteWechatMemberMap);
 				}else{
-					for (Entry<SiteInfo, List<WechatMember>> entry : siteWechatMemberMap.entrySet()) {
+					for (Entry<SiteInfo, List<WechatUser>> entry : siteWechatMemberMap.entrySet()) {
 						SiteInfo siteInfo = entry.getKey();
-						List<WechatMember> newWechatMemberList = entry.getValue();
-						List<WechatMember> oldWeChatMemberList = oldSiteWechatMemberMap.get(siteInfo);
+						List<WechatUser> newWechatMemberList = entry.getValue();
+						List<WechatUser> oldWeChatMemberList = oldSiteWechatMemberMap.get(siteInfo);
 						
 						if(isCollectionEmpty(newWechatMemberList) || isCollectionEmpty(oldWeChatMemberList))
 							continue;
 						
 						String newWechatMemberStr = "";
-						for (WechatMember newWechatMember : newWechatMemberList) {
+						for (WechatUser newWechatMember : newWechatMemberList) {
 							if (!oldWeChatMemberList.contains(newWechatMember) && !newWechatMember.getName().contains(SKIP_SUFFIX)) {
 								newWechatMemberStr += newWechatMember.getName() + ",";
 							}
@@ -408,12 +409,12 @@ public class WechatApplicationThread extends MyThread {
 	 * @author Matthew Xu
 	 * @date May 22, 2020
 	 */
-	public List<WechatMember> getAlarmFaxCallUsers(String deptId) {
+	public List<WechatUser> getAlarmFaxCallUsers(String deptId) {
 		if(isMapNotEmpty(deptIdWechatMemberMap) ){
-			List<WechatMember> wechatMembers = deptIdWechatMemberMap.get(deptId);
-			List<WechatMember> wechatMemberList = new ArrayList<>();
+			List<WechatUser> wechatMembers = deptIdWechatMemberMap.get(deptId);
+			List<WechatUser> wechatMemberList = new ArrayList<>();
 			if (isCollectionNotEmpty(wechatMembers)) {
-				for (WechatMember wechatMember : wechatMembers) {
+				for (WechatUser wechatMember : wechatMembers) {
 					if (wechatMember.getName().contains(SKIP_SUFFIX) || !wechatMember.getName().endsWith(SOLIDER_SUFFIX))
 						continue;
 
@@ -425,22 +426,22 @@ public class WechatApplicationThread extends MyThread {
 		return null;
 	}
 	
-	public List<WechatMember> getMessageReceiver(String deptId,String[] types)
+	public List<WechatUser> getMessageReceiver(String deptId,String[] types)
 	{
 	    if(deptIdWechatMemberMap != null)
 	    {
-	        List<WechatMember> wechatMembers = deptIdWechatMemberMap.get(deptId);
-            List<WechatMember> wechatMemberList = new ArrayList<>();
+	        List<WechatUser> wechatMembers = deptIdWechatMemberMap.get(deptId);
+            List<WechatUser> wechatMemberList = new ArrayList<>();
             WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
             if(StringUtils.isNotBlank(configStorage.getDebug()))
             {
-                WechatMember m = new WechatMember("葛为卫", "13358000723");
+                WechatUser m = new WechatUser("葛为卫", "13358000723");
                 m.setUserid("nemoge");
                 wechatMemberList.add(m);
             }
             if (isCollectionNotEmpty(wechatMembers)) 
             {
-                for (WechatMember wechatMember : wechatMembers) 
+                for (WechatUser wechatMember : wechatMembers) 
                 {
                     if (wechatMember.getName().endsWith(SKIP_SUFFIX))
                         continue;
@@ -470,7 +471,7 @@ public class WechatApplicationThread extends MyThread {
 	}
 
 	
-	public WechatMember getWechatMemberByUserId(String userId) {
+	public WechatUser getWechatMemberByUserId(String userId) {
 		return weChatMemberMap.get(userId);
 	}
 
@@ -492,7 +493,7 @@ public class WechatApplicationThread extends MyThread {
 		return loaded;
 	}
 
-	public List<WechatMember> getGeneralWechatMember() {
+	public List<WechatUser> getGeneralWechatMember() {
 		return generalWechatMember;
 	}
 
@@ -510,7 +511,7 @@ public class WechatApplicationThread extends MyThread {
 		return loaded;
 	}
 
-	public Map<SiteInfo, List<WechatMember>> getSiteWechatMemberMap() {
+	public Map<SiteInfo, List<WechatUser>> getSiteWechatMemberMap() {
 		return siteWechatMemberMap;
 	}
 

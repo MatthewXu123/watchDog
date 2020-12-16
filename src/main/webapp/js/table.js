@@ -6,8 +6,17 @@ $(function() {
 	$("#registerationDateInput").datepicker({
 		language:"zh-CN",
 	});
-	$('#registerationDateInput').datetimepicker('setDate', new Date());
+	$('#registerationDateInput').datepicker('setDate', new Date());
 	$("#btn_submit").click(function(){
+		$(".form-notblank").each(function(){
+			if($(this).val() == null || $(this).val().length == 0){
+				$(this).css("border", "1px red solid");
+				return;
+			}else{
+				$(this).css("border", "1px solid #ccc");
+			}
+		});
+		
 		if($("#isUpdatedInput").prop("checked"))
 			$("#isUpdatedInput").val(true);
 		else
@@ -29,6 +38,7 @@ $(function() {
 			success : function(data, status) {
 				if (status == "success") {
 					alert('提交数据成功');
+					$("#save_form").modal('hide');
 				}
 			},
 			error : function() {
@@ -50,8 +60,8 @@ var TableInit = function() {
 			striped : true, // 是否显示行间隔色
 			cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 			pagination : true, // 是否显示分页（*）
-			sortable : true, // 是否启用排序
-			sortOrder : "asc", // 排序方式
+			//sortable : true, // 是否启用排序
+			//sortOrder : "asc", // 排序方式
 			//queryParams : oTableInit.queryParams,// 传递参数（*）
 			sidePagination : "client", // 分页方式：client客户端分页，server服务端分页（*）
 			pageNumber : 1, // 初始化加载第一页，默认第一页

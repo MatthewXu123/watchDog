@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import watchDog.BaseTest;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatUser;
 
 /**
  * Description:

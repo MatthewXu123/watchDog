@@ -16,8 +16,10 @@ import watchDog.service.PropertyMgr;
 import watchDog.util.HttpSendUtil;
 import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatDept;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatPostTag;
+import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.bean.WechatResult;
+import watchDog.wechat.bean.WechatTag;
 import watchDog.wechat.service.WechatService;
 
 public class WechatUtil {
@@ -36,8 +38,13 @@ public class WechatUtil {
 	private static String getUserInfo = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=ACCESS_TOKEN&code=CODE";
 	private static String deleteDeptURL = "https://qyapi.weixin.qq.com/cgi-bin/department/delete?access_token=ACCESS_TOKEN&id=ID";
 	private static String updateWechatDeptURL = "https://qyapi.weixin.qq.com/cgi-bin/department/update?access_token=ACCESS_TOKEN";
-	
 	private static String createDeptURL = "https://qyapi.weixin.qq.com/cgi-bin/department/create?access_token=ACCESS_TOKEN";
+	// WechatTag
+	private static String getTagListURL = "https://qyapi.weixin.qq.com/cgi-bin/tag/list?access_token=ACCESS_TOKEN";
+	private static String deleteTagURL = "https://qyapi.weixin.qq.com/cgi-bin/tag/delete?access_token=ACCESS_TOKEN&tagid=TAGID";
+	private static String getTagUserListURL = "https://qyapi.weixin.qq.com/cgi-bin/tag/get?access_token=ACCESS_TOKEN&tagid=TAGID";
+	private static String addTagUserURL = "https://qyapi.weixin.qq.com/cgi-bin/tag/addtagusers?access_token=ACCESS_TOKEN";
+	private static String createTagURL = "https://qyapi.weixin.qq.com/cgi-bin/tag/create?access_token=ACCESS_TOKEN";
 	
 	public static final String FECTH_CHILD = "1";
 	public static final String DONT_FECTH_CHILD = "0";
@@ -100,14 +107,14 @@ public class WechatUtil {
 	 * @author Matthew Xu
 	 * @date May 10, 2020
 	 */
-	public static WechatMember getMemberByUserId(String uid) {
+	public static WechatUser getMemberByUserId(String uid) {
 		try {
 			if (StringUtils.isBlank(uid))
 				return null;
 			return JSONObject.parseObject(
 					HttpSendUtil.INSTANCE.sendGet(
 							getWeChatUserURL.replace("ACCESS_TOKEN", getAccessToken()).replace("USERID", uid), "UTF-8"),
-					WechatMember.class);
+					WechatUser.class);
 		} catch (Exception e) {
 			logger.error("", e);
 		}
@@ -175,7 +182,7 @@ public class WechatUtil {
 				return null;
 			List<WechatDept> wechatDeptList = getDeptListByDeptId(wechatDeptId);
 			for (WechatDept wechatDept : wechatDeptList) {
-				List<WechatMember> wechatMemberList = getMemberByDeptId(wechatDept.getId(), DONT_FECTH_CHILD);
+				List<WechatUser> wechatMemberList = getMemberByDeptId(wechatDept.getId(), DONT_FECTH_CHILD);
 				wechatDept.setWechatMemberList(wechatMemberList);
 			}
 			return wechatDeptList;
@@ -214,10 +221,10 @@ public class WechatUtil {
 	 * @author Matthew Xu
 	 * @date May 10, 2020
 	 */
-	public static Map<String, List<WechatMember>> getDeptIdMemberMap(String baseWechatDeptId) {
+	public static Map<String, List<WechatUser>> getDeptIdMemberMap(String baseWechatDeptId) {
 		if(StringUtils.isBlank(baseWechatDeptId))
 			return null;
-		Map<String, List<WechatMember>> deptIdWechatMemberMap = new HashMap<>();
+		Map<String, List<WechatUser>> deptIdWechatMemberMap = new HashMap<>();
 		List<WechatDept> wechatDeptList = getDeptListByDeptId(baseWechatDeptId);
 		for (WechatDept wechatDept : wechatDeptList) {
 			deptIdWechatMemberMap.put(wechatDept.getId(), getMemberByDeptId(wechatDept.getId(), DONT_FECTH_CHILD));
@@ -234,13 +241,13 @@ public class WechatUtil {
 	 * @author Matthew Xu
 	 * @date May 10, 2020
 	 */
-	public static List<WechatMember> getMemberByDeptId(String wechatDeptId, String isFetchChild) {
+	public static List<WechatUser> getMemberByDeptId(String wechatDeptId, String isFetchChild) {
 		try {
 			if(StringUtils.isBlank(wechatDeptId))
 				return null;
 			String WechatMemberListStr = HttpSendUtil.INSTANCE.sendGet(
 					getWechatMemberListURL.replace("ACCESS_TOKEN", getAccessToken()).replace("DEPARTMENT_ID", wechatDeptId).replace("FETCH_CHILD", isFetchChild), "UTF-8");
-			return JSON.parseObject(WechatMemberListStr).getJSONArray("userlist").toJavaList(WechatMember.class);
+			return JSON.parseObject(WechatMemberListStr).getJSONArray("userlist").toJavaList(WechatUser.class);
 		} catch (Exception e) {
 			logger.error("",e);
 		}
@@ -254,7 +261,7 @@ public class WechatUtil {
 	 * @author Matthew Xu
 	 * @date May 10, 2020
 	 */
-	public static List<WechatMember> getAllMembers(){
+	public static List<WechatUser> getAllMembers(){
 		return getMemberByDeptId("1",FECTH_CHILD);
 	}
 	
@@ -265,12 +272,12 @@ public class WechatUtil {
 	 * @author Matthew Xu
 	 * @date May 10, 2020
 	 */
-	public static Map<String, WechatMember> getMemberMap() {
+	public static Map<String, WechatUser> getMemberMap() {
 		try {
-			List<WechatMember> wechatMemberList = getMemberByDeptId("1", FECTH_CHILD);
-			Map<String, WechatMember> weChatMemberMap = new HashMap<>();
+			List<WechatUser> wechatMemberList = getMemberByDeptId("1", FECTH_CHILD);
+			Map<String, WechatUser> weChatMemberMap = new HashMap<>();
 			if (ObjectUtils.isCollectionNotEmpty(wechatMemberList)) {
-				for (WechatMember wechatMember : wechatMemberList) {
+				for (WechatUser wechatMember : wechatMemberList) {
 					weChatMemberMap.put(wechatMember.getUserid(), wechatMember);
 				}
 			}
@@ -292,7 +299,7 @@ public class WechatUtil {
 	 */
 	public static boolean isDeptEmptyOfMember(String deptId) {
 	    try {
-	    	List<WechatMember> memberList = getMemberByDeptId(deptId,DONT_FECTH_CHILD);
+	    	List<WechatUser> memberList = getMemberByDeptId(deptId,DONT_FECTH_CHILD);
 			return memberList == null || memberList.size() == 0;
 			} catch (Exception e) {
 				logger.error("",e);
@@ -359,7 +366,7 @@ public class WechatUtil {
 	 * @author Matthew Xu
 	 * @date May 15, 2020
 	 */
-	public static String updateMember(WechatMember wechatMember){
+	public static String updateMember(WechatUser wechatMember){
 		try {
 			String params = JSON.toJSONString(wechatMember);
 			return HttpSendUtil.INSTANCE
@@ -410,6 +417,61 @@ public class WechatUtil {
 		}
 		return null;
 		
+	}
+	
+	//WechatTag
+	public static List<WechatTag> getTagList(){
+		try {
+			String tagList = HttpSendUtil.INSTANCE.sendGet(
+					getTagListURL.replace("ACCESS_TOKEN", getAccessToken()), "UTF-8");
+			return JSON.parseObject(tagList).getJSONArray("taglist").toJavaList(WechatTag.class);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return null;
+	}
+	
+	public static WechatResult deleteTagById(String tagId) {
+		try {
+			return JSONObject.parseObject(HttpSendUtil.INSTANCE
+					.sendGet(deleteTagURL.replace("ACCESS_TOKEN", getAccessToken()).replace("TAGID", tagId), "UTF-8"), WechatResult.class);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return null;
+	}
+	
+	public static List<WechatUser> getTagUserList(String tagId) {
+		try {
+			String tagUserList = HttpSendUtil.INSTANCE.sendGet(
+					getTagUserListURL.replace("ACCESS_TOKEN", getAccessToken()).replace("TAGID", tagId), "UTF-8");
+			return JSON.parseObject(tagUserList).getJSONArray("userlist").toJavaList(WechatUser.class);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return null;
+	}
+	
+	public static WechatResult addTagUser(WechatPostTag wechatPostTag){
+		try {
+			String params = JSON.toJSONString(wechatPostTag);
+			return JSONObject.parseObject(HttpSendUtil.INSTANCE
+					.sendPost(addTagUserURL.replace("ACCESS_TOKEN", getAccessToken()), params, HttpSendUtil.CHAR_ENCODING_UTF8, HttpSendUtil.APPLICATION_JSON), WechatResult.class);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return null;
+	}
+	
+	public static WechatResult createTag(WechatPostTag wechatPostTag){
+		try {
+			String params = JSON.toJSONString(wechatPostTag);
+			return JSONObject.parseObject(HttpSendUtil.INSTANCE
+					.sendPost(createTagURL.replace("ACCESS_TOKEN", getAccessToken()), params, HttpSendUtil.CHAR_ENCODING_UTF8, HttpSendUtil.APPLICATION_JSON), WechatResult.class);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return null;
 	}
 	
 }

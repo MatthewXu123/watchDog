@@ -96,7 +96,7 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 	private void getData(HttpServletRequest req, HttpServletResponse resp){
 		try {
 			resp.setHeader("Content-type", "text/html;charset=UTF-8");
-			List<RegisterationInfo> rInfos = registerationInfoDAO.getAll();
+			List<RegisterationInfo> rInfos = registerationInfoDAO.getAllOrderByRegisterationDate();
 			OutputStream ops = resp.getOutputStream();
 			Writer outputStreamWriter = new OutputStreamWriter(ops, CHAR_ENCODING_UTF8);
 			PrintWriter printWriter = new PrintWriter(outputStreamWriter);
@@ -134,8 +134,13 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 		try {
 			JSONObject infoObj = JSONObject.parseObject(req.getParameter("rinfo"));
 			RegisterationInfo info = infoObj.toJavaObject(RegisterationInfo.class);
-			info.setSimCard(simCardDAO.getOneById(infoObj.getInteger("simCardId")));
+			Integer simcardId = infoObj.getInteger("simCardId");
+			if(simcardId != null){
+				info.setSimCard(simCardDAO.getOneById(simcardId));
+				simCardDAO.updateStatus(simcardId, SIMCardStatus.ENABLED);
+			}
 			registerationInfoDAO.saveOne(info);
+			BaseController.returnSuccess(resp);
 		} catch (Exception e) {
 			LOGGER.error("",e);
 		}

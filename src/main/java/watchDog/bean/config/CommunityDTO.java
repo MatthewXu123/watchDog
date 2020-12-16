@@ -22,9 +22,7 @@ public class CommunityDTO implements Serializable{
 	
 	private String deptId;
 	
-	private List<String> officerIds;
-	
-	private List<String> soldierIds;
+	private String requiredUserTag;
 	
 	private List<String> faxRuleCodes;
 
@@ -56,34 +54,12 @@ public class CommunityDTO implements Serializable{
 		this.deptId = deptId;
 	}
 
-	
-
-	/**
-	 * @return the officerIds
-	 */
-	public List<String> getOfficerIds() {
-		return officerIds;
+	public String getRequiredUserTag() {
+		return requiredUserTag;
 	}
 
-	/**
-	 * @param officerIds the officerIds to set
-	 */
-	public void setOfficerIds(List<String> officerIds) {
-		this.officerIds = officerIds;
-	}
-
-	/**
-	 * @return the soldierIds
-	 */
-	public List<String> getSoldierIds() {
-		return soldierIds;
-	}
-
-	/**
-	 * @param soldierIds the soldierIds to set
-	 */
-	public void setSoldierIds(List<String> soldierIds) {
-		this.soldierIds = soldierIds;
+	public void setRequiredUserTag(String requiredUserTag) {
+		this.requiredUserTag = requiredUserTag;
 	}
 
 	/**
@@ -121,8 +97,6 @@ public class CommunityDTO implements Serializable{
 		this.faxRuleCodes = faxRuleCodes;
 	}
 
-	
-	
 	/**
 	 * @return the isGlobal
 	 */
@@ -139,9 +113,8 @@ public class CommunityDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return "CommunityDTO [code=" + code + ", isActive=" + isActive + ", deptId=" + deptId + ", officerIds="
-				+ officerIds + ", soldierIds=" + soldierIds + ", faxRuleCodes=" + faxRuleCodes + "]";
+		return "CommunityDTO [code=" + code + ", isActive=" + isActive + ", isGlobal=" + isGlobal + ", deptId=" + deptId
+				+ ", requiredUserTag=" + requiredUserTag + ", faxRuleCodes=" + faxRuleCodes + "]";
 	}
-
 
 }

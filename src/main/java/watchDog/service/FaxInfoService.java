@@ -25,7 +25,7 @@ import watchDog.util.AESUtils;
 import watchDog.util.DateTool;
 import watchDog.util.HttpSendUtil;
 import watchDog.util.ObjectUtils;
-import watchDog.wechat.bean.WechatMember;
+import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.service.WechatService;
 import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
@@ -90,9 +90,9 @@ public class FaxInfoService {
 					correctFaxRecord.forEach(faxInfoDO -> faxInfoLogger.info("过滤后报警:" + faxInfoDO.toString()));
 					
 					for (FaxInfoDO faxInfoDO : correctFaxRecord) {
-						List<WechatMember> wechatMemberList = faxInfoDO.getWechatMemberList();
+						List<WechatUser> wechatMemberList = faxInfoDO.getWechatMemberList();
 						if (ObjectUtils.isCollectionNotEmpty(wechatMemberList)) {
-							for (WechatMember wechatMember : wechatMemberList) {
+							for (WechatUser wechatMember : wechatMemberList) {
 								// Send the request
 								String url = FAX_CALL_REQUEST_URL
 										.replace(USERNAME, URLEncoder.encode(wechatMember.getName(), "utf-8"))
@@ -303,9 +303,9 @@ public class FaxInfoService {
 	 * @author Matthew Xu
 	 * @date Jun 22, 2020
 	 */
-	private String getWechatMemberStr(List<WechatMember> wechatMembers){
+	private String getWechatMemberStr(List<WechatUser> wechatMembers){
 		String wechatMemberStr = "";
-		for (WechatMember wechatMember : wechatMembers) {
+		for (WechatUser wechatMember : wechatMembers) {
 			wechatMemberStr += wechatMember.getName() + ",";
 		}
 		return wechatMemberStr.substring(0, wechatMemberStr.length() - 1);
@@ -373,7 +373,7 @@ public class FaxInfoService {
 	 * @author Matthew Xu
 	 * @date Jun 22, 2020
 	 */
-	private void logFaxSendSuccess(FaxInfoDO faxInfoDO, WechatMember wechatMember, String faxDeviceStr){
+	private void logFaxSendSuccess(FaxInfoDO faxInfoDO, WechatUser wechatMember, String faxDeviceStr){
 		faxInfoLogger.info(propertyConfig.getValue(FaxMsgLogTemplate.FL_SEND_SUCCESS.getKey(), 
 				new Object[]{faxInfoDO.getSitename(),faxInfoDO.getAlarmFaxRuleDTO().getDescription(), wechatMember.getName(), wechatMember.getMobile(), faxDeviceStr}));
 	}
@@ -387,7 +387,7 @@ public class FaxInfoService {
 	 * @author Matthew Xu
 	 * @date Jun 22, 2020
 	 */
-	private void logFaxSendFailed(FaxInfoDO faxInfoDO, WechatMember wechatMember, String comment){
+	private void logFaxSendFailed(FaxInfoDO faxInfoDO, WechatUser wechatMember, String comment){
 		faxInfoLogger.info(propertyConfig.getValue(FaxMsgLogTemplate.FL_SEND_FAILED.getKey(), 
 				new Object[]{faxInfoDO.getSitename(),faxInfoDO.getAlarmFaxRuleDTO().getDescription(), wechatMember.getName(), wechatMember.getMobile(),comment}));
 	}
