@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ public class WechatAPITest {
 	
 	@Test
 	public void testGetMemberByUserId(){
-		WechatUser memberByUserId = WechatUtil.getMemberByUserId("15366203524");
+		WechatUser memberByUserId = WechatUtil.getMemberByUserId("matthewxu123");
 		assertTrue(true);
 	}
 	
@@ -164,6 +165,12 @@ public class WechatAPITest {
 		WechatPostTag wechatPostTag = new WechatPostTag();
 		wechatPostTag.setTagname("00必选人员-备选1");
 		WechatResult wechatResult = WechatUtil.createTag(wechatPostTag);
+		System.out.println();
+	}
+	
+	@Test
+	public void testGetmap(){
+		Map<WechatTag, List<WechatUser>> allTagUserMap = WechatUtil.getAllTagUserMap();
 		System.out.println();
 	}
 }

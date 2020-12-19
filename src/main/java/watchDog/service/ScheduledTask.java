@@ -102,17 +102,18 @@ public class ScheduledTask {
     Timer wechatDeptCheckTaskTimer = new Timer("WechatDeptCheckTaskTimer");
     wechatDeptCheckTaskTimer.schedule(WechatDeptCheckTask.INSTANCE, 0, PERIOD_DEPT_CHECK_TASK);
     
-  //TO DELETE MATTEW
-   /* Calendar wechatMemberCheckTaskTime  = Calendar.getInstance();
+    //TO DELETE MATTHEW
+    /* Calendar wechatMemberCheckTaskTime  = Calendar.getInstance();
     wechatMemberCheckTaskTime.set(Calendar.HOUR_OF_DAY, 14);
     Timer wechatMemberCheckTaskTimer = new Timer("WechatMemberCheckTaskTimer");
     wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), PERIOD_MAINTAINER_CHECK_TASK);*/
     
-    Timer alarmFaxInfoCheckTaskTimer = new Timer("AlarmFaxInfoCheckTaskTimer");
-    alarmFaxInfoCheckTaskTimer.schedule(AlarmFaxInfoCheckTask.INSTANCE, DELAY_ALARM_FAXINFO_CHECK, PERIOD_ALARM_FAXINFO_CHECK);
+    //TEST MATTHEW
+    //Timer alarmFaxInfoCheckTaskTimer = new Timer("AlarmFaxInfoCheckTaskTimer");
+    //alarmFaxInfoCheckTaskTimer.schedule(AlarmFaxInfoCheckTask.INSTANCE, DELAY_ALARM_FAXINFO_CHECK, PERIOD_ALARM_FAXINFO_CHECK);
     
-    Timer simpleCallingTaskTimer = new Timer("simpleCallingTaskTimer");
-    simpleCallingTaskTimer.schedule(SimpleCallingTask.getInstance(), 5*60*1000,5*60*1000);
+    //Timer simpleCallingTaskTimer = new Timer("simpleCallingTaskTimer");
+    //simpleCallingTaskTimer.schedule(SimpleCallingTask.getInstance(), 5*60*1000,5*60*1000);
   }
   
   class WeeklyReportManager extends TimerTask {

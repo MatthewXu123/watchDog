@@ -190,8 +190,6 @@ public class WechatUser implements Serializable{
 		this.department = department;
 	}
 
-	
-
 	@Override
 	public String toString() {
 		return name;

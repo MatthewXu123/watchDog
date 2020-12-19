@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="watchDog.util.SortList"%>
+<%@page import="watchDog.wechat.bean.WechatTag"%>
 <%@page import="watchDog.util.ObjectUtils"%>
 <%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="watchDog.thread.WechatApplicationThread"%>
@@ -60,8 +62,26 @@
 		order = "asc";
 	}
 	request.setAttribute("shortRow", shortRow);
-	Dog dog = Dog.getInstance();
-	List<SiteInfo> sites = dog.getWechatApplicationThread().getSitesByUserId(userId,method,order);
+	// Get the sites
+	WechatApplicationThread wechatApplicationThread = Dog.getInstance().getWechatApplicationThread();
+	
+	Set<SiteInfo> siteSet = new TreeSet<>();
+	List<WechatTag> wechatTagList = wechatApplicationThread.isUserHasRequiredTag(userId);
+	if(ObjectUtils.isCollectionNotEmpty(wechatTagList)){
+		for(WechatTag wechatTag : wechatTagList){
+			List<SiteInfo> tagSiteInfos = wechatApplicationThread.getSiteListByTagId(wechatTag.getTagid());
+			if(ObjectUtils.isCollectionNotEmpty(tagSiteInfos))
+				siteSet.addAll(tagSiteInfos);
+		}
+	}
+	List<SiteInfo> deptSiteInfos = wechatApplicationThread.getSitesByUserId(userId, method, order);
+	if(ObjectUtils.isCollectionNotEmpty(deptSiteInfos))
+		siteSet.addAll(deptSiteInfos);
+	
+	List<SiteInfo> sites = new ArrayList<>(siteSet);
+	SortList<SiteInfo> sort = new SortList<SiteInfo>();
+	sort.Sort(sites, method, order, true);
+	
 	int offlineSiteNum = 0;
 	int importantSiteNum = 0;
 	if(ObjectUtils.isCollectionNotEmpty(sites)){

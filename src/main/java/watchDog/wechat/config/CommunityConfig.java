@@ -2,6 +2,7 @@
 package watchDog.wechat.config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,16 @@ public class CommunityConfig extends BaseJSONConfig {
 			tag = communityDTO.getRequiredUserTag();
 		return tag;
 	}
+	
+	public static String getCommunityCodeByTagId(String tagId){
+		for (CommunityDTO communityDTO : communityDTOList) {
+			if(Arrays.asList(communityDTO.getRequiredUserTag()).contains(tagId))
+				return communityDTO.getCode();
+		}
+		return null;
+	}
+	
+	
 	
 	/**
 	 * 
@@ -236,6 +247,14 @@ public class CommunityConfig extends BaseJSONConfig {
 	 */
 	public static boolean getIsFaxRuleGlobal() {
 		return isGlobal;
+	}
+
+	public static List<CommunityDTO> getCommunityDTOList() {
+		return communityDTOList;
+	}
+
+	public static void setCommunityDTOList(List<CommunityDTO> communityDTOList) {
+		CommunityConfig.communityDTOList = communityDTOList;
 	}
 	
 }

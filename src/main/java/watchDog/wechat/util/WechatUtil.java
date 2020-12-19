@@ -463,6 +463,15 @@ public class WechatUtil {
 		return null;
 	}
 	
+	public static Map<WechatTag, List<WechatUser>> getAllTagUserMap(){
+		Map<WechatTag,List<WechatUser>> map = new HashMap<>();
+		List<WechatTag> tagList = getTagList();
+		for(WechatTag tag : tagList){
+			map.put(tag, getTagUserList(tag.getTagid()));
+		}
+		return map;
+	}
+	
 	public static WechatResult createTag(WechatPostTag wechatPostTag){
 		try {
 			String params = JSON.toJSONString(wechatPostTag);

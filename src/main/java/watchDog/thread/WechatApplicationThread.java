@@ -16,10 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hpsf.Array;
 
 import com.alibaba.fastjson.JSON;
 
 import watchDog.bean.SiteInfo;
+import watchDog.bean.config.CommunityDTO;
 import watchDog.config.json.BaseJSONConfig;
 import watchDog.listener.Dog;
 import watchDog.property.template.WechatMemberMsgTemplate;
@@ -30,6 +32,7 @@ import watchDog.util.StringTool;
 import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.config.CommunityConfig;
 import watchDog.wechat.bean.WechatMsg;
+import watchDog.wechat.bean.WechatTag;
 import watchDog.wechat.service.WechatService;
 import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
 import watchDog.wechat.util.WechatUtil;
@@ -38,6 +41,8 @@ import watchDog.wechat.util.sender.Sender;;
 public class WechatApplicationThread extends MyThread {
 	private static final Logger logger = Logger.getLogger(WechatApplicationThread.class);
 
+	private static final String REQUIRED_TAG_FLAG = "必选人员";
+	
 	private static final String GNNERAL_DEPT_ID = "109";
 
 	private static final String SKIP_SUFFIX = "_i";
@@ -67,6 +72,10 @@ public class WechatApplicationThread extends MyThread {
 	private Map<String, List<Integer>> generalWechatMemberSiteMap = new HashMap<>();
 	// <siteId, tagId>
 	private Map<Integer, String[]> siteIdTagIdMap = new HashMap<>();
+	// <WechatTag,userIdList>
+	private Map<WechatTag, List<WechatUser>> tagIdUserListMap = new HashMap<>();
+	// <TagId, siteList>
+	private Map<String, List<SiteInfo>> tagIdSiteListMap = new HashMap<>();
 	
 	private Sender sender = Sender.getInstance();
 	
@@ -110,6 +119,10 @@ public class WechatApplicationThread extends MyThread {
 					generalWechatMember = initGeneralWechatMember();
 					
 					siteIdTagIdMap = initSiteIdTagIdMap();
+					
+					tagIdUserListMap = WechatUtil.getAllTagUserMap();
+					
+					initTagIdSiteListMap();
 					
 					welcomeNewWechatMember();
 				}else {
@@ -305,6 +318,44 @@ public class WechatApplicationThread extends MyThread {
 		return wechatMemberSiteMap;
 	}
 
+	public List<WechatTag> isUserHasRequiredTag(String userId){
+		List<WechatTag> list = new ArrayList<>();
+		WechatUser wechatUser = new WechatUser();
+		wechatUser.setUserid(userId);
+		for(Map.Entry<WechatTag, List<WechatUser>> entry : this.tagIdUserListMap.entrySet()){
+			if(entry.getKey().getTagname().contains(REQUIRED_TAG_FLAG)
+					&& entry.getValue().contains(wechatUser)){
+				list.add(entry.getKey());
+			}
+		}
+		return list;
+	}
+	
+	public List<SiteInfo> getSiteListByTagId(String tagId){
+		return this.tagIdSiteListMap.get(tagId);
+	}
+	
+	private void initTagIdSiteListMap(){
+		Iterator allSites = Dog.getInstance().getAllSites();
+		while(allSites.hasNext()){
+			Map.Entry<String, SiteInfo> entry = (Map.Entry<String, SiteInfo>) allSites.next();
+			SiteInfo s = entry.getValue();
+			String manNode = s.getManNode();
+			String cusNode = s.getCusNode();
+			String[] tag = CommunityConfig.getTagIdByCommunityCode(manNode);
+			if(!ObjectUtils.isArrayNotEmpty(tag))
+				tag = CommunityConfig.getTagIdByCommunityCode(cusNode);
+			if(ObjectUtils.isArrayNotEmpty(tag)){
+				String tagId = tag[0];
+				List<SiteInfo> list = this.tagIdSiteListMap.get(tagId);
+				if(list == null)
+					list = new ArrayList<>();
+				list.add(s);
+				tagIdSiteListMap.put(tagId, list);
+			}
+		}
+	}
+	
 	private List<Integer> getSiteInfoByTagId(String tagId) {
 		List<Integer> result = new ArrayList<>();
 		Iterator it = Dog.getInstance().getAllSites();
