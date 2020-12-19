@@ -22,11 +22,11 @@ public class WechatMsg implements Serializable {
 
 	private String agentId;
 
-	// userId or deptId or tagId
-	private String[] targetIds;
-
-	private int type;
-
+	private String[] deptIds;
+	
+	private String[] tagIds;
+	
+	private String[] userIds;
 	
 	/**
 	 * 
@@ -42,27 +42,35 @@ public class WechatMsg implements Serializable {
 
 		private String agentId;
 
-		private String[] targetIds;
+		private String[] deptIds;
+		
+		private String[] userIds;
+		
+		private String[] tagIds;
 
 		// optional fields
 		private String title = "";
 
-		private int type = Sender.WECHAT_MSG_TYPE_DEPT;
-
-		/**
-		 * @param content
-		 * @param agentId
-		 * @param targetIds
-		 */
-		public Builder(String content, String agentId, String[] targetIds) {
+		public Builder(String content, String agentId, String[] deptIds, String[] tagIds) {
 			this.content = content;
 			this.agentId = agentId;
-			this.targetIds = targetIds;
+			this.deptIds = deptIds;
 		}
 		
-		public Builder(String content, String[] targetIds) {
+		public Builder(String content, String agentId, String[] deptIds) {
 			this.content = content;
-			this.targetIds = targetIds;
+			this.agentId = agentId;
+			this.deptIds = deptIds;
+		}
+		
+		public Builder(String content, String[] deptIds) {
+			this.content = content;
+			this.deptIds = deptIds;
+		}
+		
+		public Builder(String content, String agentId) {
+			this.content = content;
+			this.agentId = agentId;
 		}
 
 		/**
@@ -83,18 +91,23 @@ public class WechatMsg implements Serializable {
 			return this;
 		}
 
-		public Builder targetIds(String[] val) {
-			targetIds = val;
+		public Builder deptIds(String[] val) {
+			deptIds = val;
 			return this;
 		}
-
+		
+		public Builder tagIds(String[] val) {
+			tagIds = val;
+			return this;
+		}
+		
+		public Builder userIds(String[] val) {
+			userIds = val;
+			return this;
+		}
+		
 		public Builder title(String val) {
 			title = val;
-			return this;
-		}
-
-		public Builder type(int val) {
-			type = val;
 			return this;
 		}
 
@@ -107,9 +120,10 @@ public class WechatMsg implements Serializable {
 	private WechatMsg(Builder builder) {
 		content = builder.content;
 		agentId = builder.agentId;
-		targetIds = builder.targetIds;
+		deptIds = builder.deptIds;
+		tagIds = builder.tagIds;
+		userIds = builder.userIds;
 		title = builder.title;
-		type = builder.type;
 	}
 
 	
@@ -139,25 +153,6 @@ public class WechatMsg implements Serializable {
 		return agentId;
 	}
 
-
-
-	/**
-	 * @return the targetIds
-	 */
-	public String[] getTargetIds() {
-		return targetIds;
-	}
-
-
-
-	/**
-	 * @return the type
-	 */
-	public int getType() {
-		return type;
-	}
-
-
 	/**
 	 * @param title the title to set
 	 */
@@ -183,30 +178,35 @@ public class WechatMsg implements Serializable {
 		this.agentId = agentId;
 	}
 
-
-
-	/**
-	 * @param targetIds the targetIds to set
-	 */
-	public void setTargetIds(String[] targetIds) {
-		this.targetIds = targetIds;
+	public String[] getDeptIds() {
+		return deptIds;
 	}
 
-
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(int type) {
-		this.type = type;
+	public void setDeptIds(String[] deptIds) {
+		this.deptIds = deptIds;
 	}
 
+	public String[] getTagIds() {
+		return tagIds;
+	}
 
+	public void setTagIds(String[] tagIds) {
+		this.tagIds = tagIds;
+	}
 
+	public String[] getUserIds() {
+		return userIds;
+	}
+
+	public void setUserIds(String[] userIds) {
+		this.userIds = userIds;
+	}
+	
 	@Override
 	public String toString() {
-		return "WechatMsg [title=" + title + ", content=" + content + ", agentId=" + agentId + ", targetIds="
-				+ Arrays.toString(targetIds) + ", type=" + type + "]";
+		return "WechatMsg [title=" + title + ", content=" + content + ", agentId=" + agentId + ", deptIds="
+				+ Arrays.toString(deptIds) + ", tagIds=" + Arrays.toString(tagIds) + ", userIds="
+				+ Arrays.toString(userIds) + "]";
 	}
 
 
@@ -218,8 +218,6 @@ public class WechatMsg implements Serializable {
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {

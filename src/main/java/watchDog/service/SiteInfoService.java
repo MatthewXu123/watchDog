@@ -54,9 +54,9 @@ public class SiteInfoService {
             {
                 Sender wx = Sender.getInstance();
                 WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
-                WechatMsg.Builder b = new WechatMsg.Builder(s.getDescription()+"["+s.getIp()+"] 没有年份信息",configStorage.getCallingMsgAgentId(),new String[]{"nemoge"})
-                        .type(Sender.WECHAT_MSG_TYPE_USER);
-                wx.sendIM(b.build());
+                WechatMsg wechatMsg = new WechatMsg.Builder(s.getDescription()+"["+s.getIp()+"] 没有年份信息"
+                		, configStorage.getCallingMsgAgentId()).userIds(new String[]{"nemoge"}).build();
+                wx.sendIM(wechatMsg);
             }
             String start = getTag(s,START_TAG);
             if(StringUtils.isBlank(start))

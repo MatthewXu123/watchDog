@@ -13,6 +13,7 @@ import watchDog.bean.SiteInfo;
 import watchDog.database.DataBaseException;
 import watchDog.database.DatabaseMgr;
 import watchDog.listener.Dog;
+import watchDog.thread.WechatApplicationThread;
 import watchDog.util.StringTool;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.util.sender.Sender;
@@ -27,6 +28,7 @@ public class AlarmManageService {
 	
 	public final static int TABLE_TYPE_ACTIVE = 0;
 	public final static int TABLE_TYPE_RESET = 5;
+	private static final WechatApplicationThread WECHAT_APPLICATION_THREAD = Dog.getInstance().getWechatApplicationThread();
 	public static void ack(int idSite,int[] idAlarms,String user,String comments)
 	{
 		SiteInfo site = Dog.getInstance().getSiteInfoByIdSite(idSite);
@@ -136,7 +138,9 @@ public class AlarmManageService {
 			}
 			msg += "消息收件人:\n"+
 					Dog.getInstance().getWechatApplicationThread().getTagUsers(site.getTagId());
-			sender.sendIM(new WechatMsg.Builder(msg, site.getAgentId(), new String[]{site.getTagId()}).title("报警处理").build());
+			sender.sendIM(new WechatMsg.Builder(msg, site.getAgentId(), new String[]{site.getTagId()}).title("报警处理")
+					.tagIds(WECHAT_APPLICATION_THREAD.getTagBySiteId(site.getSupervisorId()))
+					.build());
 		}
 		else if(type == AlarmManageService.TYPE_RESET)
 		{

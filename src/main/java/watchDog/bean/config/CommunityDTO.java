@@ -22,7 +22,7 @@ public class CommunityDTO implements Serializable{
 	
 	private String deptId;
 	
-	private String requiredUserTag;
+	private String[] requiredUserTag;
 	
 	private List<String> faxRuleCodes;
 
@@ -54,11 +54,11 @@ public class CommunityDTO implements Serializable{
 		this.deptId = deptId;
 	}
 
-	public String getRequiredUserTag() {
+	public String[] getRequiredUserTag() {
 		return requiredUserTag;
 	}
 
-	public void setRequiredUserTag(String requiredUserTag) {
+	public void setRequiredUserTag(String[] requiredUserTag) {
 		this.requiredUserTag = requiredUserTag;
 	}
 
@@ -110,6 +110,7 @@ public class CommunityDTO implements Serializable{
 	public void setIsGlobal(boolean isGlobal) {
 		this.isGlobal = isGlobal;
 	}
+	
 
 	@Override
 	public String toString() {

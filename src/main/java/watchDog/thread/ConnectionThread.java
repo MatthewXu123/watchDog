@@ -33,6 +33,7 @@ public class ConnectionThread extends MyThread{
 	public static final int SLEEP_MINUTES = 10;
 	private static final long ONE_HOUR = 1000*60*60;
 	private static final long CHECK_PERIOD = 1000*60*30;
+	private static final WechatApplicationThread WECHAT_APPLICATION_THREAD = Dog.getInstance().getWechatApplicationThread();
 	static Map<String,Date> lastOnlineMap = new HashMap<String,Date>();
 	static Map<String,Date> lastOfflineMap = new HashMap<String,Date>();
 	static Map<String,Date> lastSupervisorOfflineMap = new HashMap<>();
@@ -101,7 +102,11 @@ public class ConnectionThread extends MyThread{
                                     {
                                         String routerOfflineMsg = propertyConfig.getValue(OfflineMsgLogTemplate.OM_ROUTER.getKey(), new Object[]{site.getDescription(), ip,site.getManDescription(), diff / ONE_HOUR});
                                         wx.sendIMOfflineMsg(new WechatMsg.Builder(routerOfflineMsg).build());
-                                        wx.sendIM(new WechatMsg.Builder(routerOfflineMsg, site.getAgentId(), new String[]{site.getTagId(),site.getTagId2()}).build());
+                                        wx.sendIM(new WechatMsg.Builder(routerOfflineMsg
+                                        		, site.getAgentId()
+                                        		, new String[]{site.getTagId(),site.getTagId2()})
+                                        		.tagIds(WECHAT_APPLICATION_THREAD.getTagBySiteId(site.getSupervisorId()))
+                                        		.build());
                                     }
                                 }
 					        }

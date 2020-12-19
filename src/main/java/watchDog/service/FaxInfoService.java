@@ -114,7 +114,7 @@ public class FaxInfoService {
                                                         getAlarmDeviceDescStr(faxInfoDO.getDevices(), "\n"),
                                                         getWechatMemberStr(wechatMemberList), faxInfoDO.getRepeatedTimes(),
                                                         AlarmNotificationMain.alarmSurroundURL(faxInfoDO.getIdsite(), "查看报警") });
-                                        sender.sendIM(new WechatMsg.Builder(msg, configStorage.getCallingMsgAgentId(),new String[] { wechatMember.getUserid() }).type(Sender.WECHAT_MSG_TYPE_USER).build());
+                                        sender.sendIM(new WechatMsg.Builder(msg, configStorage.getCallingMsgAgentId()).userIds(new String[] { wechatMember.getUserid()}).build());
                                     }
                                     else 
                                         logFaxSendFailed(faxInfoDO, wechatMember, result);

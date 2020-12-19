@@ -25,51 +25,60 @@ public class SenderWechat extends Sender {
 	
 	@Override
 	public boolean sendIM(WechatMsg wechatMsg) {
-		boolean sendOK = true;
 		if(StringUtils.isBlank(configStorage.getDebug())){
-			int type = wechatMsg.getType();
-			String[] targetIds = wechatMsg.getTargetIds();
-			String agentId = wechatMsg.getAgentId();
-			try {
-				if (ObjectUtils.isArrayNotEmpty(targetIds) && StringUtils.isNotBlank(agentId)) {
-					TextBuilder b = WxCpMessage.TEXT().agentId(agentId);
-					for (String targetId : targetIds) {
-						if (type == WECHAT_MSG_TYPE_TAG)
-							b = b.toTag(targetId);
-						else if (type == WECHAT_MSG_TYPE_USER && WechatUtil.isUserExist(targetId))
-							b = b.toUser(targetId);
-						else if (type == WECHAT_MSG_TYPE_DEPT && !WechatUtil.isDeptEmptyOfMember(targetId))
-							b = b.toParty(targetId);
-						else
-							return false;
-						WxCpMessage msg = b.content(wechatMsg.getContent()).build();
-						wxService.messageSend(msg);
-					}
-				}else {
-					logger.info("该消息未发送，因为未配置targetId或者agentId" + wechatMsg.getContent());
+			return sendIM(WECHAT_MSG_TYPE_DEPT, wechatMsg.getDeptIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
+			&& sendIM(WECHAT_MSG_TYPE_TAG, wechatMsg.getTagIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
+			&& sendIM(WECHAT_MSG_TYPE_USER, wechatMsg.getUserIds(), wechatMsg.getAgentId(), wechatMsg.getContent());
+		}
+		return true;
+	}
+	
+	private boolean sendIM(int type, String[] targetIds, String agentId, String content){
+		boolean sendOK = true;
+		try {
+			if (ObjectUtils.isArrayNotEmpty(targetIds) && StringUtils.isNotBlank(agentId)) {
+				TextBuilder b = WxCpMessage.TEXT().agentId(agentId);
+				for (String targetId : targetIds) {
+					if (type == WECHAT_MSG_TYPE_TAG)
+						b = b.toTag(targetId);
+					else if (type == WECHAT_MSG_TYPE_USER && WechatUtil.isUserExist(targetId))
+						b = b.toUser(targetId);
+					else if (type == WECHAT_MSG_TYPE_DEPT && !WechatUtil.isDeptEmptyOfMember(targetId))
+						b = b.toParty(targetId);
+					else
+						return false;
+					WxCpMessage msg = b.content(content).build();
+					wxService.messageSend(msg);
 				}
-			} catch (WxErrorException ex) {
-				sendOK = false;
-				logger.error("", ex);
-			} catch (Exception ex) {
-				sendOK = false;
-				logger.error("", ex);
 			}
+		} catch (WxErrorException ex) {
+			sendOK = false;
+			logger.error("", ex);
+		} catch (Exception ex) {
+			sendOK = false;
+			logger.error("", ex);
 		}
 		if (sendOK)
-			logger.info(wechatMsg.toString());
+			logger.info(content);
+		
 		return sendOK;
 	}
 
 
 	@Override
 	public boolean sendIMReport(WechatMsg wechatMsg) {
+		if(StringUtils.isBlank(configStorage.getDebug())){
+			return sendIMReport(WECHAT_MSG_TYPE_DEPT, wechatMsg.getDeptIds(), wechatMsg.getAgentId(), wechatMsg.getTitle(), wechatMsg.getContent())
+			&& sendIMReport(WECHAT_MSG_TYPE_TAG, wechatMsg.getTagIds(), wechatMsg.getAgentId(), wechatMsg.getTitle(), wechatMsg.getContent())
+			&& sendIMReport(WECHAT_MSG_TYPE_USER, wechatMsg.getUserIds(), wechatMsg.getAgentId(), wechatMsg.getTitle(), wechatMsg.getContent());
+		}
+		return true;
+	}
+
+	private boolean sendIMReport(int type, String[] targetIds, String agentId, String title, String content){
 		boolean sendOK = true;
-		String agentId = configStorage.getAgentId();
-		int type = wechatMsg.getType();
-		String[] targetIds = wechatMsg.getTargetIds();
 		try {
-			WxArticle article = getArticle(wechatMsg.getTitle(), wechatMsg.getContent());
+			WxArticle article = getArticle(title, content);
 			NewsBuilder b = WxCpMessage.NEWS().agentId(agentId);
 			for (String targetId : targetIds) {
 				if (type == WECHAT_MSG_TYPE_TAG)
@@ -88,21 +97,21 @@ public class SenderWechat extends Sender {
 			logger.error("", ex);
 		}
 		if (sendOK)
-			logger.info(wechatMsg.toString());
+			logger.info(content);
 		return sendOK;
 	}
-
+	
 	@Override
 	public  boolean sendIMToSales(WechatMsg wechatMsg){
 		wechatMsg.setAgentId(configStorage.getSalesAgentId());
-		wechatMsg.setTargetIds(new String[]{configStorage.getSalesDepartmentId()});
+		wechatMsg.setDeptIds(new String[]{configStorage.getSalesDepartmentId()});
 		return sendIM(wechatMsg);
 	}
 	
 	@Override
 	public boolean sendIMOfflineMsg(WechatMsg wechatMsg) {
 		wechatMsg.setAgentId(configStorage.getOfflineAgentId());
-		wechatMsg.setTargetIds(new String[]{configStorage.getAdminDepartmentId()});
+		wechatMsg.setDeptIds(new String[]{configStorage.getAdminDepartmentId()});
 		return sendIM(wechatMsg);
 	}
 

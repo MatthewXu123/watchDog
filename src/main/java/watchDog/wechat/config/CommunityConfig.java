@@ -16,9 +16,6 @@ import watchDog.bean.config.CommunityDTO;
 import watchDog.config.json.BaseJSONConfig;
 import watchDog.property.template.WechatMemberMsgTemplate;
 import watchDog.util.ObjectUtils;
-import watchDog.wechat.bean.WechatUser;
-import watchDog.wechat.bean.WechatMsg;
-import watchDog.wechat.util.WechatUtil;
 
 /**
  * Description:
@@ -69,6 +66,14 @@ public class CommunityConfig extends BaseJSONConfig {
 		}
 	}
 
+	public static String[] getTagIdByCommunityCode(String communityCode){
+		String[] tag = null;
+		CommunityDTO communityDTO = codeCommunityMap.get(communityCode);
+		if(communityDTO != null)
+			tag = communityDTO.getRequiredUserTag();
+		return tag;
+	}
+	
 	/**
 	 * 
 	 * Description:
@@ -77,7 +82,7 @@ public class CommunityConfig extends BaseJSONConfig {
 	 * @author Matthew Xu
 	 * @date May 12, 2020
 	 */
-	//TO DELETE MATTEW
+	//TO DELETE MATTHEW
 	/*public static List<WechatMsg> getWechatMemberChecked(SiteInfo siteInfo) {
 		List<WechatMsg> wechatMsgList = new ArrayList<>();
 		CommunityDTO manCommunity = getValue(siteInfo.getManNode());
@@ -116,7 +121,7 @@ public class CommunityConfig extends BaseJSONConfig {
 	 * @author Matthew Xu
 	 * @date Jun 8, 2020
 	 */
-	//TO DELETE MATTEW
+	//TO DELETE MATTHEW
 	/*private static WechatMsg getWechatMemberCheckedMsg(SiteInfo siteInfo, boolean isSoldier, List<String> requiredMembers){
 		WechatMsg msg = null;
 		String tagId = isSoldier ? siteInfo.getTagId() : siteInfo.getTagId2();

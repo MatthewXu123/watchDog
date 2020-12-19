@@ -32,6 +32,7 @@ import watchDog.database.DatabaseMgr;
 import watchDog.database.RecordSet;
 import watchDog.listener.Dog;
 import watchDog.thread.AlarmNotificationMain;
+import watchDog.thread.WechatApplicationThread;
 import watchDog.thread.scheduletask.AlarmFaxInfoCheckTask;
 import watchDog.thread.scheduletask.SimpleCallingTask;
 import watchDog.thread.scheduletask.WechatDeptCheckTask;
@@ -74,6 +75,8 @@ public class ScheduledTask {
   private static final long PERIOD_ALARM_FAXINFO_CHECK = ONE_MINUTE * 1;
   
   private static final Sender sender = Sender.getInstance();
+  
+  private static final WechatApplicationThread WECHAT_APPLICATION_THREAD = Dog.getInstance().getWechatApplicationThread();
   
   public ScheduledTask() {
 	logger.info("ScheduledTask start...");
@@ -230,16 +233,16 @@ public class ScheduledTask {
     //String msgURLM = ShortURLMgr.getInstance().getReportHQ("m");
     for (WechatUser wechatMember : generalWechatMember) {
     	if (isFirstOfMonth)
-    		sender.sendIMReport(new WechatMsg.Builder(getMonthlyReportHQContent(), new String[]{wechatMember.getUserid()})
+    		sender.sendIMReport(new WechatMsg.Builder(getMonthlyReportHQContent())
+    				.userIds(new String[]{wechatMember.getUserid()})
     				.title(MONTH_REPORT_TITLE)
-    				.type(Sender.WECHAT_MSG_TYPE_USER)
     				.build());
       	  //sender.sendIMReport(3, wechatMember.getUserid(), monthTitle, String.valueOf(msgPictureWX) + ";" + msgURLM); 
         if (isFirstTimeOfWeek)
       	  //sender.sendIMReport(3, wechatMember.getUserid(), weekTitle, String.valueOf(msgPictureWX) + ";" + msgURLW); 
-        	sender.sendIMReport(new WechatMsg.Builder(getWeeklyReportHQContent(), new String[]{wechatMember.getUserid()})
+        	sender.sendIMReport(new WechatMsg.Builder(getWeeklyReportHQContent())
+        			.userIds(new String[]{wechatMember.getUserid()})
         			.title(WEEK_REPORT_TITLE)
-        			.type(Sender.WECHAT_MSG_TYPE_USER)
         			.build());
 	}
     PropertyMgr.getInstance().update("last_report_time", DateTool.format(new Date(), "yyyy-MM-dd"));
@@ -380,7 +383,8 @@ public class ScheduledTask {
           msg = String.valueOf(msg) + "今日报警成功同步" ;
         } 
         Sender wx = Sender.getInstance(site.getChannel().intValue());
-        wx.sendIM(new WechatMsg.Builder(msg,site.getAgentId(), new String[]{site.getTagId(),site.getTagId2()}).build());
+        wx.sendIM(new WechatMsg.Builder(msg,site.getAgentId(), new String[]{site.getTagId(),site.getTagId2()})
+        		.tagIds(WECHAT_APPLICATION_THREAD.getTagBySiteId(site.getSupervisorId())).build());
         Dog.sleep(1000);
       } 
       return result;

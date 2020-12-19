@@ -24,9 +24,11 @@ import watchDog.config.json.BaseJSONConfig;
 import watchDog.listener.Dog;
 import watchDog.property.template.WechatMemberMsgTemplate;
 import watchDog.util.MyThread;
+import watchDog.util.ObjectUtils;
 import watchDog.util.SortList;
 import watchDog.util.StringTool;
 import watchDog.wechat.bean.WechatUser;
+import watchDog.wechat.config.CommunityConfig;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.service.WechatService;
 import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
@@ -63,7 +65,8 @@ public class WechatApplicationThread extends MyThread {
 	private Map<String, List<Integer>> allWechatMemberSiteMap = new HashMap<>();
 	// <userId, siteId>
 	private Map<String, List<Integer>> generalWechatMemberSiteMap = new HashMap<>();
-	// <tagId
+	// <siteId, tagId>
+	private Map<Integer, String[]> siteIdTagIdMap = new HashMap<>();
 	
 	private Sender sender = Sender.getInstance();
 	
@@ -105,6 +108,8 @@ public class WechatApplicationThread extends MyThread {
 					generalWechatMemberSiteMap = initGeneralWechatMemberSiteMap();
 
 					generalWechatMember = initGeneralWechatMember();
+					
+					siteIdTagIdMap = initSiteIdTagIdMap();
 					
 					welcomeNewWechatMember();
 				}else {
@@ -259,6 +264,22 @@ public class WechatApplicationThread extends MyThread {
 		return siteWechatMemberMap;
 	}
 
+	private Map<Integer, String[]> initSiteIdTagIdMap(){
+		List<SiteInfo> infos = Dog.getInfosWithTags();
+		siteIdTagIdMap = new HashMap<>();
+		for (SiteInfo siteInfo : infos) {
+			String[] tag = CommunityConfig.getTagIdByCommunityCode(siteInfo.getManNode());
+			if(ObjectUtils.isArrayNotEmpty(tag))
+				tag = CommunityConfig.getTagIdByCommunityCode(siteInfo.getCusNode());
+			siteIdTagIdMap.put(siteInfo.getSupervisorId(), tag);
+		}
+		return siteIdTagIdMap;
+	}
+	
+	public String[] getTagBySiteId(Integer siteId){
+		return this.siteIdTagIdMap.get(siteId);
+	}
+	
 	/**
 	 * Description:
 	 * 

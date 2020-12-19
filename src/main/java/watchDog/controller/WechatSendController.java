@@ -56,9 +56,9 @@ public class WechatSendController extends HttpServlet{
         String content = request.getParameter("content");
         Sender wx = Sender.getInstance();
         WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
-        WechatMsg.Builder b = new WechatMsg.Builder(content,configStorage.getCallingMsgAgentId(),new String[]{user})
-                .type(Sender.WECHAT_MSG_TYPE_USER);
-        wx.sendIM(b.build());
+        WechatMsg wechatMsg = new WechatMsg.Builder(content,configStorage.getCallingMsgAgentId())
+        		.userIds(new String[]{user}).build();
+        wx.sendIM(wechatMsg);
         logger.info("WechatSendService  client:"+client+" user:"+user+" content:"+content);
         return null;
     }

@@ -370,7 +370,8 @@ public class SimpleCallingService {
             {
 //                String result = HttpSendUtil.INSTANCE.sendGet(new String(url.getBytes("iso-8859-1"), "utf-8"),
 //                        HttpSendUtil.CHAR_ENCODING_UTF8);
-                sender.sendIM(new WechatMsg.Builder(wechatContent, configStorage.getCallingMsgAgentId(),new String[] { wechatMember.getUserid() }).type(Sender.WECHAT_MSG_TYPE_USER).build());
+                sender.sendIM(new WechatMsg.Builder(wechatContent, configStorage.getCallingMsgAgentId())
+                		.userIds(new String[] { wechatMember.getUserid() }).build());
             }
         }catch(Exception ex)
         {

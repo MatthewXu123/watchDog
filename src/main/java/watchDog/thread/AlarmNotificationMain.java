@@ -62,6 +62,8 @@ public class AlarmNotificationMain {
 	public static final String EMOJI_SPOKER = "🗣";
 
 	public static final String HIGH_TEMP = "高温报警";
+	
+	private static final WechatApplicationThread WECHAT_APPLICATION_THREAD = Dog.getInstance().getWechatApplicationThread();
 
 	Dog dog = Dog.getInstance();
 	Date lastSentDate = null;
@@ -644,7 +646,9 @@ public class AlarmNotificationMain {
 							if (StringUtils.isBlank(tagId))
 								continue;
 							Sender wx = Sender.getInstance(s.getChannel());
-							sendOK = wx.sendIM(new WechatMsg.Builder(msg, s.getAgentId(), new String[]{tagId}).title(title).build());
+							sendOK = wx.sendIM(new WechatMsg.Builder(msg, s.getAgentId(), new String[]{tagId}).title(title)
+									.tagIds(WECHAT_APPLICATION_THREAD.getTagBySiteId(s.getSupervisorId()))
+									.build());
 							Dog.sleep(1000);
 						}
 					}
@@ -712,10 +716,12 @@ public class AlarmNotificationMain {
 					Date d_31 = c.getTime();
 					if (now.after(d_31) && !now.after(site.getDeadline())) {
 						if (!StringUtils.isBlank(site.getAgentId()) && !StringUtils.isBlank(site.getTagId())) {
-							sender.sendIM(new WechatMsg.Builder(propertyConfig.getValue(CompanyServiceMsgLogTemplate.CSM_RENEW.getKey(), new Object[]{site.getDescription(), DateTool.format(site.getDeadline())}), site.getAgentId(), new String[]{site.getTagId()})
-											.build());
+							sender.sendIM(new WechatMsg.Builder(propertyConfig.getValue(CompanyServiceMsgLogTemplate.CSM_RENEW.getKey(), new Object[]{site.getDescription(), DateTool.format(site.getDeadline())})
+									, site.getAgentId()
+									, new String[]{site.getTagId()}).build());
 						}
-						sender.sendIMToSales(new WechatMsg.Builder(propertyConfig.getValue(CompanyServiceMsgLogTemplate.CSM_INQUIRY.getKey(), new Object[]{site.getDescription(), DateTool.format(site.getDeadline())})).build());
+						sender.sendIMToSales(new WechatMsg.Builder(propertyConfig.getValue(CompanyServiceMsgLogTemplate.CSM_INQUIRY.getKey()
+								, new Object[]{site.getDescription(), DateTool.format(site.getDeadline())})).build());
 					} else if (now.after(site.getDeadline())) {
 						if (!StringUtils.isBlank(site.getAgentId()) && !StringUtils.isBlank(site.getTagId())) {
 							sender.sendIM(new WechatMsg.Builder(propertyConfig.getValue(CompanyServiceMsgLogTemplate.CSM_STOP.getKey(), new Object[]{site.getDescription(), DateTool.format(site.getDeadline())}), site.getAgentId(), new String[]{site.getTagId()})
