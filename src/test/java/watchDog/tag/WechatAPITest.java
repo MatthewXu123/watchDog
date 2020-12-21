@@ -2,13 +2,18 @@ package watchDog.tag;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatDept;
 import watchDog.wechat.bean.WechatPostTag;
 import watchDog.wechat.bean.WechatResult;
@@ -17,6 +22,8 @@ import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.util.WechatUtil;
 
 public class WechatAPITest {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(WechatAPITest.class);
 	
 	@Test
 	public void testGetWechatDeptList(){
@@ -33,7 +40,7 @@ public class WechatAPITest {
 	
 	@Test
 	public void testGetWechatMemberByDeptId(){
-		List<WechatUser> WechatMemberList = WechatUtil.getMemberByDeptId("741", "0");
+		List<WechatUser> WechatMemberList = WechatUtil.getMemberByDeptId("1", "1");
 		assertTrue(WechatMemberList.size() > 0);
 	}
 	
@@ -170,7 +177,25 @@ public class WechatAPITest {
 	
 	@Test
 	public void testGetmap(){
-		Map<WechatTag, List<WechatUser>> allTagUserMap = WechatUtil.getAllTagUserMap();
-		System.out.println();
+		Map<String, List<WechatUser>> deptIdWechatMemberMap = new HashMap<>();
+		List<WechatDept> deptList = WechatUtil.getDeptListByDeptId("1");
+		List<WechatUser> userList = WechatUtil.getMemberByDeptId("1", WechatUtil.FECTH_CHILD);
+		for (WechatDept wechatDept : deptList) {
+			String deptId = wechatDept.getId();
+			if(deptId.equals("1"))
+				continue;
+			List<WechatUser> list = new ArrayList<>();
+			Iterator<WechatUser> iterator = userList.iterator();
+			while(iterator.hasNext()){
+				WechatUser wechatUser = iterator.next();
+				String[] userDepts = wechatUser.getDepartment();
+				if(ObjectUtils.isArrayNotEmpty(userDepts) && Arrays.asList(userDepts).contains(deptId))
+					list.add(wechatUser);
+				if(!ObjectUtils.isArrayNotEmpty(userDepts) ||(userDepts.length == 1 && userDepts[0].equals(deptId)))
+					iterator.remove();
+			}
+			deptIdWechatMemberMap.put(deptId, list);
+		}
 	}
+	
 }

@@ -108,12 +108,11 @@ public class ScheduledTask {
     Timer wechatMemberCheckTaskTimer = new Timer("WechatMemberCheckTaskTimer");
     wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), PERIOD_MAINTAINER_CHECK_TASK);*/
     
-    //TEST MATTHEW
-    //Timer alarmFaxInfoCheckTaskTimer = new Timer("AlarmFaxInfoCheckTaskTimer");
-    //alarmFaxInfoCheckTaskTimer.schedule(AlarmFaxInfoCheckTask.INSTANCE, DELAY_ALARM_FAXINFO_CHECK, PERIOD_ALARM_FAXINFO_CHECK);
+    Timer alarmFaxInfoCheckTaskTimer = new Timer("AlarmFaxInfoCheckTaskTimer");
+    alarmFaxInfoCheckTaskTimer.schedule(AlarmFaxInfoCheckTask.INSTANCE, DELAY_ALARM_FAXINFO_CHECK, PERIOD_ALARM_FAXINFO_CHECK);
     
-    //Timer simpleCallingTaskTimer = new Timer("simpleCallingTaskTimer");
-    //simpleCallingTaskTimer.schedule(SimpleCallingTask.getInstance(), 5*60*1000,5*60*1000);
+    Timer simpleCallingTaskTimer = new Timer("simpleCallingTaskTimer");
+    simpleCallingTaskTimer.schedule(SimpleCallingTask.getInstance(), 5*60*1000,5*60*1000);
   }
   
   class WeeklyReportManager extends TimerTask {

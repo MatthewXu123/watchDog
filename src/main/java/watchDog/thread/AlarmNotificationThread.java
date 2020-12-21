@@ -26,8 +26,6 @@ public class AlarmNotificationThread extends MyThread {
 		Dog.sleep(AlarmNotificationMain.SLEEP_MINUTES*60*1000);
 		while(!forceDead)
 		{
-			//1TEST
-			testLogger.info("AlarmNotificationThread start...");
 			logger.info("AlarmNotificationThread start...");
 			logicMain.checkAlarms();
 			this.lastRunningTime = new Date();

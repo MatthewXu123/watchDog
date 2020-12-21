@@ -113,6 +113,10 @@ public class WechatDept implements Serializable{
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "WechatDept [name=" + name + ", id=" + id + "]";
+	}
 	
 }

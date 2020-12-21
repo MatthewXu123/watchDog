@@ -6,6 +6,8 @@ import static watchDog.util.ObjectUtils.isMapEmpty;
 import static watchDog.util.ObjectUtils.isMapNotEmpty;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,23 +18,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.hpsf.Array;
 
 import com.alibaba.fastjson.JSON;
 
 import watchDog.bean.SiteInfo;
-import watchDog.bean.config.CommunityDTO;
 import watchDog.config.json.BaseJSONConfig;
 import watchDog.listener.Dog;
 import watchDog.property.template.WechatMemberMsgTemplate;
 import watchDog.util.MyThread;
 import watchDog.util.ObjectUtils;
 import watchDog.util.SortList;
-import watchDog.util.StringTool;
-import watchDog.wechat.bean.WechatUser;
-import watchDog.wechat.config.CommunityConfig;
+import watchDog.wechat.bean.WechatDept;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.bean.WechatTag;
+import watchDog.wechat.bean.WechatUser;
+import watchDog.wechat.config.CommunityConfig;
 import watchDog.wechat.service.WechatService;
 import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
 import watchDog.wechat.util.WechatUtil;
@@ -56,6 +56,7 @@ public class WechatApplicationThread extends MyThread {
 	public static final String[] SIMPLE_CALLING_SUFFIX_2 = {SIMPLE_CALLING_SUFFIX_SODIER,SIMPLE_CALLING_SUFFIX_OFFICER};
 	public static final String[] SIMPLE_CALLING_SUFFIX_3 = {SIMPLE_CALLING_SUFFIX_SODIER,SIMPLE_CALLING_SUFFIX_OFFICER,SIMPLE_CALLING_SUFFIX_GENERAL};
 
+	private List<WechatUser> allMembers = new ArrayList<>();
 	// <deptId, wechatMember>
 	private Map<String, List<WechatUser>> deptIdWechatMemberMap = new HashMap<>();
 	// <siteInfo, wechatMember>
@@ -95,19 +96,18 @@ public class WechatApplicationThread extends MyThread {
 			long start = System.currentTimeMillis();
 			try {
 				logger.info("WechatApplicationThread start...");
-				// If we can't visit 'qyapi.weixin.qq.com', the program will
-				// jump to the error.
-				// And the variable stored in the memory will keep the same.
-				deptIdWechatMemberMap = initDeptIdWechatMemberMap();
+				allMembers = WechatUtil.getAllMembers();
 				
-				// If this map is null, we will update the access token and try again to get the map.
-				if(isMapEmpty(deptIdWechatMemberMap)){
+				if(isCollectionEmpty(allMembers)){
 					WechatUtil.updateAccessToken();
-					deptIdWechatMemberMap = initDeptIdWechatMemberMap();
+					allMembers = WechatUtil.getAllMembers();
 				}
 				
-				if(isMapNotEmpty(deptIdWechatMemberMap)){
+				if(isCollectionNotEmpty(allMembers)){
+					
+					deptIdWechatMemberMap = initDeptIdWechatMemberMap();
 					logger.info("deptIdWechatMemberMap : " + deptIdWechatMemberMap.size());
+					
 					weChatMemberMap = initWeChatMemberMap();
 
 					siteWechatMemberMap = initSiteWechatMemberMap();
@@ -184,7 +184,25 @@ public class WechatApplicationThread extends MyThread {
 	 * @date May 13, 2020
 	 */
 	private Map<String, List<WechatUser>> initDeptIdWechatMemberMap() {
-		return WechatUtil.getDeptIdMemberMap(sender.getRootDepartmentId());
+		Map<String, List<WechatUser>> deptIdWechatMemberMap = new HashMap<>();
+		List<WechatDept> deptList = WechatUtil.getDeptListByDeptId(sender.getRootDepartmentId());
+		List<WechatUser> userList = new ArrayList<>(Arrays.asList(new WechatUser[allMembers.size()]));
+		Collections.copy(userList, allMembers);
+		for (WechatDept wechatDept : deptList) {
+			String deptId = wechatDept.getId();
+			List<WechatUser> list = new ArrayList<>();
+			Iterator<WechatUser> iterator = userList.iterator();
+			while(iterator.hasNext()){
+				WechatUser wechatUser = iterator.next();
+				String[] userDepts = wechatUser.getDepartment();
+				if(ObjectUtils.isArrayNotEmpty(userDepts) && Arrays.asList(userDepts).contains(deptId))
+					list.add(wechatUser);
+				if(!ObjectUtils.isArrayNotEmpty(userDepts) ||(userDepts.length == 1 && userDepts[0].equals(deptId)))
+					iterator.remove();
+			}
+			deptIdWechatMemberMap.put(deptId, list);
+		}
+		return deptIdWechatMemberMap;
 	}
 
 	/**
@@ -208,7 +226,7 @@ public class WechatApplicationThread extends MyThread {
 	 * @date May 10, 2020
 	 */
 	private Map<String, List<Integer>> initAllWechatMemberSiteMap() {
-		return getWechatMemberSiteMap(WechatUtil.getAllMembers());
+		return getWechatMemberSiteMap(this.allMembers);
 	}
 
 	/**
@@ -250,14 +268,14 @@ public class WechatApplicationThread extends MyThread {
 				// get the wechat members accoring to the tag_id
 				String tagId = site.getTagId();
 				List<WechatUser> soldierWechatMemberList = deptIdWechatMemberMap.get(tagId);
-				if (isCollectionEmpty(soldierWechatMemberList))
-					soldierWechatMemberList = WechatUtil.getMemberByDeptId(tagId, WechatUtil.DONT_FECTH_CHILD);
+//				if (isCollectionEmpty(soldierWechatMemberList))
+//					soldierWechatMemberList = WechatUtil.getMemberByDeptId(tagId, WechatUtil.DONT_FECTH_CHILD);
 				
 				// get the wechat members accoring to the tag_id2
 				String tagId2 = site.getTagId2();
 				List<WechatUser> officerWechatMemberList = deptIdWechatMemberMap.get(tagId2);
-				if (isCollectionEmpty(officerWechatMemberList))
-					officerWechatMemberList = WechatUtil.getMemberByDeptId(tagId2, WechatUtil.DONT_FECTH_CHILD);
+				/*if (isCollectionEmpty(officerWechatMemberList))
+					officerWechatMemberList = WechatUtil.getMemberByDeptId(tagId2, WechatUtil.DONT_FECTH_CHILD);*/
 				
 				// In case that the wechat API can't get the soldier group or the officer group...
 				if(runTime == 1 || (isCollectionNotEmpty(soldierWechatMemberList) && isCollectionNotEmpty(officerWechatMemberList))){
@@ -342,17 +360,27 @@ public class WechatApplicationThread extends MyThread {
 			SiteInfo s = entry.getValue();
 			String manNode = s.getManNode();
 			String cusNode = s.getCusNode();
-			String[] tag = CommunityConfig.getTagIdByCommunityCode(manNode);
-			if(!ObjectUtils.isArrayNotEmpty(tag))
-				tag = CommunityConfig.getTagIdByCommunityCode(cusNode);
-			if(ObjectUtils.isArrayNotEmpty(tag)){
-				String tagId = tag[0];
+			String[] manTag = CommunityConfig.getTagIdByCommunityCode(manNode);
+			String[] cusTag= CommunityConfig.getTagIdByCommunityCode(cusNode);
+			
+			if(ObjectUtils.isArrayNotEmpty(manTag)){
+				String tagId = manTag[0];
 				List<SiteInfo> list = this.tagIdSiteListMap.get(tagId);
 				if(list == null)
 					list = new ArrayList<>();
 				list.add(s);
 				tagIdSiteListMap.put(tagId, list);
 			}
+			
+			if(ObjectUtils.isArrayNotEmpty(cusTag)){
+				String tagId = cusTag[0];
+				List<SiteInfo> list = this.tagIdSiteListMap.get(tagId);
+				if(list == null)
+					list = new ArrayList<>();
+				list.add(s);
+				tagIdSiteListMap.put(tagId, list);
+			}
+			
 		}
 	}
 	
@@ -456,11 +484,8 @@ public class WechatApplicationThread extends MyThread {
 							
 							newWechatMemberStr = newWechatMemberStr.substring(0, newWechatMemberStr.length() - 1);
 							Sender sender = Sender.getInstance(siteInfo.getChannel());
-							//1TEST
 							sender.sendIM(new WechatMsg.Builder(getNewWechatMemberMsg(siteInfo, newWechatMemberStr),
 									siteInfo.getAgentId(), new String[] { siteInfo.getTagId(), siteInfo.getTagId2() }).build());
-//							sender.sendIM(new WechatMsg.Builder(getNewWechatMemberMsg(siteInfo, newWechatMemberStr),
-//									siteInfo.getAgentId(), new String[] { "741" }).build());
 						}
 					}
 					

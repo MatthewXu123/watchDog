@@ -221,6 +221,7 @@ public class WechatUtil {
 	 * @author Matthew Xu
 	 * @date May 10, 2020
 	 */
+	@Deprecated
 	public static Map<String, List<WechatUser>> getDeptIdMemberMap(String baseWechatDeptId) {
 		if(StringUtils.isBlank(baseWechatDeptId))
 			return null;
@@ -231,7 +232,7 @@ public class WechatUtil {
 		}
 		return deptIdWechatMemberMap;
 	}
-
+	
 	/**
 	 * 
 	 * Description:
