@@ -133,14 +133,23 @@ public class SenderWechat extends Sender {
 	}
 
 	@Override
-	public String getURL(String url) {
+	public String getURL(String url,Integer agentId) {
 		try {
-			return getURL_(URLEncoder.encode(url, "utf-8"));
+			return getURL_(URLEncoder.encode(url, "utf-8"),agentId);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		return getURL_("https://" + configStorage.getDomainName() + "/watchDog/servlet/auth");
 	}
+	@Override
+    public String getURL(String url) {
+        try {
+            return getURL_(URLEncoder.encode(url, "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return getURL_("https://" + configStorage.getDomainName() + "/watchDog/servlet/auth");
+    }
 
 	@Override
 	public String getDomainName() {
@@ -164,10 +173,14 @@ public class SenderWechat extends Sender {
 		return article;
 	}
 
+	private String getURL_(String url,Integer agentId)
+	{
+	    return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + configStorage.getCorpId()
+        + "&redirect_uri=" + url + "&response_type=code&scope=snsapi_base&agentid=" +(agentId==null? configStorage.getAgentId():agentId)
+        + "#wechat_redirect";
+	}
 	private String getURL_(String url) {
-		return "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + configStorage.getCorpId()
-				+ "&redirect_uri=" + url + "&response_type=code&scope=snsapi_base&agentid=" + configStorage.getAgentId()
-				+ "#wechat_redirect";
+		return getURL_(url,null);
 	}
 
 }

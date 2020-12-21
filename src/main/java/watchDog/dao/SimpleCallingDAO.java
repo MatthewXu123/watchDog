@@ -172,6 +172,7 @@ public class SimpleCallingDAO {
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
+            logger.error(sql);
             logger.error(" ",e);
         }
         return result;

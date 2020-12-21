@@ -36,8 +36,9 @@ public class RemoteCommandUtil {
         Connection conn = null;
         try {  
         	if(port != null)
-        		conn = new Connection(ip,port);  
-        	conn = new Connection(ip);
+        		conn = new Connection(ip,port);
+        	else
+        	    conn = new Connection(ip);
             conn.connect();//连接  
             flag = conn.authenticateWithPassword(userName, userPwd);//认证  
             if(flag){
@@ -46,7 +47,7 @@ public class RemoteCommandUtil {
             }
         } catch (IOException e) {  
             log.error("=========Login Failed=========" + e.getMessage());
-            e.printStackTrace();  
+            //e.printStackTrace();  
         }  
         return conn;  
     }  

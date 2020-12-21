@@ -58,6 +58,11 @@ public class SenderDingDing extends Sender {
 		// TODO Auto-generated method stub
 		return null;
 	}
+    @Override
+    public String getURL(String url, Integer agentId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 	
 //	public boolean sendIM(int type,String agentId,String robot,String title,String msg)
 //	{

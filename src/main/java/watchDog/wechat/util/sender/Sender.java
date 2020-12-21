@@ -44,6 +44,7 @@ public abstract class Sender {
 	
 	public abstract String getDomainName();
 
+	public abstract String getURL(String url,Integer agentId);
 	public abstract String getURL(String url);
 	
 	public abstract String isDebug();
