@@ -38,12 +38,57 @@ $(function() {
 			success : function(data, status) {
 				if (status == "success") {
 					alert('提交数据成功');
-					$("#save_form").modal('hide');
+					$("#addModal").modal('hide');
 				}
 			},
 			error : function() {
 				alert('编辑失败');
 			},
+		})
+	});
+	$("#btn_save_simcard").click(function(){
+		var count = $("#input_cardNumberCount").val();
+		if (isNaN(count) || count==""){
+			alert("数量必须是数字");
+			return;
+		}
+		
+		var countInt = parseInt(count);
+		if (countInt <= 0){
+			alert("数量必须是正整数");
+			return;
+		}
+		$.ajax({
+			method:"POST",
+			url:"/watchDog/simcard/create",
+			data:{
+				"simcard":JSON.stringify($('#form_save_simcard').serializeObject()),
+			},
+			//contentType:'application/json',
+			dataType:'JSON',
+			success:function(data,status){
+				if (status == "success") {
+					var res = data.data;
+					var successfulCards = res.successful;
+					var registeredCardNumber = "\n成功注册的卡号如下:\n";
+					for(var key in successfulCards){
+						var simcard = successfulCards[key];
+						registeredCardNumber += simcard.cardNumber + ","
+					}
+					
+					var failedCards = res.failed;
+					var unregisteredCardNumber = "\n未成功注册的卡号如下(原因是可能已重复)：\n";
+					for(var key in failedCards){
+						var simcard = failedCards[key];
+						unregisteredCardNumber += simcard.cardNumber + ","
+					}
+					
+					alert(registeredCardNumber + unregisteredCardNumber);
+				}
+			},
+			error:function(){
+				alert('创建失败');
+			}
 		})
 	})
 	/*var oButtonInit = new ButtonInit();
@@ -298,9 +343,6 @@ var TableInit = function() {
 						 });
 						 return result;
 					 },
-					 formatter(value,row,index){
-							return value;
-						},
 				 }
 			},
 			{

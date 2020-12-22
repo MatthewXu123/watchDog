@@ -30,18 +30,21 @@ public interface BaseController {
 		returnResult(resp, JSONObject.toJSONString(ResultFactory.getSuccessResult()));
 	}
 	
+	public static void returnFailure(HttpServletResponse resp) {
+		returnResult(resp, JSONObject.toJSONString(ResultFactory.getFailResult()));
+	}
+	
 	public static void returnResult(HttpServletResponse resp, String result) {
 		try {
+			resp.setHeader("Content-type", "text/html;charset=UTF-8");
 			OutputStream ops = resp.getOutputStream();
 			Writer outputStreamWriter = new OutputStreamWriter(ops, CHAR_ENCODING_UTF8);
 			PrintWriter printWriter = new PrintWriter(outputStreamWriter);
-			printWriter.write(result);;
+			printWriter.write(result);
 			printWriter.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
 	
 }

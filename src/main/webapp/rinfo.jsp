@@ -41,6 +41,18 @@
 		<!-- Example Events -->
 		<div class="example-wrap">
 			<h4 class="example-title">项目信息管理</h4>
+			<div class="">
+				<form id="form_save_simcard">
+					<span>SIM CARD一键生成</span>
+					<input type="text" name="startCardNumber" placeholder="填入起始卡号" id="input_startCardNumber">
+					<input type="text" name="cardNumberCount" placeholder="填入数量" id="input_cardNumberCount">
+					<select name="simcardType" id="select_type">
+						<option value="0">中国移动</option>
+						<option value="1">中国电信</option>
+					</select>
+					<button id="btn_save_simcard">点击生成</button>
+				</form>
+			</div>
 			<div class="example">
 				<div id="toolbar" class="btn-group">
 					<button id="btn_add" type="button" class="btn btn-default"  data-toggle="modal" data-target="#addModal">

@@ -8,7 +8,13 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,8 +29,12 @@ import com.alibaba.fastjson.JSONObject;
 
 import watchDog.bean.register.SIMCard;
 import watchDog.bean.register.SIMCardStatus;
+import watchDog.bean.register.SIMCardType;
+import watchDog.bean.result.ResultFactory;
 import watchDog.dao.SIMCardDAO;
 import watchDog.util.HttpServletUtil;
+import watchDog.util.ObjectUtils;
+import watchDog.wechat.bean.WechatUser;
 
 /**
  * Description:
@@ -32,7 +42,7 @@ import watchDog.util.HttpServletUtil;
  * @author Matthew Xu
  * @date Dec 9, 2020
  */
-@WebServlet(urlPatterns = { "/simcard/get" })
+@WebServlet(urlPatterns = { "/simcard/get", "/simcard/create"})
 public class SIMCardController extends HttpServlet implements BaseController{
 
 	private static final long serialVersionUID = -5031685751594766916L;
@@ -59,14 +69,54 @@ public class SIMCardController extends HttpServlet implements BaseController{
 	private void get(HttpServletRequest req, HttpServletResponse resp){
 		try {
 			List<SIMCard> list = simCardDAO.getAll();
-			resp.setHeader("Content-type", "text/html;charset=UTF-8");
-			OutputStream ops = resp.getOutputStream();
-			Writer outputStreamWriter = new OutputStreamWriter(ops, CHAR_ENCODING_UTF8);
-			PrintWriter printWriter = new PrintWriter(outputStreamWriter);
-			printWriter.write(JSONObject.toJSONString(list));
-			printWriter.flush();
+			BaseController.returnResult(resp, JSONObject.toJSONString(list));
 		} catch (Exception e) {
 			LOGGER.error("", e);
+			BaseController.returnFailure(resp);
 		}
 	}
+	
+	private void create(HttpServletRequest req, HttpServletResponse resp){
+		try {
+			String contentType = req.getContentType();
+			JSONObject simcardObj = JSONObject.parseObject(req.getParameter("simcard"));
+			BigDecimal startCardNumber = new BigDecimal(simcardObj.getString("startCardNumber"));
+			int cardNumberCount = simcardObj.getIntValue("cardNumberCount");
+			int simcardType = simcardObj.getIntValue("simcardType");
+			List<SIMCard> simcardList = new ArrayList<>();
+			for(int i = 0; i < cardNumberCount; i++){
+				SIMCard simCard = new SIMCard();
+				simCard.setCardNumber(startCardNumber.add(new BigDecimal(i)).toString());
+				simCard.setSimCardStatus(SIMCardStatus.UNUSED);
+				simCard.setSimCardType(SIMCardType.getOneByCode(simcardType));
+				simcardList.add(simCard);
+			}
+			
+			List<SIMCard> currentAllSimcards = simCardDAO.getAllByType(SIMCardType.getOneByCode(simcardType));
+			List<SIMCard> copiedSimCardList = new ArrayList<>();
+			copiedSimCardList.addAll(simcardList);
+			// To see if two lists have the same card numbers.
+			copiedSimCardList.retainAll(currentAllSimcards);
+			// To make sure that the saved card numbers are all unique.
+			simcardList.removeAll(currentAllSimcards);
+			if(ObjectUtils.isCollectionNotEmpty(simcardList))
+				simCardDAO.saveAll(simcardList);
+			
+			Map<String,List<SIMCard>> map = new HashMap<>();
+			map.put("successful", simcardList);
+			map.put("failed", copiedSimCardList);
+			
+			BaseController.returnResult(resp, JSONObject.toJSONString(ResultFactory.getSuccessResult(map)));
+		} catch (Exception e) {
+			LOGGER.error("", e);
+			BaseController.returnFailure(resp);
+		}
+	}
+	
+	public static void main(String[] args) {
+		BigDecimal bigDecimal = new BigDecimal("89860427102090711021");
+		bigDecimal = bigDecimal.add(new BigDecimal(1));
+		System.out.println(bigDecimal.toString());
+	}
+	
 }

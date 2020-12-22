@@ -77,9 +77,15 @@ public class SIMCardDAOTest {
 	}
 	
 	@Test
-	public void testGetAll(){
+	public void testGetAtll(){
 		List<SIMCard> list = simCardDAO.getAll();
 		assertTrue(list.size() > 0);
+	}
+	
+	@Test
+	public void testGetAllByType(){
+		List<SIMCard> list = simCardDAO.getAllByType(SIMCardType.CHINA_TELECOM);
+		assertTrue(list.size() == 0);
 	}
 	
 	@Test

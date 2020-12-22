@@ -32,7 +32,7 @@ public class ResultFactory extends RestResult {
      * @author Matthew Xu
      * @date 11 Jan 2020
      */
-    public  RestResult getSuccessResult(Object data) {
+    public static RestResult getSuccessResult(Object data) {
     	return getFreeResult(ResultCode.SUCCESS, SUCCESS, data);
     }
     
@@ -45,7 +45,7 @@ public class ResultFactory extends RestResult {
      * @author Matthew Xu
      * @date 11 Jan 2020
      */
-    public  RestResult getSuccessResult(String msg,Object data) {
+    public static RestResult getSuccessResult(String msg,Object data) {
     	return getFreeResult(ResultCode.SUCCESS, msg, data);
     }
    
@@ -56,7 +56,7 @@ public class ResultFactory extends RestResult {
      * @author Matthew Xu
      * @date 11 Jan 2020
      */
-    public  RestResult getFailResult() {
+    public static RestResult getFailResult() {
     	return getFreeResult(ResultCode.FAIL, FAILED, null);
     }
     
@@ -68,7 +68,7 @@ public class ResultFactory extends RestResult {
      * @author Matthew Xu
      * @date 11 Jan 2020
      */
-    public  RestResult getFailResult(String msg) {
+    public static RestResult getFailResult(String msg) {
     	return getFreeResult(ResultCode.FAIL, msg, null);
     }
     

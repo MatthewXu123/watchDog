@@ -72,6 +72,11 @@ public class SIMCardDAO extends BaseDAO{
 		return getAll(sql, status);
 	}
 	
+	public List<SIMCard> getAllByType(SIMCardType simCardType){
+		String sql = "SELECT * FROM wechat.simcard WHERE simcard_type = ?";
+		return getAll(sql, simCardType.getCode());
+	}
+	
 	public List<SIMCard> getAll(){
 		String sql = "SELECT * FROM wechat.simcard ORDER BY simcard_status";
 		return getAll(sql, null);
