@@ -67,7 +67,7 @@ public class CommunityConfig extends BaseJSONConfig {
 		}
 	}
 
-	public static String[] getTagIdByCommunityCode(String communityCode){
+	/*public static String[] getTagIdByCommunityCode(String communityCode){
 		String[] tag = null;
 		CommunityDTO communityDTO = codeCommunityMap.get(communityCode);
 		if(communityDTO != null)
@@ -81,7 +81,7 @@ public class CommunityConfig extends BaseJSONConfig {
 				return communityDTO.getCode();
 		}
 		return null;
-	}
+	}*/
 	
 	
 	

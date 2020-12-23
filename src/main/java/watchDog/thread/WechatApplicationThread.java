@@ -2,12 +2,10 @@ package watchDog.thread;
 
 import static watchDog.util.ObjectUtils.isCollectionEmpty;
 import static watchDog.util.ObjectUtils.isCollectionNotEmpty;
-import static watchDog.util.ObjectUtils.isMapEmpty;
 import static watchDog.util.ObjectUtils.isMapNotEmpty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,7 +30,6 @@ import watchDog.wechat.bean.WechatDept;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.bean.WechatTag;
 import watchDog.wechat.bean.WechatUser;
-import watchDog.wechat.config.CommunityConfig;
 import watchDog.wechat.service.WechatService;
 import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
 import watchDog.wechat.util.WechatUtil;
@@ -41,8 +38,6 @@ import watchDog.wechat.util.sender.Sender;;
 public class WechatApplicationThread extends MyThread {
 	private static final Logger logger = Logger.getLogger(WechatApplicationThread.class);
 
-	private static final String REQUIRED_TAG_FLAG = "必选人员";
-	
 	private static final String GNNERAL_DEPT_ID = "109";
 
 	private static final String SKIP_SUFFIX = "_i";
@@ -69,6 +64,10 @@ public class WechatApplicationThread extends MyThread {
 	private List<WechatUser> generalWechatMember = new ArrayList<>();
 	// <userId, siteId>
 	private Map<String, List<Integer>> allWechatMemberSiteMap = new HashMap<>();
+	// <tagId, codeId>
+	private Map<String, String> tagIdCodeMap = new HashMap<>();
+	// <codeId, tagId>
+	private Map<String, String> codetagIdMap = new HashMap<>();
 	// <userId, siteId>
 	private Map<String, List<Integer>> generalWechatMemberSiteMap = new HashMap<>();
 	// <siteId, tagId>
@@ -117,6 +116,9 @@ public class WechatApplicationThread extends MyThread {
 					generalWechatMemberSiteMap = initGeneralWechatMemberSiteMap();
 
 					generalWechatMember = initGeneralWechatMember();
+					
+					//Tag
+					initTagCodeMap();
 					
 					siteIdTagIdMap = initSiteIdTagIdMap();
 					
@@ -186,8 +188,9 @@ public class WechatApplicationThread extends MyThread {
 	private Map<String, List<WechatUser>> initDeptIdWechatMemberMap() {
 		Map<String, List<WechatUser>> deptIdWechatMemberMap = new HashMap<>();
 		List<WechatDept> deptList = WechatUtil.getDeptListByDeptId(sender.getRootDepartmentId());
-		List<WechatUser> userList = new ArrayList<>(Arrays.asList(new WechatUser[allMembers.size()]));
-		Collections.copy(userList, allMembers);
+		List<WechatUser> userList = new ArrayList<>();
+		userList.addAll(allMembers);
+		
 		for (WechatDept wechatDept : deptList) {
 			String deptId = wechatDept.getId();
 			List<WechatUser> list = new ArrayList<>();
@@ -279,7 +282,8 @@ public class WechatApplicationThread extends MyThread {
 				
 				// In case that the wechat API can't get the soldier group or the officer group...
 				if(runTime == 1 || (isCollectionNotEmpty(soldierWechatMemberList) && isCollectionNotEmpty(officerWechatMemberList))){
-					allWechatMemberList.addAll(soldierWechatMemberList);
+					if(isCollectionNotEmpty(soldierWechatMemberList))
+						allWechatMemberList.addAll(soldierWechatMemberList);
 					if (isCollectionNotEmpty(officerWechatMemberList)) {
 						for (WechatUser officer : officerWechatMemberList) {
 							// in case that there are repeated persons
@@ -295,16 +299,45 @@ public class WechatApplicationThread extends MyThread {
 		return siteWechatMemberMap;
 	}
 
+	private void initTagCodeMap(){
+		tagIdCodeMap = new HashMap<>();
+		codetagIdMap = new HashMap<>();
+		List<WechatTag> tagList = WechatUtil.getTagList();
+		for (WechatTag wechatTag : tagList) {
+			String[] tagNameSplits = wechatTag.getTagname().split("\\|");
+			if(ObjectUtils.isArrayNotEmpty(tagNameSplits)){
+				String tagid = wechatTag.getTagid();
+				String code = tagNameSplits[1];
+				tagIdCodeMap.put(tagid, code);
+				codetagIdMap.put(code, tagid);
+			}
+		}
+	}
+	
 	private Map<Integer, String[]> initSiteIdTagIdMap(){
 		List<SiteInfo> infos = Dog.getInfosWithTags();
 		siteIdTagIdMap = new HashMap<>();
 		for (SiteInfo siteInfo : infos) {
-			String[] tag = CommunityConfig.getTagIdByCommunityCode(siteInfo.getManNode());
-			if(ObjectUtils.isArrayNotEmpty(tag))
-				tag = CommunityConfig.getTagIdByCommunityCode(siteInfo.getCusNode());
-			siteIdTagIdMap.put(siteInfo.getSupervisorId(), tag);
+			List<String> tagIdList = new ArrayList<>();
+			String manTagId = getTagIdByCode(siteInfo.getManNode());
+			String cusTagId = getTagIdByCode(siteInfo.getCusNode());
+			if(StringUtils.isNotBlank(manTagId))
+				tagIdList.add(manTagId);
+			if(StringUtils.isNotBlank(cusTagId))
+				tagIdList.add(cusTagId);
+			siteIdTagIdMap.put(siteInfo.getSupervisorId(), tagIdList.toArray(new String[tagIdList.size()]));
 		}
 		return siteIdTagIdMap;
+	}
+	
+	private String getTagIdByCode(String code){
+		//MAN.XINGX.DINGDONG
+		if(StringUtils.isNotBlank(code) && this.codetagIdMap.get(code) == null){
+			String[] codeSplits =  code.split("\\.");
+			//MAN.XINGX
+			code = codeSplits[0] + "." + codeSplits[1];
+		}
+		return this.codetagIdMap.get(code);
 	}
 	
 	public String[] getTagBySiteId(Integer siteId){
@@ -341,8 +374,7 @@ public class WechatApplicationThread extends MyThread {
 		WechatUser wechatUser = new WechatUser();
 		wechatUser.setUserid(userId);
 		for(Map.Entry<WechatTag, List<WechatUser>> entry : this.tagIdUserListMap.entrySet()){
-			if(entry.getKey().getTagname().contains(REQUIRED_TAG_FLAG)
-					&& entry.getValue().contains(wechatUser)){
+			if(entry.getValue().contains(wechatUser)){
 				list.add(entry.getKey());
 			}
 		}
@@ -360,25 +392,23 @@ public class WechatApplicationThread extends MyThread {
 			SiteInfo s = entry.getValue();
 			String manNode = s.getManNode();
 			String cusNode = s.getCusNode();
-			String[] manTag = CommunityConfig.getTagIdByCommunityCode(manNode);
-			String[] cusTag= CommunityConfig.getTagIdByCommunityCode(cusNode);
+			String manTag = this.codetagIdMap.get(manNode);
+			String cusTag= this.codetagIdMap.get(cusNode);
 			
-			if(ObjectUtils.isArrayNotEmpty(manTag)){
-				String tagId = manTag[0];
-				List<SiteInfo> list = this.tagIdSiteListMap.get(tagId);
+			if(StringUtils.isNotBlank(manTag)){
+				List<SiteInfo> list = this.tagIdSiteListMap.get(manTag);
 				if(list == null)
 					list = new ArrayList<>();
 				list.add(s);
-				tagIdSiteListMap.put(tagId, list);
+				tagIdSiteListMap.put(manTag, list);
 			}
 			
-			if(ObjectUtils.isArrayNotEmpty(cusTag)){
-				String tagId = cusTag[0];
-				List<SiteInfo> list = this.tagIdSiteListMap.get(tagId);
+			if(StringUtils.isNotBlank(cusTag)){
+				List<SiteInfo> list = this.tagIdSiteListMap.get(cusTag);
 				if(list == null)
 					list = new ArrayList<>();
 				list.add(s);
-				tagIdSiteListMap.put(tagId, list);
+				tagIdSiteListMap.put(cusTag, list);
 			}
 			
 		}

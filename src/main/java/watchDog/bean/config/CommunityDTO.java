@@ -22,8 +22,6 @@ public class CommunityDTO implements Serializable{
 	
 	private String deptId;
 	
-	private String[] requiredUserTag;
-	
 	private List<String> faxRuleCodes;
 
 	/**
@@ -52,14 +50,6 @@ public class CommunityDTO implements Serializable{
 	 */
 	public void setDeptId(String deptId) {
 		this.deptId = deptId;
-	}
-
-	public String[] getRequiredUserTag() {
-		return requiredUserTag;
-	}
-
-	public void setRequiredUserTag(String[] requiredUserTag) {
-		this.requiredUserTag = requiredUserTag;
 	}
 
 	/**
@@ -109,13 +99,6 @@ public class CommunityDTO implements Serializable{
 	 */
 	public void setIsGlobal(boolean isGlobal) {
 		this.isGlobal = isGlobal;
-	}
-	
-
-	@Override
-	public String toString() {
-		return "CommunityDTO [code=" + code + ", isActive=" + isActive + ", isGlobal=" + isGlobal + ", deptId=" + deptId
-				+ ", requiredUserTag=" + requiredUserTag + ", faxRuleCodes=" + faxRuleCodes + "]";
 	}
 
 }

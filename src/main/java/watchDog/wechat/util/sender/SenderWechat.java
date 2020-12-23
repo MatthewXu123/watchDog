@@ -53,10 +53,7 @@ public class SenderWechat extends Sender {
 			}
 		} catch (WxErrorException ex) {
 			sendOK = false;
-			logger.error("", ex);
-		} catch (Exception ex) {
-			sendOK = false;
-			logger.error("", ex);
+			logger.error("type:" + type + ",targetIds:" + targetIds.toString() + ",agentId:" + agentId + ",content:" + content, ex);
 		}
 		if (sendOK)
 			logger.info(content);
