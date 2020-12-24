@@ -13,7 +13,6 @@ import me.chanjar.weixin.cp.bean.WxCpMessage.WxArticle;
 import me.chanjar.weixin.cp.bean.messagebuilder.NewsBuilder;
 import me.chanjar.weixin.cp.bean.messagebuilder.TextBuilder;
 import watchDog.listener.Dog;
-import watchDog.thread.WechatApplicationThread;
 import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.service.WechatService;
