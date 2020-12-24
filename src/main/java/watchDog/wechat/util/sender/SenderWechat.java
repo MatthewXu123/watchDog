@@ -12,6 +12,8 @@ import me.chanjar.weixin.cp.bean.WxCpMessage;
 import me.chanjar.weixin.cp.bean.WxCpMessage.WxArticle;
 import me.chanjar.weixin.cp.bean.messagebuilder.NewsBuilder;
 import me.chanjar.weixin.cp.bean.messagebuilder.TextBuilder;
+import watchDog.listener.Dog;
+import watchDog.thread.WechatApplicationThread;
 import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.service.WechatService;
@@ -22,13 +24,15 @@ public class SenderWechat extends Sender {
 	private static final Logger logger = Logger.getLogger(SenderWechat.class);
 	private WxCpService wxService = WechatService.getInstance().getWxCpService();
 	private WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
+	private static final Dog DOG = Dog.getInstance();
 	
 	@Override
 	public boolean sendIM(WechatMsg wechatMsg) {
 		if(StringUtils.isBlank(configStorage.getDebug())){
+			// Here use '&' not '&&'
 			return sendIM(WECHAT_MSG_TYPE_DEPT, wechatMsg.getDeptIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
-			&& sendIM(WECHAT_MSG_TYPE_TAG, wechatMsg.getTagIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
-			&& sendIM(WECHAT_MSG_TYPE_USER, wechatMsg.getUserIds(), wechatMsg.getAgentId(), wechatMsg.getContent());
+			& sendIM(WECHAT_MSG_TYPE_TAG, wechatMsg.getTagIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
+			& sendIM(WECHAT_MSG_TYPE_USER, wechatMsg.getUserIds(), wechatMsg.getAgentId(), wechatMsg.getContent());
 		}
 		return true;
 	}
@@ -41,9 +45,9 @@ public class SenderWechat extends Sender {
 				for (String targetId : targetIds) {
 					if (type == WECHAT_MSG_TYPE_TAG)
 						b = b.toTag(targetId);
-					else if (type == WECHAT_MSG_TYPE_USER && WechatUtil.isUserExist(targetId))
+					else if (type == WECHAT_MSG_TYPE_USER && DOG.getWechatApplicationThread().isUserExist(targetId))
 						b = b.toUser(targetId);
-					else if (type == WECHAT_MSG_TYPE_DEPT && !WechatUtil.isDeptEmptyOfMember(targetId))
+					else if (type == WECHAT_MSG_TYPE_DEPT && DOG.getWechatApplicationThread().isDeptNotEmptyOfMembers(targetId))
 						b = b.toParty(targetId);
 					else
 						return false;

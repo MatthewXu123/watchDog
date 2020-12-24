@@ -318,6 +318,9 @@ public class WechatApplicationThread extends MyThread {
 		List<SiteInfo> infos = Dog.getInfosWithTags();
 		siteIdTagIdMap = new HashMap<>();
 		for (SiteInfo siteInfo : infos) {
+			//TESTBYMAT
+			if(siteInfo.getDescription().equals("盒马长沙阳光100店"))
+				siteInfo.setManNode("MAN.Carrier.TEST");
 			List<String> tagIdList = new ArrayList<>();
 			String manTagId = getTagIdByCode(siteInfo.getManNode());
 			String cusTagId = getTagIdByCode(siteInfo.getCusNode());
@@ -602,6 +605,17 @@ public class WechatApplicationThread extends MyThread {
 		return weChatMemberMap.get(userId);
 	}
 
+	public boolean isDeptNotEmptyOfMembers(String deptId){
+		return isMapNotEmpty(deptIdWechatMemberMap) 
+				&& isCollectionNotEmpty(deptIdWechatMemberMap.get(deptId));
+	}
+	
+	public boolean isUserExist(String userId) {
+		WechatUser wechatUser = new WechatUser();
+		wechatUser.setUserid(userId);
+		return allMembers.contains(wechatUser);
+	}
+	
 	public List<SiteInfo> getSitesByUserId(String userId, String method, String order) {
 		List<Integer> siteIdList = allWechatMemberSiteMap.get(userId);
 		List<SiteInfo> siteList = new ArrayList<>();

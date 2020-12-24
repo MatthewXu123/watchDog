@@ -21,7 +21,6 @@ public class AlarmNotificationThread extends MyThread {
 	}
 	public void run()
 	{
-		
 		//sleep 5 minutes first
 		Dog.sleep(AlarmNotificationMain.SLEEP_MINUTES*60*1000);
 		while(!forceDead)

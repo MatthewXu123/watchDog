@@ -80,60 +80,37 @@ public class AlarmNotificationMain {
 		try {
 			logger.info("checking alarms");
 			// update c:/ip.properties every time
-			Sender wechat = Sender.getInstance();
-			if (wechat.isDebug() != null) {
-				Thread.sleep(SLEEP_MINUTES * 60 * 1000);
-				return;
-			}
 			deadlineNotify();
 			String idents = dog.getIdents4AlarmChecking();
 			if (!StringUtils.isBlank(idents)) {
 				String lastQueryTime = getLastQueryTime();
 				Date untilTime = new Date();
 				int messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1;
-				Map<String, List<String>> active = null;
-				Map<String, List<String>> reset = null;
-				boolean sendOK = true;
+				Map<String, List<String>> active = new HashMap<>();
+				Map<String, List<String>> reset = new HashMap<>();
 
-				logger.info("checking alarms: first level");
 				// first level
-				try {
-					messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1;
-					active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
-					if (!sendIM(ACTIVE, active, messagePurposeType))
-						sendOK = false;
-					reset = checkSite(RESET, idents, messagePurposeType, lastQueryTime);
-					if (!sendIM(RESET, reset, messagePurposeType))
-						sendOK = false;
-				} catch (Exception ex) {
-					logger.error("", ex);
-				}
+				logger.info("checking alarms: first level");
+				messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1;
+				active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
+				sendIM(ACTIVE, active, messagePurposeType);
+				reset = checkSite(RESET, idents, messagePurposeType, lastQueryTime);
+				sendIM(RESET, reset, messagePurposeType);
 
-				logger.info("checking alarms: second level");
 				// second level
-				try {
-					messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL2;
-					active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
-					if (!sendIM(ACTIVE, active, messagePurposeType))
-						sendOK = false;
-					reset = checkSite(RESET, idents, messagePurposeType, lastQueryTime);
-					if (!sendIM(RESET, reset, messagePurposeType))
-						sendOK = false;
-				} catch (Exception ex) {
-					logger.error("", ex);
-				}
+				logger.info("checking alarms: second level");
+				messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL2;
+				active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
+				sendIM(ACTIVE, active, messagePurposeType);
+				reset = checkSite(RESET, idents, messagePurposeType, lastQueryTime);
+				sendIM(RESET, reset, messagePurposeType);
 
-				logger.info("checking alarms: repeat, first level");
 				// repeat, first level
-				try {
-					if (canRepeatSend()) {
-						messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT;
-						active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
-						if (!sendIM(ACTIVE, active, messagePurposeType))
-							sendOK = false;
-					}
-				} catch (Exception ex) {
-					logger.error("", ex);
+				logger.info("checking alarms: repeat, first level");
+				if (canRepeatSend()) {
+					messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT;
+					active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
+					sendIM(ACTIVE, active, messagePurposeType);
 				}
 
 				// if(sendOK)
@@ -142,8 +119,8 @@ public class AlarmNotificationMain {
 				heartbeat(untilTime);
 				logger.info("checking alarms: finished");
 			} else
-				logger.error("no sites");
-			// updateAlarmNum();
+				logger.info("no sites");
+				// updateAlarmNum();
 
 		} catch (Exception ex) {
 			logger.error("", ex);
@@ -152,8 +129,7 @@ public class AlarmNotificationMain {
 				Thread.sleep(SLEEP_MINUTES * 60 * 1000);
 				Dog.getInstance().loadFromDB();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("", e);
 			}
 		}
 	}

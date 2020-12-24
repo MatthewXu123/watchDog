@@ -26,6 +26,7 @@ import watchDog.thread.AlarmNotificationMain;
 import watchDog.thread.WechatApplicationThread;
 import watchDog.util.DateTool;
 import watchDog.util.HttpSendUtil;
+import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.service.WechatService;
@@ -52,27 +53,30 @@ public class SimpleCallingService {
     }
     public void start()
     {
+    	deleteResetAlarm();
+    	boolean canRepeat = canRepeat();
+    	Date now = new Date();
+    	
         String[] idSites = getSitesWithCallingUser();
-        Map<WechatUser,String> willCallServerMap = new HashMap<>();
-        
-        deleteResetAlarm();
-        Map<CallingLogKey,CallingLogValue> callingLogMap = SimpleCallingDAO.getCallingLog();
-        Date now = new Date();
-        boolean canRepeat = canRepeat();
-        for(String CODE:CODES)
-        {
-            try{
-                Method method = SimpleCallingDAO.class.getMethod("getAlarm"+CODE,String[].class, String.class);
-                List<SimpleAlarm> alarms = (List<SimpleAlarm>)method.invoke(null, idSites, CODE);
-                filter(CODE,willCallServerMap,alarms,callingLogMap,getNum(CODE));
-            }catch(Exception ex){
-                logger.error("",ex);
+        if(ObjectUtils.isArrayNotEmpty(idSites)){
+        	Map<WechatUser,String> willCallServerMap = new HashMap<>();
+            Map<CallingLogKey,CallingLogValue> callingLogMap = SimpleCallingDAO.getCallingLog();
+            for(String CODE:CODES)
+            {
+                try{
+                    Method method = SimpleCallingDAO.class.getMethod("getAlarm"+CODE,String[].class, String.class);
+                    List<SimpleAlarm> alarms = (List<SimpleAlarm>)method.invoke(null, idSites, CODE);
+                    filter(CODE,willCallServerMap,alarms,callingLogMap,getNum(CODE));
+                }catch(Exception ex){
+                    logger.error("",ex);
+                }
             }
+            handleWillCallServerMap(willCallServerMap);
         }
-        handleWillCallServerMap(willCallServerMap);
+        
         if(canRepeat)
             this.lastRepeatTime = now;
-        this.lastRunDate = new Date();
+        this.lastRunDate = now;
     }
     private void handleWillCallServerMap(Map<WechatUser,String> willCallServerMap)
     {
