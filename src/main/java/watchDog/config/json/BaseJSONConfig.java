@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import org.apache.log4j.Logger;
 
 import watchDog.property.template.PropertyConfig;
-import watchDog.wechat.config.CommunityConfig;
 
 /**
  * Description:
@@ -26,10 +25,11 @@ public abstract class BaseJSONConfig {
 	protected static PropertyConfig propertyConfig = PropertyConfig.INSTANCE;
 	
 	public static void refreshConfig(){
-		DeviceModelConfig.getConfigJSONStr();
-		UnitConfig.getConfigJSONStr();
-		FaxRuleConfig.getConfigJSONStr();
-		CommunityConfig.getConfigJSONStr();
+		DeviceModelConfig.getConfig();
+		UnitConfig.getConfig();
+		FaxRuleConfig.getConfig();
+		CommunityConfig.getConfig();
+		MailConfig.getConfig();
 	}
 	
 	protected static String readFromPath(String path){

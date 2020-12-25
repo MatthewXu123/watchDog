@@ -23,10 +23,10 @@ public class UnitConfig extends BaseJSONConfig{
 	
 	static{
 		if(ObjectUtils.isMapEmpty(unitOFFMap))
-			getConfigJSONStr();
+			getConfig();
 	}
 	
-	public static void getConfigJSONStr() {
+	public static void getConfig() {
 		unitOFFMap = JSON.parseObject(readFromPath(basePath + UNIT_CONFIG_PTAH)).toJavaObject(Map.class);		
 	}
 	

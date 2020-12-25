@@ -8,12 +8,10 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 
-import watchDog.bean.FaxInfoDO;
 import watchDog.bean.config.AlarmFaxRuleDTO;
 import watchDog.bean.config.CommunityDTO;
 import watchDog.bean.config.FaxRuleDTO;
 import watchDog.util.ObjectUtils;
-import watchDog.wechat.config.CommunityConfig;
 
 /**
  * Description:
@@ -49,7 +47,7 @@ public class FaxRuleConfig extends BaseJSONConfig {
 	
 	static {
 		if (ObjectUtils.isCollectionEmpty(faxRuleDTOList))
-			getConfigJSONStr();
+			getConfig();
 	}
 
 	/**
@@ -58,7 +56,7 @@ public class FaxRuleConfig extends BaseJSONConfig {
 	 * @author Matthew Xu
 	 * @date Jun 16, 2020
 	 */
-	public static void getConfigJSONStr() {
+	public static void getConfig() {
 		// Get the fax rules from the json
 		faxRuleDTOList = JSON.parseArray(readFromPath(basePath + DEPT_OFFICER_PATH), FaxRuleDTO.class);
 		

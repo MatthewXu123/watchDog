@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import org.apache.log4j.Logger;
 
 import watchDog.bean.SiteInfo;
+import watchDog.config.json.CommunityConfig;
 import watchDog.listener.Dog;
 import watchDog.property.template.CommonMsgLogTemplate;
 import watchDog.property.template.WechatDeptLogTemplate;
@@ -15,7 +16,6 @@ import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatDept;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.bean.WechatResult;
-import watchDog.wechat.config.CommunityConfig;
 import watchDog.wechat.util.WechatUtil;
 import watchDog.wechat.util.sender.SenderWechat;
 

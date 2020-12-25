@@ -8,8 +8,8 @@ import java.util.List;
 import org.junit.Test;
 
 import watchDog.bean.config.CommunityDTO;
+import watchDog.config.json.CommunityConfig;
 import watchDog.config.json.FaxRuleConfig;
-import watchDog.wechat.config.CommunityConfig;
 
 /**
  * Description:

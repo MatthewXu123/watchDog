@@ -52,14 +52,13 @@ public class SenderWechat extends Sender {
 						return false;
 					WxCpMessage msg = b.content(content).build();
 					wxService.messageSend(msg);
+					logger.info(content);
 				}
 			}
 		} catch (WxErrorException ex) {
 			sendOK = false;
 			logger.error("type:" + type + ",targetIds:" + targetIds.toString() + ",agentId:" + agentId + ",content:" + content, ex);
 		}
-		if (sendOK)
-			logger.info(content);
 		
 		return sendOK;
 	}

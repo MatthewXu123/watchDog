@@ -26,7 +26,7 @@ public class DeviceModelConfig extends BaseJSONConfig{
 	
 	private static JSONObject devmdlJson;
 	
-	public static void getConfigJSONStr() {
+	public static void getConfig() {
 		devmdlJson = JSON.parseObject(readFromPath(basePath + DEVMDL_CONFIG_PTAH));
 	}
 

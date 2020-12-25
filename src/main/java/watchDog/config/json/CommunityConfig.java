@@ -1,8 +1,7 @@
 
-package watchDog.wechat.config;
+package watchDog.config.json;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import com.alibaba.fastjson.JSON;
 
 import watchDog.bean.SiteInfo;
 import watchDog.bean.config.CommunityDTO;
-import watchDog.config.json.BaseJSONConfig;
 import watchDog.property.template.WechatMemberMsgTemplate;
 import watchDog.util.ObjectUtils;
 
@@ -52,12 +50,12 @@ public class CommunityConfig extends BaseJSONConfig {
 	private static final String SKIP_CHECK = "-1";
 	static{
 		if(ObjectUtils.isCollectionEmpty(communityDTOList) || ObjectUtils.isMapEmpty(codeCommunityMap)){
-			getConfigJSONStr();
+			getConfig();
 			getCustomerCode();
 		}
 	}
 	
-	public static void getConfigJSONStr() {
+	public static void getConfig() {
 		communityDTOList = JSON.parseArray(readFromPath(basePath + PATH_COMMUNITY_CONFIG), CommunityDTO.class);
 		codeCommunityMap = new HashMap<>();
 		for (CommunityDTO communityDTO : communityDTOList) {
@@ -67,100 +65,6 @@ public class CommunityConfig extends BaseJSONConfig {
 		}
 	}
 
-	/*public static String[] getTagIdByCommunityCode(String communityCode){
-		String[] tag = null;
-		CommunityDTO communityDTO = codeCommunityMap.get(communityCode);
-		if(communityDTO != null)
-			tag = communityDTO.getRequiredUserTag();
-		return tag;
-	}
-	
-	public static String getCommunityCodeByTagId(String tagId){
-		for (CommunityDTO communityDTO : communityDTOList) {
-			if(Arrays.asList(communityDTO.getRequiredUserTag()).contains(tagId))
-				return communityDTO.getCode();
-		}
-		return null;
-	}*/
-	
-	
-	
-	/**
-	 * 
-	 * Description:
-	 * @param siteInfo
-	 * @return
-	 * @author Matthew Xu
-	 * @date May 12, 2020
-	 */
-	//TO DELETE MATTHEW
-	/*public static List<WechatMsg> getWechatMemberChecked(SiteInfo siteInfo) {
-		List<WechatMsg> wechatMsgList = new ArrayList<>();
-		CommunityDTO manCommunity = getValue(siteInfo.getManNode());
-		if(manCommunity != null && manCommunity.getIsActive()){
-			WechatMsg soldierMsg = getWechatMemberCheckedMsg(siteInfo, true, manCommunity.getSoldierIds());
-			if(soldierMsg != null && !wechatMsgList.contains(soldierMsg))
-				wechatMsgList.add(soldierMsg);
-			
-			WechatMsg officerMsg = getWechatMemberCheckedMsg(siteInfo, false, manCommunity.getOfficerIds());
-			if(officerMsg != null && !wechatMsgList.contains(officerMsg))
-				wechatMsgList.add(officerMsg);
-		}
-		
-		CommunityDTO cusCommunity = getValue(siteInfo.getCusNode());
-		if(cusCommunity != null && cusCommunity.getIsActive() ){
-			WechatMsg soldierMsg = getWechatMemberCheckedMsg(siteInfo, true, cusCommunity.getSoldierIds());
-			if(soldierMsg != null && !wechatMsgList.contains(soldierMsg))
-				wechatMsgList.add(soldierMsg);
-			
-			WechatMsg officerMsg = getWechatMemberCheckedMsg(siteInfo, false, cusCommunity.getOfficerIds());
-			if(officerMsg != null && !wechatMsgList.contains(officerMsg))
-				wechatMsgList.add(officerMsg);
-		}
-		
-		return wechatMsgList;
-	}*/
-
-	/**
-	 * 
-	 * Description:
-	 * @param tagId
-	 * @param siteInfo
-	 * @param isSoldier
-	 * @param requiredMembers The members configured in the community.json
-	 * @return
-	 * @author Matthew Xu
-	 * @date Jun 8, 2020
-	 */
-	//TO DELETE MATTHEW
-	/*private static WechatMsg getWechatMemberCheckedMsg(SiteInfo siteInfo, boolean isSoldier, List<String> requiredMembers){
-		WechatMsg msg = null;
-		String tagId = isSoldier ? siteInfo.getTagId() : siteInfo.getTagId2();
-		// If the tagId is blank, we don't need to check it.
-		if(StringUtils.isNotBlank(tagId) && !tagId.equals(SKIP_CHECK)){
-			List<WechatUser> members = WechatUtil.getMemberByDeptId(tagId, WechatUtil.FECTH_CHILD);
-			
-			if(ObjectUtils.isCollectionEmpty(members)){
-				msg = new WechatMsg.Builder(getPropertyValue(isSoldier ? WechatMemberMsgTemplate.MM_NO_SOLIDER : WechatMemberMsgTemplate.MM_NO_OFFICER, 
-						siteInfo)).build();
-			}else {
-				if(ObjectUtils.isCollectionNotEmpty(requiredMembers)){
-					int count = 0;
-					for (WechatUser member : members) {
-						if(requiredMembers.contains(member.getUserid()))
-							count ++ ;
-					}
-					if (count < requiredMembers.size()){
-						msg = new WechatMsg.Builder(getPropertyValue(isSoldier ? WechatMemberMsgTemplate.MM_WRONG_SOLDIER : WechatMemberMsgTemplate.MM_WRONG_OFFICER, 
-								siteInfo)).build();
-					}
-				}
-			}
-		}
-		return msg;
-	}
-	*/
-	
 	private static String getPropertyValue(WechatMemberMsgTemplate wechatMemberMsgTemplate, SiteInfo siteInfo){
 		return propertyConfig.getValue(wechatMemberMsgTemplate.getKey(), 
 						new Object[]{siteInfo.getIp(),siteInfo.getDescription(),(StringUtils.isBlank(siteInfo.getManDescription()) ? "未配置" : siteInfo.getManDescription())});
