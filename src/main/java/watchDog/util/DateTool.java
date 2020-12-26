@@ -319,11 +319,11 @@ public class DateTool {
 		// 得到第一个日期的年分和月份数
 		calendar.setTime(one);
 		int yearOne = calendar.get(Calendar.YEAR);
-		int monthOne = calendar.get(Calendar.MONDAY);
+		int monthOne = calendar.get(Calendar.MONTH);
 		// 得到第二个日期的年份和月份
 		calendar.setTime(two);
 		int yearTwo = calendar.get(Calendar.YEAR);
-		int monthTwo = calendar.get(Calendar.MONDAY);
+		int monthTwo = calendar.get(Calendar.MONTH);
 
 		return (yearOne - yearTwo) * MONTH_PER_YEAR + (monthOne - monthTwo);
 	}

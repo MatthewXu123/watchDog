@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Test;
 
 import watchDog.bean.SiteInfo;
-import watchDog.util.ObjectUtils;
 
 /**
  * Description:
@@ -54,6 +53,5 @@ public class SiteInfoDAOTest {
 	@Test
 	public void testUpdateOne() {
 	}
-
 	
 }

@@ -25,5 +25,8 @@ public class MailConfig extends BaseJSONConfig{
 		mailDTO = JSONObject.parseObject(readFromPath(basePath + DEVMDL_CONFIG_PTAH), MailDTO.class);
 	}
 
+	public static MailDTO getMailDTO() {
+		return mailDTO;
+	}
 
 }

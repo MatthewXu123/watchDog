@@ -29,13 +29,13 @@ public class PropertyConfig {
 	
 	private static final String PATH_LOG_TEMPLATE = "templateProperties/LogTemplate.properties";
 	
-	private static final String PATH = "templateProperties/";
+	private static final String PATH_MAIL_TEMPLATE = "templateProperties/MailTemplate.properties";
 	
 	private PropertyConfig(){};
 
 	{
 		try {
-			String[] paths = new String[]{PATH_WECHAT_MSG_TEMPLATE, PATH_LOG_TEMPLATE };
+			String[] paths = new String[]{PATH_WECHAT_MSG_TEMPLATE, PATH_LOG_TEMPLATE, PATH_MAIL_TEMPLATE};
 			for (String path : paths)
 				prop.load(new InputStreamReader(PropertyConfig.class.getClassLoader().getResourceAsStream(path), "UTF-8"));       
 		} catch (IOException e) {
@@ -46,5 +46,9 @@ public class PropertyConfig {
 	public String getValue(String key, Object[] params){
 		String value = prop.getProperty(key);
 		return MessageFormat.format(value, params);
+	}
+	
+	public String getValue(String key){
+		return prop.getProperty(key);
 	}
 }
