@@ -40,15 +40,4 @@ public class AlarmFaxInfoCheckTask extends TimerTask implements BaseTask{
 		}
 	}
 
-	@Deprecated
-	private Date getLastFaxQueryTime(){
-		Date lastFaxQueryTime = new Date();
-		Property property = propertyMgr.getProperty(PropertyMgr.LAST_FAX_QUERY_TIME);
-		if(property == null || StringUtils.isBlank(property.getValue())){
-			return DateTool.addMinutes(lastFaxQueryTime, -10);
-		}else {
-			return DateTool.parse(propertyMgr.getProperty(PropertyMgr.LAST_FAX_QUERY_TIME).getValue(),DateTool.DEFAULT_DATETIME_FORMAT);
-		}
-			
-	}
 }

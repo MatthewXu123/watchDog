@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.TimerTask;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import watchDog.bean.SiteInfo;
 import watchDog.config.json.CommunityConfig;
@@ -36,7 +37,7 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 
     private static final String TO_REGEX = "^TO:\\d{4}-\\d{2}-\\d{2}$";
 	private static final String TO = "TO:";
-    private static final Logger logger = Logger.getLogger(WechatDeptCheckTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WechatDeptCheckTask.class);
 
 	public static final WechatDeptCheckTask INSTANCE = new WechatDeptCheckTask();
 
@@ -51,7 +52,7 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 	@Override
 	public void run() {
 		try {
-			logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_START.getKey(), new Object[]{this.getClass().getName()}));
+			BaseTask.getStartLog(LOGGER, this.getClass().getName());
 			List<SiteInfo> infos = Dog.getInfosWithoutTags();
 			if (ObjectUtils.isCollectionNotEmpty(infos)) {
 				Iterator<SiteInfo> iterator = infos.iterator();
@@ -88,9 +89,10 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 					}
 				}
 			}
-			logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_END.getKey(), new Object[]{this.getClass().getName()}));
 		} catch (Exception e) {
-			logger.error("", e);
+			LOGGER.error("", e);
+		}finally {
+			BaseTask.getEndLog(LOGGER, this.getClass().getName());
 		}
 
 	}
@@ -171,11 +173,10 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 		String siteDesc = siteInfo.getDescription();
 		if (isSoldierGroup != null)
 			siteDesc += isSoldierGroup ? SOLDIER_DEPT_SUFFIX : OFFICER_DEPT_SUFFIX;
-		String createdDeptId = "";
 
 		String deptId = WechatUtil.isDeptExistByName(parentId, siteDesc);
 		if(StringUtils.isNotBlank(deptId)){
-			logger.info("该门店已存在。" + deptId + "," + siteDesc);
+			LOGGER.info("该门店已存在。" + deptId + "," + siteDesc);
 			return deptId;
 		}else{
 			WechatDept wechatDept = new WechatDept();

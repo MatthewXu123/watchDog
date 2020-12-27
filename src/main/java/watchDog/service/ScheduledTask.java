@@ -34,6 +34,7 @@ import watchDog.listener.Dog;
 import watchDog.thread.AlarmNotificationMain;
 import watchDog.thread.WechatApplicationThread;
 import watchDog.thread.scheduletask.AlarmFaxInfoCheckTask;
+import watchDog.thread.scheduletask.MailTask;
 import watchDog.thread.scheduletask.SimpleCallingTask;
 import watchDog.thread.scheduletask.WechatDeptCheckTask;
 import watchDog.thread.scheduletask.WechatMemberCheckTask;
@@ -57,6 +58,8 @@ public class ScheduledTask {
   private static final long ONE_HOUR = 1000 * 3600;
   
   private static final long ONE_MINUTE = 1000 * 60;
+  
+  private static final long ONE_DAY = ONE_HOUR * 24;
   
   private static final long PERIOD_MAINTAINER_CHECK_TASK = ONE_HOUR * 24;
   
@@ -102,17 +105,14 @@ public class ScheduledTask {
     Timer wechatDeptCheckTaskTimer = new Timer("WechatDeptCheckTaskTimer");
     wechatDeptCheckTaskTimer.schedule(WechatDeptCheckTask.INSTANCE, 0, PERIOD_DEPT_CHECK_TASK);
     
-    //TO DELETE MATTHEW
-    /* Calendar wechatMemberCheckTaskTime  = Calendar.getInstance();
-    wechatMemberCheckTaskTime.set(Calendar.HOUR_OF_DAY, 14);
-    Timer wechatMemberCheckTaskTimer = new Timer("WechatMemberCheckTaskTimer");
-    wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), PERIOD_MAINTAINER_CHECK_TASK);*/
-    
     Timer alarmFaxInfoCheckTaskTimer = new Timer("AlarmFaxInfoCheckTaskTimer");
     alarmFaxInfoCheckTaskTimer.schedule(AlarmFaxInfoCheckTask.INSTANCE, DELAY_ALARM_FAXINFO_CHECK, PERIOD_ALARM_FAXINFO_CHECK);
     
     Timer simpleCallingTaskTimer = new Timer("simpleCallingTaskTimer");
     simpleCallingTaskTimer.schedule(SimpleCallingTask.getInstance(), 5*60*1000,5*60*1000);
+    
+    Timer mailTaskTimer = new Timer("MailTaskTimer");
+    mailTaskTimer.schedule(MailTask.INSTANCE, DateTool.getFirstDayOfCurrentWeek(), ONE_DAY * 7);
   }
   
   class WeeklyReportManager extends TimerTask {

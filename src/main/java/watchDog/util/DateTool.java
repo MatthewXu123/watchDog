@@ -714,4 +714,12 @@ public class DateTool {
 		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1;
 		return (1 <= dayOfWeek && dayOfWeek <= 5) ? true : false;
 	}
+	
+	public static Date getFirstDayOfCurrentWeek(){
+		Calendar cal=Calendar.getInstance();
+        cal.add(Calendar.WEEK_OF_MONTH, 0);
+        cal.set(Calendar.DAY_OF_WEEK, 2);
+        return cal.getTime();
+	}
+	
 }

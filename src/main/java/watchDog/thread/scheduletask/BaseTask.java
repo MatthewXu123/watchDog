@@ -1,7 +1,10 @@
 
 package watchDog.thread.scheduletask;
 
+import org.slf4j.Logger;
+
 import watchDog.listener.Dog;
+import watchDog.property.template.CommonMsgLogTemplate;
 import watchDog.property.template.PropertyConfig;
 import watchDog.service.PropertyMgr;
 import watchDog.thread.ConnectionThread;
@@ -28,4 +31,12 @@ public interface BaseTask {
 	public static final  Sender sender = Sender.getInstance();
 	
 	PropertyConfig propertyConfig = PropertyConfig.INSTANCE;
+	
+	public static void getStartLog(Logger logger, String className) {
+		logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_START.getKey(), new Object[]{className}));
+	}
+	
+	public static void getEndLog(Logger logger, String className) {
+		logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_END.getKey(), new Object[]{className}));
+	}
 }
