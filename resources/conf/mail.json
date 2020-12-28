@@ -1,7 +1,7 @@
 {
-	"fromAddress":"15366203524.com",
+	"fromAddress":"15366203524@163.com",
 	"authCode":"LIXODDXZXJFCTKFQ",
-	"toAddresses":["15366203524@163.com","matthew.xu@carel.com"],
+	"toAddresses":["carly.yang@carel.com","kevin.ge@carel.com","matthew.xu@carel.com"],
 	"mailSmtpHost":"smtp.163.com",
 	"mailSmtpPort":"25"
 }

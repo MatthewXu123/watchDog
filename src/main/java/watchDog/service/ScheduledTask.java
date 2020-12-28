@@ -113,6 +113,7 @@ public class ScheduledTask {
     
     Timer mailTaskTimer = new Timer("MailTaskTimer");
     mailTaskTimer.schedule(MailTask.INSTANCE, DateTool.getFirstDayOfCurrentWeek(), ONE_DAY * 7);
+    //mailTaskTimer.schedule(MailTask.INSTANCE, 0, ONE_DAY * 7);
   }
   
   class WeeklyReportManager extends TimerTask {
