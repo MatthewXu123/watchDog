@@ -20,6 +20,7 @@
 	</div>
 	<button id="btn_vpn">VPN管理</button>
 	<button id="btn_router">路由器管理</button>
+	<button id="btn_rinfo">项目注册信息管理</button>
 	<form action="/watchDog/file/memberExport">
 		<button type="submit" class="button-import-member">导出门店成员</button>
 	</form>

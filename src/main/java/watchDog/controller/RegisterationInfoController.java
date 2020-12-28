@@ -15,18 +15,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import watchDog.bean.register.RegisterationInfo;
 import watchDog.bean.register.SIMCardStatus;
-import watchDog.bean.result.ResultFactory;
 import watchDog.dao.RegisterationInfoDAO;
 import watchDog.dao.SIMCardDAO;
 import watchDog.util.HttpServletUtil;
@@ -51,11 +50,11 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Method method = HttpServletUtil.INSTANCE.getMethod(req, resp, this);
 		
-		/*HttpSession session = req.getSession();
+		HttpSession session = req.getSession();
 		if(!method.getName().equals("get") && !"success".equals(session.getAttribute("LoginStatus"))){
 			resp.sendRedirect("../login.jsp");
 			return;
-        } */
+        } 
 		
 		try {
 			method.invoke(this, req, resp);

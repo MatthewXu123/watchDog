@@ -77,7 +77,9 @@ public class RegisterationInfoDAO extends BaseDAO{
 	}
 	
 	public List<RegisterationInfo> getAllOrderByRegisterationDate(){
-		String sql = "SELECT * FROM wechat.registeration_info WHERE is_deleted = false ORDER BY id desc";
+		String sql = "(SELECT * FROM wechat.registeration_info WHERE is_deleted = FALSE and registeration_date IS NOT NULL ORDER BY registeration_date DESC)"
+				+ "UNION ALL "
+				+ "SELECT * FROM wechat.registeration_info WHERE is_deleted = FALSE and registeration_date IS NULL";
 		return getAll(sql);
 	}
 	

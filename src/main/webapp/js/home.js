@@ -5,6 +5,9 @@ $(function() {
 	$("#btn_router").click(function() {
 		window.open("/watchDog/router/view");
 	});
+	$("#btn_rinfo").click(function() {
+		window.open("/watchDog/rinfo/view");
+	});
 	$(".input-readonly").each(function() {
 		$(this).attr("readonly", "readonly");
 		$(this).css("border", "none");

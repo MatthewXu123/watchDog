@@ -2,6 +2,8 @@ package watchDog.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +15,8 @@ import watchDog.bean.SiteInfo;
 import watchDog.dao.SiteInfoDAO;
 import watchDog.database.DatabaseMgr;
 import watchDog.database.RecordSet;
-import watchDog.listener.Dog;
 import watchDog.util.DateTool;
+import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.service.WechatService;
 import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
@@ -107,12 +109,26 @@ public class SiteInfoService {
 		try {
 			List<SiteInfo> infosWithTags = SiteInfoDAO.INSTANCE.getList(true);
 			for (SiteInfo siteInfo : infosWithTags) {
-				if(siteInfo.getDeadline() != null && DateTool.diffMonths(siteInfo.getDeadline(), new Date()) <= 2)
-					list.add(siteInfo);
+				if(siteInfo.getDeadline() != null){
+					int diff = DateTool.diffMonths(siteInfo.getDeadline(), new Date());
+					if(0 < diff && diff <=2)
+						list.add(siteInfo);
+				}
+			}
+			
+			if(ObjectUtils.isCollectionNotEmpty(list)){
+				Collections.sort(list, new Comparator<SiteInfo>() {
+					@Override
+					public int compare(SiteInfo o1, SiteInfo o2) {
+						return  (int)DateTool.diffDays(o1.getDeadline(), o2.getDeadline());
+					}
+				});
 			}
 		} catch (Exception e) {
 			LOGGER.error("" ,e);
 		}
+		
+		
 		return list;
 	}
 }

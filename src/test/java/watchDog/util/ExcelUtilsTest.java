@@ -140,7 +140,7 @@ public class ExcelUtilsTest {
 			 return DateTool.parse(dateSplit[2] + "-" + monthNum + "-" + dateSplit[0]);
 		 }
 		 
-		 if(dateStr.indexOf("//.") != -1)
+		 if(dateStr.indexOf(".") != -1)
 			 return DateTool.parse(dateStr, "yyyy.MM.dd");
 		 
 		 if(dateStr.indexOf("//") != -1)
@@ -156,5 +156,5 @@ public class ExcelUtilsTest {
 	 private boolean getIsConnected(String isConnectedFlag){
 		 return !isConnectedFlag.equalsIgnoreCase("n") && StringUtils.isNotBlank(isConnectedFlag);
 	 }
-
+	 
 }

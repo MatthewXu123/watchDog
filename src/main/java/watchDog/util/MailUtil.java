@@ -41,7 +41,7 @@ public class MailUtil {
 				return new PasswordAuthentication(mailDTO.getFromAddress(), mailDTO.getAuthCode());
 			}
 		});
-		session.setDebug(true);
+		//session.setDebug(true);
 		
 		try {
 			MimeMessage message = new MimeMessage(session);
