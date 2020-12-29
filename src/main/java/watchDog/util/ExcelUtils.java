@@ -35,6 +35,15 @@ public class ExcelUtils {
     	return null;
 	}
 	
+	public static Workbook getWorkBook(File file){
+    	try {
+			return WorkbookFactory.create(new FileInputStream(file));
+		} catch (EncryptedDocumentException | IOException e) {
+			LOGGER.error("",e);
+		}
+    	return null;
+	}
+	
 	public static String getStringFromCell(Cell cell){
 		if(cell != null)
 			return cell.toString();

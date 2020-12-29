@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import me.chanjar.weixin.common.util.StringUtils;
 import watchDog.wechat.util.sender.Sender;
-import watchDog.wechat.util.sender.SenderWechat;
 
 public class RequestService {
 
