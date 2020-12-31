@@ -29,6 +29,7 @@ public class SenderWechat extends Sender {
 	public boolean sendIM(WechatMsg wechatMsg) {
 		if(StringUtils.isBlank(configStorage.getDebug())){
 			// Here use '&' not '&&'
+			logger.info(wechatMsg.toString());
 			return sendIM(WECHAT_MSG_TYPE_DEPT, wechatMsg.getDeptIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
 			& sendIM(WECHAT_MSG_TYPE_TAG, wechatMsg.getTagIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
 			& sendIM(WECHAT_MSG_TYPE_USER, wechatMsg.getUserIds(), wechatMsg.getAgentId(), wechatMsg.getContent());
@@ -54,7 +55,6 @@ public class SenderWechat extends Sender {
 						return false;
 					WxCpMessage msg = b.content(content).build();
 					wxService.messageSend(msg);
-					logger.info(content);
 				}
 			}
 		} catch (WxErrorException ex) {

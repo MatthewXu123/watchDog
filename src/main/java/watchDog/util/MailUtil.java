@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import watchDog.bean.config.MailDTO;
-import watchDog.config.json.MailConfig;
  
 public class MailUtil {
 	
@@ -67,10 +66,6 @@ public class MailUtil {
 				LOGGER.error("",e);
 			}
 			return list.toArray(new Address[list.size()]);
-	}
-	
-	public static void main(String[] args) {
-		sendMail(MailConfig.getMailDTO(), "TEST", "测试邮件");
 	}
 	
 }

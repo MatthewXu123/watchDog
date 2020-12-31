@@ -318,9 +318,6 @@ public class WechatApplicationThread extends MyThread {
 		List<SiteInfo> infos = Dog.getInfosWithTags();
 		siteIdTagIdMap = new HashMap<>();
 		for (SiteInfo siteInfo : infos) {
-			//TESTBYMAT
-			if(siteInfo.getDescription().equals("盒马长沙阳光100店"))
-				siteInfo.setManNode("MAN.Carrier.TEST");
 			List<String> tagIdList = new ArrayList<>();
 			String manTagId = getTagIdByCode(siteInfo.getManNode());
 			String cusTagId = getTagIdByCode(siteInfo.getCusNode());
@@ -395,8 +392,8 @@ public class WechatApplicationThread extends MyThread {
 			SiteInfo s = entry.getValue();
 			String manNode = s.getManNode();
 			String cusNode = s.getCusNode();
-			String manTag = this.codetagIdMap.get(manNode);
-			String cusTag= this.codetagIdMap.get(cusNode);
+			String manTag = getTagIdByCode(manNode);
+			String cusTag= getTagIdByCode(cusNode);
 			
 			if(StringUtils.isNotBlank(manTag)){
 				List<SiteInfo> list = this.tagIdSiteListMap.get(manTag);
