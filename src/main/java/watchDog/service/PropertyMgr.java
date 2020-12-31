@@ -22,6 +22,7 @@ public class PropertyMgr {
 	public static final String LAST_FAX_QUERY_TIME = "last_fax_query_time";
 	public static final String WECHAT_ACCESS_TOKEN = "wechat_access_token";
 	public static final String WECHAT_EXPIRE_TIME = "wechat_expire_time";
+	public static final String LAST_MAIL_TIME = "last_mail_time";
 	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyMgr.class);
 	Map<String, Property> map = new HashMap<>();
 	private static PropertyMgr me = null;

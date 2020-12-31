@@ -112,7 +112,7 @@ public class ScheduledTask {
     simpleCallingTaskTimer.schedule(SimpleCallingTask.getInstance(), 5*60*1000,5*60*1000);
     
     Timer mailTaskTimer = new Timer("MailTaskTimer");
-    mailTaskTimer.schedule(MailTask.INSTANCE, DateTool.getFirstDayOfCurrentWeek(), ONE_DAY * 7);
+    mailTaskTimer.schedule(MailTask.INSTANCE, DateTool.getFirstDayOfCurrentWeek(), MailTask.RUNNING_PERIOD);
     //mailTaskTimer.schedule(MailTask.INSTANCE, 0, ONE_DAY * 7);
   }
   

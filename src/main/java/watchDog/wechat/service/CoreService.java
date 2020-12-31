@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import watchDog.listener.Dog;
@@ -61,9 +63,9 @@ public class CoreService {
             String site = requestMap.get("Content");
             logger.info("fromUserName:" + fromUserName + "--toUserName:"  
                     + toUserName + "--msgType" + msgType+"--Content"+site);
-            int idsite = Integer.valueOf(site);
-            if(msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT))
+            if(msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT) && isQualifiedSiteId(site))
             {
+            	int idsite = Integer.valueOf(site);
             	List<String> msgList = new ArrayList<String>();
             	int validResult = Dog.getInstance().canUserAccessSite(fromUserName,idsite);
             	switch(validResult)
@@ -103,4 +105,9 @@ public class CoreService {
         	logger.error("",e);
         }  
     }  
+    
+    private static boolean isQualifiedSiteId(String idSite){
+    	return StringUtils.isNotBlank(idSite) && Pattern.compile("^[0-9]*$").matcher(idSite).matches();
+    }
+    
 }   

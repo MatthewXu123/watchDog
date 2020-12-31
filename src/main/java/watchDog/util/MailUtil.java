@@ -46,7 +46,7 @@ public class MailUtil {
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(mailDTO.getFromAddress()));
 			message.setRecipients(Message.RecipientType.TO, getToAddresses(mailDTO));
-			message.setSubject(title);
+			message.setSubject(title,"UTF-8");
 			message.setContent(content, "text/html;charset=UTF-8");
 			message.setSentDate(new Date());
 			message.saveChanges();

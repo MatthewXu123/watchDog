@@ -167,13 +167,24 @@ public class WechatApplicationThread extends MyThread {
 			return SITE_ACCESS_OK;
 		if (Dog.getInstance().getSiteInfoByIdSite(idsite) == null)
 			return SITE_ACCESS_NOSITE;
+		
+		//Dept
 		List<Integer> sites = allWechatMemberSiteMap.get(userId);
-		if (sites == null)
-			return SITE_ACCESS_NOTMEMBER;
-		for (Integer s : sites) {
-			if (s.intValue() == idsite)
-				return SITE_ACCESS_OK;
+		if(ObjectUtils.isCollectionNotEmpty(sites) && sites.contains(idsite))
+			return SITE_ACCESS_OK;
+		
+		//Tag
+		WechatUser wechatUser = new WechatUser();
+		wechatUser.setUserid(userId);
+		String[] tagIds = siteIdTagIdMap.get(idsite);
+		if(ObjectUtils.isArrayNotEmpty(tagIds)){
+			for (String tagId : tagIds) {
+				List<WechatUser> userList = tagIdUserListMap.get(tagId);
+				if(ObjectUtils.isCollectionNotEmpty(userList) && userList.contains(wechatUser))
+					return SITE_ACCESS_OK; 
+			}
 		}
+			
 		return SITE_ACCESS_NOTMEMBER;
 	}
 

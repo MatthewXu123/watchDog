@@ -154,7 +154,7 @@ public class WechatAPITest {
 	
 	@Test
 	public void testGetTagUserList(){
-		List<WechatUser> tagUserList = WechatUtil.getTagUserList("20");
+		List<WechatUser> tagUserList = WechatUtil.getTagUserList("2");
 		System.out.println();
 	}
 	

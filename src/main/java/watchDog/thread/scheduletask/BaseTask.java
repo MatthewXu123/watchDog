@@ -32,6 +32,14 @@ public interface BaseTask {
 	
 	PropertyConfig propertyConfig = PropertyConfig.INSTANCE;
 	
+	public static final long ONE_HOUR = 1000 * 3600;
+	  
+	public static final long ONE_MINUTE = 1000 * 60;
+	  
+	public static final long ONE_DAY = ONE_HOUR * 24;
+	
+	public static final long ONE_WEEK = ONE_DAY * 7;
+	
 	public static void getStartLog(Logger logger, String className) {
 		logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_START.getKey(), new Object[]{className}));
 	}
