@@ -20,12 +20,12 @@ import watchDog.bean.Alarm;
 import watchDog.bean.DeviceValueBean;
 import watchDog.bean.Property;
 import watchDog.bean.SiteInfo;
+import watchDog.bean.Suggestion;
 import watchDog.database.DataBaseException;
 import watchDog.database.DatabaseMgr;
 import watchDog.database.Record;
 import watchDog.database.RecordSet;
 import watchDog.listener.Dog;
-import watchDog.property.template.CompanyServiceMsgLogTemplate;
 import watchDog.property.template.PropertyConfig;
 import watchDog.service.AlarmService;
 import watchDog.service.DeviceValueMgr;
@@ -33,11 +33,11 @@ import watchDog.service.FaxInfoService;
 import watchDog.service.PropertyMgr;
 import watchDog.util.DateTool;
 import watchDog.util.HttpSendUtil;
-import watchDog.util.LogUtil;
-
-import static watchDog.util.LogUtil.*;
 import watchDog.util.ValueRetrieve;
 import watchDog.wechat.bean.WechatMsg;
+import watchDog.wechat.bean.WechatUser;
+import watchDog.wechat.service.WechatService;
+import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
 import watchDog.wechat.util.sender.Sender;
 import watchDog.wechat.util.sender.SenderWechat;
 
@@ -62,9 +62,9 @@ public class AlarmNotificationMain {
 	public static final String EMOJI_SPOKER = "🗣";
 
 	public static final String HIGH_TEMP = "高温报警";
-	
-	private static final WechatApplicationThread WECHAT_APPLICATION_THREAD = Dog.getInstance().getWechatApplicationThread();
 
+	private static final WechatApplicationThread WECHAT_APPLICATION_THREAD = Dog.getInstance().getWechatApplicationThread();
+	
 	Dog dog = Dog.getInstance();
 	Date lastSentDate = null;
 	int lastRepeatCheckHour = -1;
@@ -80,47 +80,64 @@ public class AlarmNotificationMain {
 		try {
 			logger.info("checking alarms");
 			// update c:/ip.properties every time
-			deadlineNotify();
+			Sender wechat = Sender.getInstance();
+			if (wechat.isDebug() != null) {
+				Thread.sleep(SLEEP_MINUTES * 60 * 1000);
+				return;
+			}
 			String idents = dog.getIdents4AlarmChecking();
 			if (!StringUtils.isBlank(idents)) {
 				String lastQueryTime = getLastQueryTime();
 				Date untilTime = new Date();
 				int messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1;
-				Map<String, List<String>> active = new HashMap<>();
-				Map<String, List<String>> reset = new HashMap<>();
+				Map<String, List<String>> active = null;
+				Map<String, List<String>> reset = null;
 
-				// first level
 				logger.info("checking alarms: first level");
-				messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1;
-				active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
-				sendIM(ACTIVE, active, messagePurposeType);
-				reset = checkSite(RESET, idents, messagePurposeType, lastQueryTime);
-				sendIM(RESET, reset, messagePurposeType);
-
-				// second level
-				logger.info("checking alarms: second level");
-				messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL2;
-				active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
-				sendIM(ACTIVE, active, messagePurposeType);
-				reset = checkSite(RESET, idents, messagePurposeType, lastQueryTime);
-				sendIM(RESET, reset, messagePurposeType);
-
-				// repeat, first level
-				logger.info("checking alarms: repeat, first level");
-				if (canRepeatSend()) {
-					messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT;
+				// first level
+				try {
+					messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1;
 					active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
 					sendIM(ACTIVE, active, messagePurposeType);
+					reset = checkSite(RESET, idents, messagePurposeType, lastQueryTime);
+					sendIM(RESET, reset, messagePurposeType);
+				} catch (Exception ex) {
+					logger.error("", ex);
+				}
+
+				logger.info("checking alarms: second level");
+				// second level
+				try {
+					messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL2;
+					active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
+					sendIM(ACTIVE, active, messagePurposeType);
+					reset = checkSite(RESET, idents, messagePurposeType, lastQueryTime);
+					sendIM(RESET, reset, messagePurposeType);
+				} catch (Exception ex) {
+					logger.error("", ex);
+				}
+
+				logger.info("checking alarms: repeat, first level");
+				// repeat, first level
+				try {
+					if (canRepeatSend()) {
+						messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT;
+						active = checkSite(ACTIVE, idents, messagePurposeType, lastQueryTime);
+						sendIM(ACTIVE, active, messagePurposeType);
+					}
+				} catch (Exception ex) {
+					logger.error("", ex);
 				}
 
 				// if(sendOK)
 				PropertyMgr.getInstance().update(PropertyMgr.LAST_QUERY_TIME,
 						DateTool.format(untilTime, "yyyy-MM-dd HH:mm:ss"));
 				heartbeat(untilTime);
+				suggestionNotify(untilTime);
 				logger.info("checking alarms: finished");
 			} else
-				logger.info("no sites");
-				// updateAlarmNum();
+				logger.error("no sites");
+			// updateAlarmNum();
 
 		} catch (Exception ex) {
 			logger.error("", ex);
@@ -129,6 +146,7 @@ public class AlarmNotificationMain {
 				Thread.sleep(SLEEP_MINUTES * 60 * 1000);
 				Dog.getInstance().loadFromDB();
 			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				logger.error("", e);
 			}
 		}
@@ -537,8 +555,7 @@ public class AlarmNotificationMain {
 	}
 
 	private boolean isOfflineAlarm(Alarm alarm) {
-		if ("OFFLINE".equalsIgnoreCase(alarm.getCode()) || alarm.getAddressIn() == 0
-				&& (alarm.getPriority().equals("1") || alarm.getPriority().equals("2")))
+		if ("OFFLINE".equalsIgnoreCase(alarm.getCode()) || alarm.getAddressIn() == 0)
 			return true;
 		else
 			return false;
@@ -668,47 +685,11 @@ public class AlarmNotificationMain {
         String msg = "";
         String domainName = Sender.getInstance(Sender.CHANNEL_WECHAT).getDomainName();
         String url = "https://" + domainName + "/watchDog/servlet/auth?path=suggestion/create?type=1";
-        url = Sender.getInstance().getURL(url);
+        WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
+        url = Sender.getInstance().getURL(url,Integer.valueOf(configStorage.getCallingMsgAgentId()));
         msg = "<a href=\"" + url + "\">取消电话报警</a>";
         return msg;
     }
-
-	private void deadlineNotify() {
-		Date now = new Date();
-		Dog dog = Dog.getInstance();
-		Sender sender = Sender.getInstance(Sender.CHANNEL_WECHAT);
-		Calendar c = Calendar.getInstance();
-		// 10 AM, every wednesday, 60 days before
-		if (c.get(Calendar.HOUR_OF_DAY) == 10 && (c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY)
-				&& !DateTool.isSameDay(lastSentDate, now)) {
-			Iterator it = dog.getAllSites();
-			while (it.hasNext()) {
-				Entry entry = (Entry) it.next();
-				String ident = (String) entry.getKey();
-				SiteInfo site = dog.getSiteInfo(ident);
-				if (site != null && site.getDeadline() != null) {
-					c.setTime(site.getDeadline());
-					c.add(Calendar.DATE, -60);
-					Date d_31 = c.getTime();
-					if (now.after(d_31) && !now.after(site.getDeadline())) {
-						if (!StringUtils.isBlank(site.getAgentId()) && !StringUtils.isBlank(site.getTagId())) {
-							sender.sendIM(new WechatMsg.Builder(propertyConfig.getValue(CompanyServiceMsgLogTemplate.CSM_RENEW.getKey(), new Object[]{site.getDescription(), DateTool.format(site.getDeadline())})
-									, site.getAgentId()
-									, new String[]{site.getTagId()}).build());
-						}
-						sender.sendIMToSales(new WechatMsg.Builder(propertyConfig.getValue(CompanyServiceMsgLogTemplate.CSM_INQUIRY.getKey()
-								, new Object[]{site.getDescription(), DateTool.format(site.getDeadline())})).build());
-					} else if (now.after(site.getDeadline())) {
-						if (!StringUtils.isBlank(site.getAgentId()) && !StringUtils.isBlank(site.getTagId())) {
-							sender.sendIM(new WechatMsg.Builder(propertyConfig.getValue(CompanyServiceMsgLogTemplate.CSM_STOP.getKey(), new Object[]{site.getDescription(), DateTool.format(site.getDeadline())}), site.getAgentId(), new String[]{site.getTagId()})
-											.build());
-						}
-					}
-				}
-			}
-			lastSentDate = new Date();
-		}
-	}
 
 	private static boolean importantAlarmTimeCheck(Alarm alarm) {
 		Date now = new Date();
@@ -825,5 +806,46 @@ public class AlarmNotificationMain {
             logger.error("",e);
         }
 	    
+	}
+	@Test
+	public void suggestion()
+	{
+	    suggestionNotify(DateTool.parse("2020-11-05 17:22:57","yyyy-MM-dd hh:mm:ss"));
+	}
+	private void suggestionNotify(Date lastTime)
+	{
+	    try{
+    	    String sql = "select * from wechat.suggestion where insert_time>=?";
+    	    Object[] params = {new Timestamp(lastTime.getTime())};
+    	    try {
+                RecordSet rs = DatabaseMgr.getInstance().executeQuery(sql, params);
+                for(int i=0;i<rs.size();i++)
+                {
+                    Suggestion s = new Suggestion(rs.get(i));
+                    sendSuggestion(s);
+                }
+            } catch (DataBaseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+	    }
+	    catch(Exception ex)
+	    {
+	        
+	    }
+	}
+	private void sendSuggestion(Suggestion s)
+	{
+	    WechatUser m = Dog.getInstance().getWechatApplicationThread().getWechatMemberByUserId(s.getUserId());
+	    if(m != null)
+	    {
+	        Sender wx = Sender.getInstance();
+	        WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
+	        WechatMsg wechatMsg = new WechatMsg.Builder("客户反馈"+"\n"+
+	                   m.getName()+"\n"+
+	                   s.getSuggestion(),configStorage.getCallingMsgAgentId())
+	                .userIds(new String[]{"nemoge"}).build();
+	        wx.sendIM(wechatMsg);
+	    }
 	}
 }

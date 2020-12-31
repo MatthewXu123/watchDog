@@ -131,7 +131,7 @@ public class RegisterationInfoDAO extends BaseDAO{
 		RegisterationInfo info = new RegisterationInfo();
 		info.setId(record.get(0) != null ? (int)record.get(0) : null);
 		info.setVpnAddress(record.get(1) != null ? (String)record.get(1) : null);
-		info.setRegisterationDate(record.get(2) != null ? new Date(((Timestamp)record.get(2)).getTime()) : null);
+		info.setRegisterationDate(record.get(2) != null ? new Date(((java.sql.Date)record.get(2)).getTime()) : null);
 		info.setPurchaser(record.get(3) != null ? (String)record.get(3) : null);
 		info.setProject(record.get(4) != null ? (String)record.get(4) : null);
 		info.setServicePeriod(record.get(5) != null ? (int)record.get(5) : null);

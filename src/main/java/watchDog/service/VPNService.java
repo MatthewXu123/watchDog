@@ -18,6 +18,7 @@ import watchDog.bean.SiteInfo;
 import watchDog.listener.Dog;
 import watchDog.thread.AlarmNotificationMain;
 import watchDog.util.HttpSendUtil;
+import watchDog.util.Ping;
 import watchDog.util.RemoteCommandUtil;
 
 /**
@@ -32,10 +33,75 @@ public class VPNService {
 	
 	public VPNService(){}
 	
-	@Test
+	//@Test
 	public void test()
 	{
-	    INSTANCE.getVPNInfo("pvp89");
+	    //INSTANCE.getVPNInfo("pvp89");
+	}
+	//@Test
+	public void t()
+	{
+	    String ip = "192.168.8.1";
+	    Connection login = RemoteCommandUtil.login(ip,22, "root", "adminCarel");
+        if(login.isAuthenticationComplete())
+        {
+            String output = RemoteCommandUtil.execute(login, "passwd");
+            if(output.indexOf("HWaddr")>0)
+            {
+                String[] s = output.split("HWaddr");
+                output = s[1].replace(";", "").trim();
+                logger.info(ip+"="+output);
+            }
+        }
+	}
+	@Test
+	public void testt() throws InterruptedException
+	{
+	    for(int j=68;j<69;j++)
+	    {
+    	    for(int i=2;i<255;i++)
+    	    {
+        	    String ip = "192.168."+j+"."+i;
+        	    System.out.println("checking "+ip);
+        	    boolean pingOK = Ping.ping(ip, 1, 5000);
+        	    System.out.println("after ping");
+        	    if(pingOK)
+        	    {
+        	        RemoteThread r = new RemoteThread(ip);
+        	        Thread t = new Thread(r,ip);
+        	        t.start();
+            	    Thread.sleep(5000);
+        	    }
+    	    }
+	    }
+	}
+	class RemoteThread implements Runnable
+	{
+	    String ip = null;
+	    RemoteThread(String ip)
+	    {
+	        this.ip = ip;
+	    }
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            Connection login = RemoteCommandUtil.login(ip,22, "root", "adminCarel");
+            if(login.isAuthenticationComplete())
+            {
+                String output = RemoteCommandUtil.execute(login, "ifconfig|grep eth0");
+                if(output.indexOf("HWaddr")>0)
+                {
+                    String[] s = output.split("HWaddr");
+                    output = s[1].replace(";", "").trim();
+                    logger.info(ip+"="+output);
+                }
+            }
+            else
+            {
+                logger.info(ip+" can not login");
+            }
+        }
+	    
 	}
 	public PageVPNInfo getVPNInfo(String account)
 	{
@@ -121,7 +187,7 @@ public class VPNService {
 		String output = RemoteCommandUtil.execute(login, "kill -TERM `cat /var/run/XXX.pid`".replace("XXX", pid));
 		return output;
 	}
-	@Test
+	//@Test
 	public void test2()
 	{
 	    INSTANCE.getCity("117.132.198.158");

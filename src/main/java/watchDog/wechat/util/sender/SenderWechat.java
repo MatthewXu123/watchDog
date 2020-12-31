@@ -42,6 +42,8 @@ public class SenderWechat extends Sender {
 			if (ObjectUtils.isArrayNotEmpty(targetIds) && StringUtils.isNotBlank(agentId)) {
 				TextBuilder b = WxCpMessage.TEXT().agentId(agentId);
 				for (String targetId : targetIds) {
+				    if(StringUtils.isBlank(targetId))
+                        continue;
 					if (type == WECHAT_MSG_TYPE_TAG)
 						b = b.toTag(targetId);
 					else if (type == WECHAT_MSG_TYPE_USER && DOG.getWechatApplicationThread().isUserExist(targetId))
@@ -80,6 +82,8 @@ public class SenderWechat extends Sender {
 			WxArticle article = getArticle(title, content);
 			NewsBuilder b = WxCpMessage.NEWS().agentId(agentId);
 			for (String targetId : targetIds) {
+			    if(StringUtils.isBlank(targetId))
+                    continue;
 				if (type == WECHAT_MSG_TYPE_TAG)
 					b = b.toTag(targetId);
 				else if (type == WECHAT_MSG_TYPE_USER && WechatUtil.isUserExist(targetId))
