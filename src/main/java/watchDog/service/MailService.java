@@ -4,8 +4,8 @@ package watchDog.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import watchDog.bean.SiteInfo;
 import watchDog.bean.config.MailDTO;
@@ -22,7 +22,7 @@ import watchDog.util.MailUtil;
  */
 public class MailService {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
+	private static final Logger LOGGER = Logger.getLogger(MailService.class);
 	
 	public static final MailService INSTANCE = new MailService();
 	

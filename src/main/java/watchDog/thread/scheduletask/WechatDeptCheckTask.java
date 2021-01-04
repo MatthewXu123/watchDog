@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.TimerTask;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import watchDog.bean.SiteInfo;
 import watchDog.config.json.CommunityConfig;
@@ -37,7 +37,7 @@ public class WechatDeptCheckTask extends TimerTask implements BaseTask{
 
     private static final String TO_REGEX = "^TO:\\d{4}-\\d{2}-\\d{2}$";
 	private static final String TO = "TO:";
-    private static final Logger LOGGER = LoggerFactory.getLogger(WechatDeptCheckTask.class);
+    private static final Logger LOGGER = Logger.getLogger(WechatDeptCheckTask.class);
 
 	public static final WechatDeptCheckTask INSTANCE = new WechatDeptCheckTask();
 

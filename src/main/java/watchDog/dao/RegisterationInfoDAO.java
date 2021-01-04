@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import watchDog.bean.register.RegisterationInfo;
 import watchDog.database.Record;
@@ -25,7 +25,7 @@ public class RegisterationInfoDAO extends BaseDAO{
 
 	public static final RegisterationInfoDAO INSTANCE = new RegisterationInfoDAO();
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterationInfoDAO.class);
+	private static final Logger LOGGER = Logger.getLogger(RegisterationInfoDAO.class);
 	
 	private static final String COLUMNS = "vpn_address, registeration_date, purchaser, project"
 			+ ",service_period,product_code,product_mac,router_mac"

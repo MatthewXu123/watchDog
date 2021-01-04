@@ -1,7 +1,7 @@
 
 package watchDog.thread.scheduletask;
 
-import org.slf4j.Logger;
+import org.apache.log4j.Logger;
 
 import watchDog.listener.Dog;
 import watchDog.property.template.CommonMsgLogTemplate;

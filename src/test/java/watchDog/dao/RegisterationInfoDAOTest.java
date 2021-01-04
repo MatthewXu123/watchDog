@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -24,7 +24,7 @@ public class RegisterationInfoDAOTest {
 
 	private RegisterationInfoDAO registerationInfoDAO = RegisterationInfoDAO.INSTANCE;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterationInfoDAOTest.class);
+	private static final Logger LOGGER = Logger.getLogger(RegisterationInfoDAOTest.class);
 	
 	/**
 	 * Test method for {@link watchDog.dao.RegisterationInfoDAO#saveOne(watchDog.bean.register.RegisterationInfo)}.

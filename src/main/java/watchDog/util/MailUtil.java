@@ -16,14 +16,13 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import watchDog.bean.config.MailDTO;
  
 public class MailUtil {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(MailUtil.class);
+	private static final Logger LOGGER = Logger.getLogger(MailUtil.class);
 	
 	public static void sendMail(MailDTO mailDTO, String title, String content){
 		Properties p = new Properties();

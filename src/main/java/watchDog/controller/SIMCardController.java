@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -47,7 +47,7 @@ public class SIMCardController extends HttpServlet implements BaseController{
 
 	private static final long serialVersionUID = -5031685751594766916L;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SIMCardController.class);
+	private static final Logger LOGGER = Logger.getLogger(SIMCardController.class);
 
 	private SIMCardDAO simCardDAO = SIMCardDAO.INSTANCE;
 

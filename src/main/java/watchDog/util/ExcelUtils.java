@@ -8,14 +8,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Description:
@@ -24,7 +23,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ExcelUtils {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ExcelUtils.class);
+	private static final Logger LOGGER = Logger.getLogger(ExcelUtils.class);
 	
 	public static Workbook getWorkBook(String filePath){
     	try {

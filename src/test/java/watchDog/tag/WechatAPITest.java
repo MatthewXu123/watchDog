@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatDept;
@@ -23,7 +23,7 @@ import watchDog.wechat.util.WechatUtil;
 
 public class WechatAPITest {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(WechatAPITest.class);
+	private static final Logger LOGGER = Logger.getLogger(WechatAPITest.class);
 	
 	@Test
 	public void testGetWechatDeptList(){

@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -40,7 +40,7 @@ public class RegisterationInfoController extends HttpServlet implements BaseCont
 
 	private static final long serialVersionUID = -5031685751594766916L;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterationInfoController.class);
+	private static final Logger LOGGER = Logger.getLogger(RegisterationInfoController.class);
 	
 	private RegisterationInfoDAO registerationInfoDAO = RegisterationInfoDAO.INSTANCE;
 	

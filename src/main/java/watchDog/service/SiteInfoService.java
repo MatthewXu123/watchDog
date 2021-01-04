@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import watchDog.bean.SiteInfo;
 import watchDog.dao.SiteInfoDAO;
@@ -30,7 +30,7 @@ public class SiteInfoService {
     //1: one year
     public static final String BUY_YEAR_TAG = "buy_";
     public static final String CST_TAG = "cst_";
-    private static final Logger LOGGER = LoggerFactory.getLogger(SiteInfoService.class);
+    private static final Logger LOGGER = Logger.getLogger(SiteInfoService.class);
     public static String getTag(SiteInfo siteInfo,String tag)
     {
         try{

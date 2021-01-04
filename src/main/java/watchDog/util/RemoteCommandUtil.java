@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.Session;
@@ -18,7 +18,7 @@ import ch.ethz.ssh2.StreamGobbler;
 
 public class RemoteCommandUtil {
 
-    private static final Logger log = LoggerFactory.getLogger(RemoteCommandUtil.class);
+    private static final Logger log = Logger.getLogger(RemoteCommandUtil.class);
     private static final String  DEFAULT_ENCODING = "UTF-8"; 
 
    /**

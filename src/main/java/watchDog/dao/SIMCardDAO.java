@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import watchDog.bean.register.SIMCard;
 import watchDog.bean.register.SIMCardStatus;
@@ -24,7 +24,7 @@ public class SIMCardDAO extends BaseDAO{
 
 	public static final SIMCardDAO INSTANCE = new SIMCardDAO();
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(SIMCardDAO.class);
+	private static final Logger LOGGER = Logger.getLogger(SIMCardDAO.class);
 	
 	private SIMCardDAO(){
 		
