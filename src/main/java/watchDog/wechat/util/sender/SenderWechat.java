@@ -2,6 +2,7 @@ package watchDog.wechat.util.sender;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -49,7 +50,7 @@ public class SenderWechat extends Sender {
 						b = b.toTag(targetId);
 					else if (type == WECHAT_MSG_TYPE_USER && DOG.getWechatApplicationThread().isUserExist(targetId))
 						b = b.toUser(targetId);
-					else if (type == WECHAT_MSG_TYPE_DEPT && DOG.getWechatApplicationThread().isDeptNotEmptyOfMembers(targetId))
+					else if (type == WECHAT_MSG_TYPE_DEPT)//&& DOG.getWechatApplicationThread().isDeptNotEmptyOfMembers(targetId)
 						b = b.toParty(targetId);
 					else
 						return false;
@@ -59,7 +60,7 @@ public class SenderWechat extends Sender {
 			}
 		} catch (WxErrorException ex) {
 			sendOK = false;
-			logger.error("type:" + type + ",targetIds:" + targetIds.toString() + ",agentId:" + agentId + ",content:" + content, ex);
+			logger.error("type:" + type + ",targetIds:" + Arrays.toString(targetIds) + ",agentId:" + agentId + ",content:" + content, ex);
 		}
 		
 		return sendOK;

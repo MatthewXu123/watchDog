@@ -563,12 +563,34 @@ public class WechatApplicationThread extends MyThread {
 		}
 		return null;
 	}
-	
 	public List<WechatUser> getMessageReceiver(String deptId,String[] types)
+	{
+	    return getMessageReceiver(null,deptId,types);
+	}
+	public List<WechatUser> getMessageReceiver(Integer idSite,String[] types)
+    {
+        return getMessageReceiver(idSite,null,types);
+    }
+	public List<WechatUser> getMessageReceiver(Integer idSite,String deptId,String[] types)
 	{
 	    if(deptIdWechatMemberMap != null)
 	    {
-	        List<WechatUser> wechatMembers = deptIdWechatMemberMap.get(deptId);
+	        List<WechatUser> wechatMembers = new ArrayList<>();
+	        if(idSite == null)
+	        {
+	            wechatMembers = deptIdWechatMemberMap.get(deptId);
+	        }
+	        else
+	        {
+	            String[] tagIds = siteIdTagIdMap.get(idSite);
+	            if(ObjectUtils.isArrayNotEmpty(tagIds)){
+	                for (String tagId : tagIds) {
+	                    List<WechatUser> list = tagIdUserListMap.get(tagId);
+	                    if(list != null)
+	                        wechatMembers.addAll(list);
+	                }
+	            }
+	        }
             List<WechatUser> wechatMemberList = new ArrayList<>();
             WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
             if(StringUtils.isNotBlank(configStorage.getDebug()))

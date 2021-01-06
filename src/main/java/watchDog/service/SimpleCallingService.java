@@ -35,8 +35,6 @@ import watchDog.wechat.util.sender.Sender;
 
 public class SimpleCallingService {
     private static final Logger logger = Logger.getLogger(SimpleCallingService.class);
-    private static final String SIMPLE_CALLING_TAG = "#sc";
-    private static final String IGNORE_SIMPLECALLING_TAG = "#scign";
     private static final String CODE_NO1 = "NO1";
     private static final String CODE_NO2 = "NO2";
     private static final String CODE_NO3 = "NO3";
@@ -154,10 +152,13 @@ public class SimpleCallingService {
             List<WechatUser> mList = new ArrayList<>();
             List<WechatUser> t1 = wat.getMessageReceiver(site.getTagId(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_1);
             List<WechatUser> t2 = wat.getMessageReceiver(site.getTagId2(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_1);
+            List<WechatUser> t3 = wat.getMessageReceiver(site.getSupervisorId(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_1);
             if(t1 != null)
                 mList.addAll(t1);
             if(t2 != null)
                 mList.addAll(t2);
+            if(t3 != null)
+                mList.addAll(t3);
             if(mList.size()>0)
             {
                 PropertyConfig propertyConfig = PropertyConfig.INSTANCE;
@@ -257,6 +258,8 @@ public class SimpleCallingService {
     {
         WechatApplicationThread wat = Dog.getInstance().getWechatApplicationThread();
         List<WechatUser> mList = new ArrayList<>();
+        //1: officer repeat
+        //2: general repeat
         if(repeatType == 1 || repeatType == 2)
         {
             List<WechatUser> t1 = wat.getMessageReceiver(site.getTagId(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_2);
@@ -268,7 +271,12 @@ public class SimpleCallingService {
             List<WechatUser> t3 = wat.getMessageReceiver(site.getTagId3(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_2);
             if(t3 != null)
                 mList.addAll(t3);
+            //users from tag
+            List<WechatUser> t4 = wat.getMessageReceiver(site.getSupervisorId(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_2);
+            if(t4 != null)
+                mList.addAll(t4);
         }
+        //3: general repeat
         else if(repeatType == 3)
         {
             List<WechatUser> t1 = wat.getMessageReceiver(site.getTagId(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_3);
@@ -280,6 +288,10 @@ public class SimpleCallingService {
             List<WechatUser> t3 = wat.getMessageReceiver(site.getTagId3(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_3);
             if(t3 != null)
                 mList.addAll(t3);
+            //users from tag
+            List<WechatUser> t4 = wat.getMessageReceiver(site.getSupervisorId(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_3);
+            if(t4 != null)
+                mList.addAll(t4);
             boolean contains_cg = false;
             for(WechatUser m:mList)
             {
@@ -445,7 +457,8 @@ public class SimpleCallingService {
                     List<WechatUser> t1 = wat.getMessageReceiver(site.getTagId(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_3);
                     List<WechatUser> t2 = wat.getMessageReceiver(site.getTagId2(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_3);
                     List<WechatUser> t3 = wat.getMessageReceiver(site.getTagId3(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_3);
-                    if((t1 != null && t1.size()>0) || (t2 != null && t2.size()>0) || (t3 != null && t3.size()>0))
+                    List<WechatUser> t4 = wat.getMessageReceiver(site.getSupervisorId(), WechatApplicationThread.SIMPLE_CALLING_SUFFIX_3);
+                    if((t1 != null && t1.size()>0) || (t2 != null && t2.size()>0) || (t3 != null && t3.size()>0)|| (t4 != null && t4.size()>0))
                         result.add(site.getSupervisorId()+"");
                 }
             }
