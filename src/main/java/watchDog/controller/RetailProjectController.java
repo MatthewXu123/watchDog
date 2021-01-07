@@ -66,7 +66,7 @@ public class RetailProjectController extends HttpServlet implements BaseControll
 	
 	private void getData(HttpServletRequest req, HttpServletResponse resp){
 		try {
-			BaseController.returnResult(resp, JSONArray.toJSONString(retailProjectService.getDataFromExcel()));
+			BaseController.returnResult(resp, JSONArray.toJSONString(retailProjectService.getAll()));
 		} catch (Exception e) {
 			LOGGER.error("",e);
 		}

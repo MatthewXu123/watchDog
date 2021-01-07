@@ -10,6 +10,8 @@ import java.util.Date;
  */
 public class RetailProject {
 
+	private int id;
+	
 	private String customer;
 	
 	private String description;
@@ -51,6 +53,14 @@ public class RetailProject {
 	private String projectComment;
 	
 	private String projectAddress;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getCustomer() {
 		return customer;
@@ -220,4 +230,16 @@ public class RetailProject {
 		this.projectAddress = projectAddress;
 	}
 
+	@Override
+	public String toString() {
+		return "RetailProject [id=" + id + ", customer=" + customer + ", description=" + description + ", ip=" + ip
+				+ ", province=" + province + ", purchaser=" + purchaser + ", manufacturer=" + manufacturer
+				+ ", cabnietSupplier=" + cabnietSupplier + ", contactPerson=" + contactPerson + ", contactMobile="
+				+ contactMobile + ", sales=" + sales + ", cstPerson=" + cstPerson + ", deliveryTime=" + deliveryTime
+				+ ", commissionPlannedTime=" + commissionPlannedTime + ", commissionStartTime=" + commissionStartTime
+				+ ", warrantyStartTime=" + warrantyStartTime + ", warrantyPeriod=" + warrantyPeriod
+				+ ", warrantyEndTime=" + warrantyEndTime + ", projectType=" + projectType + ", projectStatus="
+				+ projectStatus + ", projectComment=" + projectComment + ", projectAddress=" + projectAddress + "]";
+	}
+	
 }

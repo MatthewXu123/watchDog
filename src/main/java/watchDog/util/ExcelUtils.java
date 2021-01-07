@@ -55,8 +55,8 @@ public class ExcelUtils {
 	}
 	
 	public static Date getDateFromCell(Cell cell){
+		String dateStr = getStringFromCell(cell);
 		try {
-			String dateStr = getStringFromCell(cell);
 			if(StringUtils.isBlank(dateStr) || dateStr.length() < 8 || dateStr.length() > 11)
 				return null;
 			 if(dateStr.indexOf("-") != -1){
@@ -103,7 +103,6 @@ public class ExcelUtils {
 				 		monthNum = "12";
 				 		break;
 				default:
-					System.out.println("未匹配" + month);
 					break;
 				}
 				 return DateTool.parse(dateSplit[2] + "-" + monthNum + "-" + dateSplit[0]);
@@ -119,6 +118,7 @@ public class ExcelUtils {
 			 
 			 return null;
 		} catch (Exception e) {
+			LOGGER.error("该日期不符合规范:" + dateStr ,e);
 			return null;
 		}
 	 }

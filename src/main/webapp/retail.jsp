@@ -32,27 +32,27 @@
   					data-filter-control="true">
 					<thead>
    						<tr>
-							<th data-field="c0" data-filter-control="select">客户</th>
-      						<th data-field="c1" data-filter-control="input">项目</th>
-      						<th data-field="c2" data-visible="false">ip</th>
-      						<th data-field="c3" data-visible="false">省份</th>
-      						<th data-field="c4" data-filter-control="select" data-visible="false">采购方</th>
-      						<th data-field="c5" data-filter-control="select">工程商</th>
-      						<th data-field="c6" data-visible="false">柜商</th>
-      						<th data-field="c7" data-visible="false">项目类型</th>
-      						<th data-field="c8" data-filter-control="select" data-visible="false">项目联系人</th>
-      						<th data-field="c9" data-filter-control="select">销售</th>
-      						<th data-field="c10" data-filter-control="select" data-formatter="phoneFormatter">联系电话</th>
-      						<th data-field="c11" data-formatter="dateFormatter">发货时间</th>
-      						<th data-field="c12" data-formatter="dateFormatter">计划调试时间</th>
-      						<th data-field="c13" data-filter-control="select">项目进度</th>
-      						<th data-field="c14" data-filter-control="select">CST</th>
-      						<th data-field="c15" data-formatter="dateFormatter">调试开始时间</th>
-      						<th data-field="c16" data-visible="false">备注</th>
-      						<th data-field="c17" data-visible="false">项目地址</th>
-      						<th data-field="c18" data-formatter="dateFormatter">保修起始</th>
-      						<th data-field="c19" data-formatter="dateFormatter" data-visible="false">保修年限</th>
-      						<th data-field="c20" data-formatter="dateFormatter">保修到期</th>
+							<th data-field="customer" data-filter-control="select">客户</th>
+      						<th data-field="description" data-filter-control="input">项目</th>
+      						<th data-field="ip" data-visible="false">ip</th>
+      						<th data-field="province" data-visible="false">省份</th>
+      						<th data-field="purchaser" data-filter-control="select" data-visible="false">采购方</th>
+      						<th data-field="manufacturer" data-filter-control="select">工程商</th>
+      						<th data-field="cabinetSupplier" data-visible="false">柜商</th>
+      						<th data-field="projectType" data-visible="false">项目类型</th>
+      						<th data-field="contactPerson" data-filter-control="select" data-visible="false">项目联系人</th>
+      						<th data-field="sales" data-filter-control="select">销售</th>
+      						<th data-field="contactMobile" data-filter-control="select" data-formatter="phoneFormatter">联系电话</th>
+      						<th data-field="deliveryTime">发货时间</th>
+      						<th data-field="commissionPlanndTime">计划调试时间</th>
+      						<th data-field="projectStatus" data-filter-control="select">项目进度</th>
+      						<th data-field="cstPerson" data-filter-control="select">CST</th>
+      						<th data-field="commissionStartTime">调试开始时间</th>
+      						<th data-field="projectComment" data-visible="false">备注</th>
+      						<th data-field="projectAddress" data-visible="false">项目地址</th>
+      						<th data-field="warrantyStartTime">保修起始</th>
+      						<th data-field="warrantyPeriod" data-visible="false">保修年限</th>
+      						<th data-field="warrantyEndTime">保修到期</th>
       					</tr>
       				</thead>
 				</table>
@@ -74,7 +74,7 @@ function phoneFormatter(value){
 	return num.toLocaleString().replaceAll(",","");
 }  
 
-function dateFormatter(value){
+/* function dateFormatter(value){
 	if(value != undefined){
 		if(value.indexOf("-") != -1){
 			var valSplits = value.split("-");
@@ -127,6 +127,6 @@ function getMonthNum(month){
 	break;
 	}
 	return monthNum;
-}
+} */
 </script>
 </html>
