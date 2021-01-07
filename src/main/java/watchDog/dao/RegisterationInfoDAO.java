@@ -168,23 +168,6 @@ public class RegisterationInfoDAO extends BaseDAO{
 				, registerationInfo.getSimCard() == null ? null : registerationInfo.getSimCard().getId()
 				, registerationInfo.getComment()
 				, registerationInfo.getIsDeleted()).collect(Collectors.toList());
-		/*return new Object[]{
-				registerationInfo.getVpnAddress()
-				, registerationInfo.getRegisterationDate()
-				, registerationInfo.getPurchaser()
-				, registerationInfo.getProject()
-				, registerationInfo.getServicePeriod()
-				, registerationInfo.getProductCode()
-				, registerationInfo.getProductMac()
-				, registerationInfo.getRouterMac()
-				, registerationInfo.getRouterManufacturer()
-				, registerationInfo.getOriginalVersion()
-				, registerationInfo.getIsUpdated()
-				, registerationInfo.getIsConnected()
-				, registerationInfo.getSimCard() == null ? null : registerationInfo.getSimCard().getId()
-				, registerationInfo.getComment()
-				, registerationInfo.getIsDeleted()
-		};*/
 	}
 	
 	private Object[] getUpdateParams(RegisterationInfo registerationInfo){

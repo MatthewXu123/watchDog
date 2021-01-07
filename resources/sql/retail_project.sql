@@ -1,0 +1,25 @@
+CREATE TABLE wechat.retail_project
+(
+    id SERIAL,
+    customer text,
+    description text,
+    ip text,
+    province text,
+    purchaser text,
+    manufacturer text,
+    cabniet_supplier text,
+    contact_person text,
+    contact_mobile text,
+    sales text,
+    cst_person text,
+    delivery_time date,
+    commission_planned_time date,
+    commission_start_time date,
+    warranty_start_time date,
+    warranty_period integer,
+    warranty_end_time date,
+    project_type text,
+    project_status text,
+    project_comment text,
+    project_address text
+)
