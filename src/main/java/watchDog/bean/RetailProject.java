@@ -40,17 +40,17 @@ public class RetailProject {
 	
 	private Date warrantyStartTime;
 	
-	private int warrantyPeriod;
+	private Date warrantyPeriod;
 	
 	private Date warrantyEndTime;
 	
-	private String type;
+	private String projectType;
 	
-	private String status;
+	private String projectStatus;
 	
-	private String comment;
+	private String projectComment;
 	
-	private String address;
+	private String projectAddress;
 
 	public String getCustomer() {
 		return customer;
@@ -172,11 +172,11 @@ public class RetailProject {
 		this.warrantyStartTime = warrantyStartTime;
 	}
 
-	public int getWarrantyPeriod() {
+	public Date getWarrantyPeriod() {
 		return warrantyPeriod;
 	}
 
-	public void setWarrantyPeriod(int warrantyPeriod) {
+	public void setWarrantyPeriod(Date warrantyPeriod) {
 		this.warrantyPeriod = warrantyPeriod;
 	}
 
@@ -188,36 +188,36 @@ public class RetailProject {
 		this.warrantyEndTime = warrantyEndTime;
 	}
 
-	public String getType() {
-		return type;
+	public String getProjectType() {
+		return projectType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setProjectType(String projectType) {
+		this.projectType = projectType;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getProjectStatus() {
+		return projectStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setProjectStatus(String projectStatus) {
+		this.projectStatus = projectStatus;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getProjectComment() {
+		return projectComment;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setProjectComment(String projectComment) {
+		this.projectComment = projectComment;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getProjectAddress() {
+		return projectAddress;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setProjectAddress(String projectAddress) {
+		this.projectAddress = projectAddress;
 	}
-	
+
 }

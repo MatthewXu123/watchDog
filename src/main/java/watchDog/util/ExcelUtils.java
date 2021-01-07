@@ -3,15 +3,12 @@ package watchDog.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
@@ -45,15 +42,11 @@ public class ExcelUtils {
 	}
 	
 	public static String getStringFromCell(Cell cell){
-		if(cell != null)
-			return cell.toString();
-		return null;
+		return cell != null ? cell.toString() : null;
 	}
 	
 	public static Integer getIntFromCell(Cell cell){
-		if(cell != null)
-			return Integer.valueOf(cell.toString());
-		return 0;
+		return cell != null ? Integer.valueOf(cell.toString()) : null;
 	}
 	
 	public static Integer getIntFromCell2(Cell cell){
@@ -62,35 +55,72 @@ public class ExcelUtils {
 		return 0;
 	}
 	
-	public static void main(String[] args) throws EncryptedDocumentException, IOException {
-		ArrayList<String> baseFiles = new ArrayList<String>(); 
-		ArrayList<String> subFiles = new ArrayList<String>(); 
-        for (String baseFile : baseFiles) {
-        	FileInputStream fis = new FileInputStream(new File(baseFile));
-        	Workbook baseWb = WorkbookFactory.create(fis);
-        	Sheet baseSheet = baseWb.getSheetAt(0);
-			Integer baseRowNum = baseSheet.getLastRowNum();
-        	for (String subFile : subFiles) {
-        		FileInputStream fis2 = new FileInputStream(new File(subFile));
-        		Workbook subWb = WorkbookFactory.create(fis2);
-        		Sheet subSheet = subWb.getSheetAt(0);
-    			Integer subRowNum = subSheet.getLastRowNum();
-    			int j = 1;
-    			for(int i = 6; i < subRowNum; i++){
-    				Row createRow = baseSheet.createRow(baseRowNum + j++);
-    				Row row = subSheet.getRow(i);
-    				short firstCellNum = row.getFirstCellNum();
-    				short lastCellNum = row.getLastCellNum();
-    				for(int k = firstCellNum; k < lastCellNum; k++){
-    					createRow.createCell(k);
-    					createRow.getCell(k).setCellValue(row.getCell(k).toString());
-    				}
-    			}
-    			FileOutputStream fileOut=new FileOutputStream(baseFile);
-    			baseWb.write(fileOut);
-    	        fileOut.close();
-			}
+	public static Date getDateFromCell(Cell cell){
+		try {
+			String dateStr = getStringFromCell(cell);
+			if(StringUtils.isBlank(dateStr) || dateStr.length() < 8 || dateStr.length() > 11)
+				return null;
+			 if(dateStr.indexOf("-") != -1){
+				 String[] dateSplit = dateStr.split("-");
+				 if(dateSplit.length != 3)
+					 return null;
+				 String month = dateSplit[1];
+				 String monthNum = "0";
+				 switch (month) {
+				 	case "Jan":
+				 		monthNum = "1";
+				 		break;
+				 	case "Feb":
+				 		monthNum = "2";
+				 		break;
+				 	case "Mar":
+				 		monthNum = "3";
+				 		break;
+				 	case "Apr":
+				 		monthNum = "4";
+				 		break;
+				 	case "May":
+				 		monthNum = "5";
+				 		break;
+				 	case "Jun":
+				 		monthNum = "6";
+				 		break;
+				 	case "Jul":
+				 		monthNum = "7";
+				 		break;
+				 	case "Aug":
+				 		monthNum = "8";
+				 		break;
+				 	case "Sep":
+				 		monthNum = "9";
+				 		break;
+				 	case "Oct":
+				 		monthNum = "10";
+				 		break;
+				 	case "Nov":
+				 		monthNum = "11";
+				 		break;
+				 	case "Dec":
+				 		monthNum = "12";
+				 		break;
+				default:
+					System.out.println("未匹配" + month);
+					break;
+				}
+				 return DateTool.parse(dateSplit[2] + "-" + monthNum + "-" + dateSplit[0]);
+			 }
+			 
+			 if(dateStr.indexOf(".") != -1)
+				 if(dateStr.split(".").length == 3)
+					 return DateTool.parse(dateStr, "yyyy.MM.dd");
+			 
+			 if(dateStr.indexOf("//") != -1)
+				 if(dateStr.split("//").length != 3)
+					 return DateTool.parse(dateStr, "MM/dd/yy");
+			 
+			 return null;
+		} catch (Exception e) {
+			return null;
 		}
-	}
-
+	 }
 }

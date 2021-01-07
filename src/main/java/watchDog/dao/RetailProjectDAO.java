@@ -7,29 +7,46 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import watchDog.bean.RetailProject;
-import watchDog.bean.register.RegisterationInfo;
 
 /**
  * Description:
  * @author Matthew Xu
  * @date Dec 31, 2020
  */
-public class RetailProjectDAO {
+public class RetailProjectDAO extends BaseDAO{
 
-	public void saveOne(RegisterationInfo registerationInfo){
+	public static final RetailProjectDAO INSTANCE = new RetailProjectDAO();
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RetailProjectDAO.class);
+	
+	private static final String COLUMNS = "customer, description, ip, province, purchaser, manufacturer,"
+			+ "cabniet_supplier, contact_person, contact_mobile, sales, cst_person, delivery_time, commission_planned_time,"
+			+ "commission_start_time,warranty_start_time, warranty_period,warranty_end_time,project_type,project_status,"
+			+ "project_comment,project_address";
+	
+	private static final String SQL_SAVE = "INSERT INTO wechat.retail_project(" + COLUMNS + ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	
+	private RetailProjectDAO(){
+		
+	}
+	
+	public void saveOne(RetailProject retailProject){
 		try {
-			dataBaseMgr.executeUpdate(SQL_SAVE, getParams(registerationInfo).toArray());
+			dataBaseMgr.executeUpdate(SQL_SAVE, getParams(retailProject).toArray());
 		} catch (Exception e) {
 			LOGGER.error("",e);
 		}
 	}
 	
-	public void saveAll(Collection<RegisterationInfo> registerationInfos){
+	public void saveAll(Collection<RetailProject> retailProjects){
 		try {
 			List<Object[]> paramsList = new ArrayList<>();
-			for (RegisterationInfo registerationInfo : registerationInfos) {
-				paramsList.add(getParams(registerationInfo).toArray());
+			for (RetailProject retailProject : retailProjects) {
+				paramsList.add(getParams(retailProject).toArray());
 			}
 			dataBaseMgr.executeMulUpdate(SQL_SAVE, paramsList);
 		} catch (Exception e) {
@@ -45,19 +62,20 @@ public class RetailProjectDAO {
 				, retailProject.getPurchaser()
 				, retailProject.getManufacturer()
 				, retailProject.getCabnietSupplier()
-				, retailProject.getType()
 				, retailProject.getContactPerson()
-				, retailProject.getSales()
 				, retailProject.getContactMobile()
+				, retailProject.getSales()
+				, retailProject.getCstPerson()
 				, retailProject.getDeliveryTime()
 				, retailProject.getCommissionPlannedTime()
-				, retailProject.getStatus()
-				, retailProject.getCstPerson()
 				, retailProject.getCommissionStartTime()
-				, retailProject.getComment()
-				, retailProject.getAddress()
 				, retailProject.getWarrantyStartTime()
 				, retailProject.getWarrantyPeriod()
-				, retailProject.getWarrantyEndTime()).collect(Collectors.toList());
+				, retailProject.getWarrantyEndTime()
+				, retailProject.getProjectType()
+				, retailProject.getProjectStatus()
+				, retailProject.getProjectComment()
+				, retailProject.getProjectAddress()
+				).collect(Collectors.toList());
 	}
 }

@@ -1,10 +1,11 @@
 
 package watchDog.util;
 
-import static watchDog.util.ExcelUtils.*;
+import static watchDog.util.ExcelUtils.getIntFromCell2;
+import static watchDog.util.ExcelUtils.getStringFromCell;
+import static watchDog.util.ExcelUtils.getWorkBook;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +44,7 @@ public class ExcelUtilsTest {
 		for(int i = 0; i <= rowNum; i ++){
 			RegisterationInfo info = new RegisterationInfo();
 			Row row = sheet.getRow(i);
-			info.setRegisterationDate(getDateFromStr(getStringFromCell(row.getCell(0))));
+			info.setRegisterationDate(ExcelUtils.getDateFromCell(row.getCell(0)));
 			info.setPurchaser(getStringFromCell(row.getCell(1)));
 			info.setProject(getStringFromCell(row.getCell(2)));
 			info.setServicePeriod(getIntFromCell2(row.getCell(3)));
@@ -91,64 +92,6 @@ public class ExcelUtilsTest {
 		
 	}
 	
-	 private Date getDateFromStr(String dateStr){
-		 if(dateStr.indexOf("-") != -1){
-			 String[] dateSplit = dateStr.split("-");
-			 String month = dateSplit[1];
-			 String monthNum = "0";
-			 switch (month) {
-			 	case "Jan":
-			 		monthNum = "1";
-			 		break;
-			 	case "Feb":
-			 		monthNum = "2";
-			 		break;
-			 	case "Mar":
-			 		monthNum = "3";
-			 		break;
-			 	case "Apr":
-			 		monthNum = "4";
-			 		break;
-			 	case "May":
-			 		monthNum = "5";
-			 		break;
-			 	case "Jun":
-			 		monthNum = "6";
-			 		break;
-			 	case "Jul":
-			 		monthNum = "7";
-			 		break;
-			 	case "Aug":
-			 		monthNum = "8";
-			 		break;
-			 	case "Sep":
-			 		monthNum = "9";
-			 		break;
-			 	case "Oct":
-			 		monthNum = "10";
-			 		break;
-			 	case "Nov":
-			 		monthNum = "11";
-			 		break;
-			 	case "Dec":
-			 		monthNum = "12";
-			 		break;
-			default:
-				System.out.println("未匹配" + month);
-				break;
-			}
-			 return DateTool.parse(dateSplit[2] + "-" + monthNum + "-" + dateSplit[0]);
-		 }
-		 
-		 if(dateStr.indexOf(".") != -1)
-			 return DateTool.parse(dateStr, "yyyy.MM.dd");
-		 
-		 if(dateStr.indexOf("//") != -1)
-			 return DateTool.parse(dateStr, "MM/dd/yy");
-		 
-		 return null;
-	 }
-	 
 	 private boolean getIsUpdated(String isUpdatedFlag){
 		 return !isUpdatedFlag.equalsIgnoreCase("n") && StringUtils.isNotBlank(isUpdatedFlag);
 	 }
