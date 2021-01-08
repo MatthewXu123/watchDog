@@ -1,0 +1,34 @@
+.input-date{
+	width:140px;
+}
+.div-date-fromto>input{
+	margin:5px;
+	border-radius:0.25rem;
+}
+.div-date-fromto>span{
+	margin:5px;
+}
+.div-date-fromto{
+	align-items: center;
+	justify-content:flex-end;
+}
+.div-date-container{
+	height:140px;
+	margin-top: 20px;
+    width: 90%;
+    background-color: #5a6268;
+    border-radius:0.25rem;
+}
+.select-year{
+	width:15%
+}
+.select-month{
+	width:15%
+}
+.div-btn{
+	width: 100%;
+    justify-content: center;
+}
+#btn_query{
+	width:160px;
+}
