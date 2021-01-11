@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -19,9 +19,9 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 </script>
 <script src="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.js"></script>
-<script
-    src="https://unpkg.com/bootstrap-table@1.18.1/dist/extensions/filter-control/bootstrap-table-filter-control.min.js">
-</script>
+<!-- <script
+    src="https://unpkg.com/bootstrap-table@1.18.1/dist/extensions/filter-control/bootstrap-table-filter-control.js">
+</script> -->
 <script src="../js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="../js/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 <script src="../js/retailTable.js"></script>
@@ -132,7 +132,7 @@
     </div>
     <table id="table" data-toggle="table" data-url="/watchDog/retail/getData" data-search="true"
         data-show-refresh="true" data-show-columns="true" data-toolbar="#toolbar" data-pagination="true"
-        data-show-search-clear-button="true" data-filter-control="true">
+        data-show-search-clear-button="true">
         <thead>
             <tr>
                 <th data-field="customer" data-filter-control="select">客户</th>
