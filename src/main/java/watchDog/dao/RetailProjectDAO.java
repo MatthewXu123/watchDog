@@ -32,6 +32,8 @@ public class RetailProjectDAO extends BaseDAO{
 	
 	private static final String SQL_SAVE = "INSERT INTO wechat.retail_project(" + COLUMNS + ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	
+	private static final String SQL_DELETE_ALL = "DELETE FROM wechat.retail_project";
+	
 	private RetailProjectDAO(){
 		
 	}
@@ -51,6 +53,14 @@ public class RetailProjectDAO extends BaseDAO{
 				paramsList.add(getParams(retailProject).toArray());
 			}
 			dataBaseMgr.executeMulUpdate(SQL_SAVE, paramsList);
+		} catch (Exception e) {
+			LOGGER.error("",e);
+		}
+	}
+	
+	public void deleteAll(){
+		try {
+			dataBaseMgr.executeUpdate(SQL_DELETE_ALL);
 		} catch (Exception e) {
 			LOGGER.error("",e);
 		}

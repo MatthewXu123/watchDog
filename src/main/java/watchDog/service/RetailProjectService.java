@@ -61,6 +61,9 @@ public class RetailProjectService {
 	 */
 	public void saveAllFromExcel(){
 		try {
+			// Clear the table first.
+			retailProjectDAO.deleteAll();
+			
 			File file = new File(FILE_FOLDER_PATH);
 			File[] listFiles = file.listFiles();
 			// Get the first file in the folder

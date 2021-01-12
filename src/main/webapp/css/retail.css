@@ -14,10 +14,10 @@
 }
 .div-date-container{
 	height:140px;
-	margin-top: 20px;
     width: 90%;
     background-color: #5a6268;
     border-radius:0.25rem;
+    margin-top:10px;
 }
 .select-year{
 	width:15%
@@ -31,4 +31,13 @@
 }
 #btn_query{
 	width:160px;
+}
+.div-form-upload{
+	margin-left:80px;
+	margin-top:10px;
+}
+.btn-form-upload{
+	margin-left: 10px;
+    margin-right: 10px;
+}
 }

@@ -11,7 +11,7 @@ $(function () {
 					return true;
 				}
 			});
-	})
+	});
 	//$('.input-date').datepicker('setDate', new Date()); 
 })
 

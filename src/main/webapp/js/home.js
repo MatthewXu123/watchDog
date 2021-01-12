@@ -8,6 +8,9 @@ $(function() {
 	$("#btn_rinfo").click(function() {
 		window.open("/watchDog/rinfo/view");
 	});
+	$("#btn_retail").click(function() {
+		window.open("/watchDog/retail/view");
+	});
 	$(".input-readonly").each(function() {
 		$(this).attr("readonly", "readonly");
 		$(this).css("border", "none");

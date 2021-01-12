@@ -34,6 +34,10 @@ public interface BaseController {
 		returnResult(resp, JSONObject.toJSONString(ResultFactory.getFailResult()));
 	}
 	
+	public static void returnFailure(HttpServletResponse resp, String msg) {
+		returnResult(resp, JSONObject.toJSONString(ResultFactory.getFailResult(msg)));
+	}
+	
 	public static void returnResult(HttpServletResponse resp, String result) {
 		try {
 			resp.setHeader("Content-type", "text/html;charset=UTF-8");
