@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import watchDog.bean.RetailProject;
+import watchDog.controller.UploadController;
 import watchDog.dao.RetailProjectDAO;
 import watchDog.util.ExcelUtils;
 
@@ -25,8 +26,6 @@ import watchDog.util.ExcelUtils;
 public class RetailProjectService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RetailProjectService.class);
-	
-	private static final String FILE_FOLDER_PATH  = "C:\\watchDog\\files\\retail\\";
 	
 	private RetailProjectDAO retailProjectDAO = RetailProjectDAO.INSTANCE;
 	
@@ -64,7 +63,7 @@ public class RetailProjectService {
 			// Clear the table first.
 			retailProjectDAO.deleteAll();
 			
-			File file = new File(FILE_FOLDER_PATH);
+			File file = new File(UploadController.UPLOAD_DIRECTORY + UploadController.PATH_RETAIL);
 			File[] listFiles = file.listFiles();
 			// Get the first file in the folder
 			Workbook workBook = getWorkBook(listFiles[0]);

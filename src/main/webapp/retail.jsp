@@ -128,35 +128,30 @@
 	<table id="table" data-toggle="table"
 		data-url="/watchDog/retail/getData" data-search="true"
 		data-show-refresh="true" data-show-columns="true"
-		data-toolbar="#toolbar" data-pagination="true"
+		data-toolbar="#toolbar" data-pagination="true" data-page-list="[10, 50, 100, 200, all]" 
 		data-show-search-clear-button="true" data-filter-control="true">
 		<thead>
 			<tr>
-				<th data-field="customer" data-filter-control="select">客户</th>
+				<th data-field="customer" data-filter-control="select" data-formatter="simpleDescFormmatter">客户</th>
 				<th data-field="description" data-filter-control="input">项目</th>
 				<th data-field="ip" data-visible="false">ip</th>
-				<th data-field="province" data-visible="false">省份</th>
-				<th data-field="purchaser" data-filter-control="select"
-					data-visible="false">采购方</th>
-				<th data-field="manufacturer" data-filter-control="select">工程商</th>
-				<th data-field="cabinetSupplier" data-visible="false">柜商</th>
+				<th data-field="province">省份</th>
+				<th data-field="purchaser" data-filter-control="select" data-formatter="simpleDescFormmatter">采购方</th>
+				<th data-field="manufacturer" data-filter-control="select" data-formatter="simpleDescFormmatter">工程商</th>
+				<th data-field="cabinetSupplier" data-visible="false" data-formatter="simpleDescFormmatter">柜商</th>
 				<th data-field="projectType" data-visible="false">项目类型</th>
-				<th data-field="contactPerson" data-filter-control="select"
-					data-visible="false">项目联系人</th>
+				<th data-field="contactPerson" data-filter-control="select" data-visible="false">项目联系人</th>
 				<th data-field="sales" data-filter-control="select">销售</th>
-				<th data-field="contactMobile" data-filter-control="select"
-					data-formatter="phoneFormatter">联系电话</th>
+				<th data-field="contactMobile" data-filter-control="select" data-formatter="phoneFormatter" data-visible="false">联系电话</th>
 				<th data-field="deliveryTime" data-formatter="dateFormatter">发货时间</th>
-				<th data-field="commissionPlannedTime"
-					data-formatter="dateFormatter">计划调试时间</th>
-				<th data-field="projectStatus" data-filter-control="select">项目进度</th>
+				<th data-field="commissionPlannedTime" data-formatter="dateFormatter">计划调试时间</th>
+				<th data-field="projectStatus" data-filter-control="select" data-formatter="simpleDescFormmatter">项目进度</th>
 				<th data-field="cstPerson" data-filter-control="select">CST</th>
 				<th data-field="commissionStartTime" data-formatter="dateFormatter">调试开始时间</th>
 				<th data-field="projectComment" data-visible="false">备注</th>
 				<th data-field="projectAddress" data-visible="false">项目地址</th>
 				<th data-field="warrantyStartTime" data-formatter="dateFormatter">保修起始</th>
-				<th data-field="warrantyPeriod" data-visible="false"
-					data-formatter="dateFormatter">保修年限</th>
+				<th data-field="warrantyPeriod" data-visible="false" data-formatter="dateFormatter">保修年限</th>
 				<th data-field="warrantyEndTime" data-formatter="dateFormatter">保修到期</th>
 			</tr>
 		</thead>

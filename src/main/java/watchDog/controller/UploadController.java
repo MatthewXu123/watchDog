@@ -24,10 +24,12 @@ import watchDog.bean.result.ResultFactory;
 import watchDog.service.RetailProjectService;
 import watchDog.util.HttpServletUtil;
 
-@WebServlet(urlPatterns = { "/upload/retail" })
+@WebServlet(urlPatterns = { "/upload/retail", "/upload/traffic" })
 public class UploadController extends HttpServlet implements BaseController {
 	private static final long serialVersionUID = 1L;
-	private static final String UPLOAD_DIRECTORY = "C:\\watchDog\\files";
+	public static final String UPLOAD_DIRECTORY = "C:\\watchDog\\files";
+	public static final String PATH_RETAIL = "\\retail";
+	public static final String PATH_TRAFFIC = "\\traffic";
 	private static final int MEMORY_THRESHOLD = 1024 * 1024 * 3; // 3MB
 	private static final int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
 	private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
@@ -53,10 +55,8 @@ public class UploadController extends HttpServlet implements BaseController {
 
 	private void retail(HttpServletRequest req, HttpServletResponse resp) {
 		try {
-			String path = "\\retail";
-			RestResult restResult = upload(req, resp, path, true);
-			int status = restResult.getStatus();
-			if (status == ResultCode.SUCCESS.getStatus()) {
+			RestResult restResult = upload(req, resp, PATH_RETAIL, true);
+			if (restResult.getStatus() == ResultCode.SUCCESS.getStatus()) {
 				retailProjectService.saveAllFromExcel();
 				resp.sendRedirect("/watchDog/retail/view");
 			} else {
@@ -66,7 +66,29 @@ public class UploadController extends HttpServlet implements BaseController {
 			LOGGER.error("", e);
 		}
 	}
+	
+	private void traffic(HttpServletRequest req, HttpServletResponse resp){
+		try {
+			RestResult restResult = upload(req, resp, PATH_TRAFFIC, true);
+			if (restResult.getStatus() == ResultCode.SUCCESS.getStatus()) {
+			} else {
+				BaseController.returnFailure(resp, restResult.getMsg());
+			}
+		} catch (Exception e) {
+			LOGGER.error("", e);
+		}
+	}
 
+	/**
+	 * Description:
+	 * @param request
+	 * @param response
+	 * @param path
+	 * @param isCover
+	 * @return
+	 * @author Matthew Xu
+	 * @date Jan 12, 2021
+	 */
 	private RestResult upload(HttpServletRequest request, HttpServletResponse response, String path, boolean isCover) {
 		if (!ServletFileUpload.isMultipartContent(request))
 			return ResultFactory.getFailResult("文件格式不对");

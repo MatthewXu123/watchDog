@@ -1,17 +1,22 @@
 
 package watchDog.util;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import watchDog.bean.SiteInfo;
-import watchDog.listener.Dog;
+import com.opencsv.CSVReaderBuilder;
 
 /**
  * Description:
@@ -21,8 +26,12 @@ import watchDog.listener.Dog;
  */
 public class CSVUtils {
 
-	/** CSV文件列分隔符 */
 	private static final String CSV_DELIMITER = ",";
+
+	public static Iterator<String[]> readCsv(File file, String charset) throws UnsupportedEncodingException, FileNotFoundException {
+		return new CSVReaderBuilder(new BufferedReader(new InputStreamReader(new FileInputStream(file), charset)))
+				.build().iterator();
+	}
 
 	/**
 	 * CSV文件生成方法
@@ -93,18 +102,20 @@ public class CSVUtils {
 	 * @param object
 	 * @return
 	 * @author Matthew Xu
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
 	 * @date Apr 1, 2020
 	 */
-	public static Object getFieldValueByFieldName(String fieldName, Object object) {
-		try {
-			String firstLetter = fieldName.substring(0, 1).toUpperCase();
-			String getter = "get" + firstLetter + fieldName.substring(1);
-			Method method = object.getClass().getMethod(getter, new Class[] {});
-			Object value = method.invoke(object, new Object[] {});
-			return value;
-		} catch (Exception e) {
-			return null;
-		}
+	public static Object getFieldValueByFieldName(String fieldName, Object object) throws NoSuchMethodException,
+			SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		String firstLetter = fieldName.substring(0, 1).toUpperCase();
+		String getter = "get" + firstLetter + fieldName.substring(1);
+		Method method = object.getClass().getMethod(getter, new Class[] {});
+		Object value = method.invoke(object, new Object[] {});
+		return value;
 	}
 
 }

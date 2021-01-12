@@ -34,7 +34,7 @@ import watchDog.util.ZipCompressor;
  * @author Matthew Xu
  * @date Apr 1, 2020
  */
-@WebServlet(urlPatterns = { "/file/siteExport", "/file/memberExport","/file/logExport" })
+@WebServlet(urlPatterns = { "/file/siteExport", "/file/memberExport","/file/logExport","/file/trafficExport" })
 public class FileController extends HttpServlet implements BaseController{
 
 	private static final long serialVersionUID = 1L;
@@ -45,6 +45,8 @@ public class FileController extends HttpServlet implements BaseController{
 			"lastSynch", "deadline", "checkNetwork", "channel", "tagId", "tagId2", "tagId3", "comment" };
 	
 	private static final String[] MEMBER_HEADERS = new String[] { "厂商", "客户", "门店", "士兵", "军官","链接" ,"微信服务到期"};
+	
+	private static final String[] TRAFFIC_HEADERS = new String[] { "卡号", "项目", "项目名称", "客户", "流量","服务到期时间",""};
 
 	private static final String FIELNAME_SITES = "siteinfo";
 	
@@ -80,7 +82,14 @@ public class FileController extends HttpServlet implements BaseController{
 	}
 	
 	private void memberExport(HttpServletRequest req, HttpServletResponse resp){
-		// 导出文件路径
+		String downloadFilePath = req.getSession().getServletContext().getRealPath("");
+		// 导出CSV文件
+		File csvFile = CSVUtils.createCSVFile(Arrays.asList(MEMBER_HEADERS), fileService.getSiteMemberList(),
+				downloadFilePath, FILENAME_MEMBER);
+		csvExport(req, resp, csvFile);
+	}
+	
+	private void trafficExport(HttpServletRequest req, HttpServletResponse resp){
 		String downloadFilePath = req.getSession().getServletContext().getRealPath("");
 		// 导出CSV文件
 		File csvFile = CSVUtils.createCSVFile(Arrays.asList(MEMBER_HEADERS), fileService.getSiteMemberList(),
