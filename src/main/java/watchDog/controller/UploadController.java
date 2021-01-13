@@ -71,9 +71,9 @@ public class UploadController extends HttpServlet implements BaseController {
 		try {
 			RestResult restResult = upload(req, resp, PATH_TRAFFIC, true);
 			if (restResult.getStatus() == ResultCode.SUCCESS.getStatus()) {
-			} else {
-				BaseController.returnFailure(resp, restResult.getMsg());
+				req.getRequestDispatcher("/file/trafficExport").forward(req, resp);
 			}
+			
 		} catch (Exception e) {
 			LOGGER.error("", e);
 		}

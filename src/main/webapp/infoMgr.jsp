@@ -31,6 +31,12 @@
 	<form action="/watchDog/file/siteExport">
 		<button type="submit" class="button-import-csv">导出到csv</button>
 	</form>
+	<form action="/watchDog/file/trafficExport" method="post" enctype="multipart/form-data">
+		<input id="uploadFile" name="uploadFile" type="file" style="display: none" accept=".csv">
+		<input id="fileCover" class="form-control" type="text" style="height: 30px" placeholder="请上传流量报表">
+		<button type="button" onclick="$('input[id=uploadFile]').click();">浏览</button>
+		<button id="submit" type="submit">上传</button>
+	</form>
 	<form action="/watchDog/site/manage" method="post">
 		<input type="submit" class="input-confirm" value="确认修改">
 		<table>
@@ -120,6 +126,10 @@
 			</c:forEach>
 		</table>
 	</form>
+	<script type="text/javascript">
+		$('input[id=uploadFile]').change(function() {
+			$('#fileCover').val($(this).val());
+		});
 	</script>
 </body>
 </html>

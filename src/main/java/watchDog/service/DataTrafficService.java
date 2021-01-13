@@ -15,6 +15,7 @@ import watchDog.bean.SiteInfo;
 import watchDog.controller.UploadController;
 import watchDog.dao.SiteInfoDAO;
 import watchDog.util.CSVUtils;
+import watchDog.util.DateTool;
 import watchDog.util.ObjectUtils;
 
 /**
@@ -31,6 +32,7 @@ public class DataTrafficService {
 
 	private static final String UNUSED_WITH_TRAFFIC = "未使用，但已有流量";
 	private static final String PROJECT_REMOVED = "项目已停止";
+	private static final String NORMAL = "情况正常";
 	
 	private List<TrafficInfo> getDataFromCsv() {
 		List<TrafficInfo> totalList = new ArrayList<>();
@@ -72,14 +74,18 @@ public class DataTrafficService {
 						siteInfo.setDescription(remoteProProject);
 						siteInfo.setManDescription(infoList.get(2));
 						siteInfo.setCusDescription(infoList.get(3));
+						siteInfo.setDeadline(StringUtils.isNotBlank(infoList.get(4)) ? DateTool.parse(infoList.get(4)) : null);
 						trafficInfo.setSiteInfo(siteInfo);
-						trafficInfo.setDeadline(infoList.get(4));
+						trafficInfo.setComment(NORMAL);
 						normalList.add(trafficInfo);
 					}
 				}
 					
 			}
 			Collections.sort(normalList);
+			Collections.sort(unusedList);
+			Collections.sort(removedList);
+			
 			totalList.addAll(unusedList);
 			totalList.addAll(removedList);
 			totalList.addAll(normalList);
@@ -90,17 +96,18 @@ public class DataTrafficService {
 		return totalList;
 	}
 	
-	private List<List<Object>> getDataTraffic(){
+	public List<List<Object>> getDataTraffic(){
 		List<List<Object>> dataTrafficList = new ArrayList<>();
 		List<TrafficInfo> dataFromCsv = getDataFromCsv();
 		for (TrafficInfo trafficInfo : dataFromCsv) {
 			List<Object> list = new ArrayList<>();
-			list.add(trafficInfo.getCardNumber());
+			list.add("\'" + trafficInfo.getCardNumber());
 			SiteInfo siteInfo = trafficInfo.getSiteInfo();
-			list.add(siteInfo != null ? siteInfo.getDescription() : "");
-			list.add(siteInfo != null ? siteInfo.getManDescription() : "");
-			list.add(siteInfo != null ? siteInfo.getCusDescription() : "");
-			list.add(trafficInfo.getDeadline());
+			boolean isSiteNotNull = siteInfo != null;
+			list.add(isSiteNotNull ? siteInfo.getDescription() : "");
+			list.add(isSiteNotNull ? siteInfo.getManDescription() : "");
+			list.add(isSiteNotNull ? siteInfo.getCusDescription() : "");
+			list.add(isSiteNotNull && siteInfo.getDeadline() != null ? DateTool.format(siteInfo.getDeadline()) : "");
 			list.add(trafficInfo.getTrafficCount());
 			list.add(trafficInfo.getComment());
 			
@@ -112,7 +119,6 @@ public class DataTrafficService {
 	private class TrafficInfo implements Comparable<TrafficInfo>{
 		private String cardNumber;
 		private SiteInfo siteInfo;
-		private String deadline;
 		private double trafficCount;
 		private String comment;
 		
@@ -140,21 +146,11 @@ public class DataTrafficService {
 		public void setComment(String comment) {
 			this.comment = comment;
 		}
-		public String getDeadline() {
-			return deadline;
-		}
-		public void setDeadline(String deadline) {
-			this.deadline = deadline;
-		}
 		@Override
 		public int compareTo(TrafficInfo o) {
-			return (int) (this.trafficCount - o.getTrafficCount());
+			return (int) (o.trafficCount * 10000 - this.getTrafficCount() * 10000);
 		}
 		
-	}
-	
-	public static void main(String[] args) {
-		DataTrafficService.INSTANCE.getDataTraffic();
 	}
 	
 }

@@ -22,6 +22,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import watchDog.service.DataTrafficService;
 import watchDog.service.FileSevice;
 import watchDog.util.CSVUtils;
 import watchDog.util.DateTool;
@@ -40,17 +45,21 @@ public class FileController extends HttpServlet implements BaseController{
 	private static final long serialVersionUID = 1L;
 	
 	private static final FileSevice fileService = FileSevice.INSTANCE;
+	
+	private DataTrafficService dataTrafficService = DataTrafficService.INSTANCE;
 
 	private static final String[] SITE_HEADERS = new String[] { "description", "manDescription", "ktype", "ip",
 			"lastSynch", "deadline", "checkNetwork", "channel", "tagId", "tagId2", "tagId3", "comment" };
 	
 	private static final String[] MEMBER_HEADERS = new String[] { "厂商", "客户", "门店", "士兵", "军官","链接" ,"微信服务到期"};
 	
-	private static final String[] TRAFFIC_HEADERS = new String[] { "卡号", "项目", "项目名称", "客户", "流量","服务到期时间",""};
+	private static final String[] TRAFFIC_HEADERS = new String[] { "卡号", "项目", "工程商", "客户", "流量","服务到期时间","备注"};
 
 	private static final String FIELNAME_SITES = "siteinfo";
 	
 	private static final String FILENAME_MEMBER = "member";
+	
+	private static final String FILENAME_TRAFFIC = "traffic";
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -90,10 +99,23 @@ public class FileController extends HttpServlet implements BaseController{
 	}
 	
 	private void trafficExport(HttpServletRequest req, HttpServletResponse resp){
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		List<FileItem> list = upload.parseRequest(req);
+		if (list != null && list.size() > 0) {
+			for (FileItem item : list) {
+				if (!item.isFormField()) {
+					String fileName = new File(item.getName()).getName();
+					File storeFile = new File(uploadPath, fileName);
+					// 保存文件到硬盘
+					item.write(storeFile);
+				}
+			}
+		}
 		String downloadFilePath = req.getSession().getServletContext().getRealPath("");
 		// 导出CSV文件
-		File csvFile = CSVUtils.createCSVFile(Arrays.asList(MEMBER_HEADERS), fileService.getSiteMemberList(),
-				downloadFilePath, FILENAME_MEMBER);
+		File csvFile = CSVUtils.createCSVFile(Arrays.asList(TRAFFIC_HEADERS), dataTrafficService.getDataTraffic(),
+				downloadFilePath, FILENAME_TRAFFIC);
 		csvExport(req, resp, csvFile);
 	}
 	
