@@ -22,6 +22,7 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVWriter;
 
 /**
  * Description:
@@ -35,7 +36,7 @@ public class CSVUtils {
 
 	public static List<String[]> readCsv(File file, char separator) throws IOException{
         return new CSVReaderBuilder(Files.newBufferedReader(file.toPath(),StandardCharsets.UTF_8))
-        		.withCSVParser(new CSVParserBuilder().withSeparator(separator).build()).build().readAll();
+        		.withCSVParser(new CSVParserBuilder().withQuoteChar(CSVWriter.DEFAULT_QUOTE_CHARACTER).withSeparator(separator).build()).build().readAll();
 	}
 
 	/**

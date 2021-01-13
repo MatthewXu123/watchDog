@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -98,25 +99,26 @@ public class FileController extends HttpServlet implements BaseController{
 		csvExport(req, resp, csvFile);
 	}
 	
-	private void trafficExport(HttpServletRequest req, HttpServletResponse resp){
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-		ServletFileUpload upload = new ServletFileUpload(factory);
-		List<FileItem> list = upload.parseRequest(req);
-		if (list != null && list.size() > 0) {
-			for (FileItem item : list) {
-				if (!item.isFormField()) {
-					String fileName = new File(item.getName()).getName();
-					File storeFile = new File(uploadPath, fileName);
-					// 保存文件到硬盘
-					item.write(storeFile);
-				}
+	private void trafficExport(HttpServletRequest req, HttpServletResponse resp) throws Exception{
+		try {
+			DiskFileItemFactory factory = new DiskFileItemFactory();
+			ServletFileUpload upload = new ServletFileUpload(factory);
+			upload.setHeaderEncoding("UTF-8");
+			List<FileItem> list = upload.parseRequest(req);
+			File file = null;
+			if (list != null && list.size() > 0) {
+				FileItem fileItem = list.get(0);
+				file = new File(fileItem.getName());
+				fileItem.write(file);
 			}
+			String downloadFilePath = req.getSession().getServletContext().getRealPath("");
+			// 导出CSV文件
+			File csvFile = CSVUtils.createCSVFile(Arrays.asList(TRAFFIC_HEADERS), dataTrafficService.getDataTraffic(file),
+					downloadFilePath, FILENAME_TRAFFIC);
+			csvExport(req, resp, csvFile);
+		} catch (Exception e) {
+			resp.sendRedirect("/watchDog/retail/view");
 		}
-		String downloadFilePath = req.getSession().getServletContext().getRealPath("");
-		// 导出CSV文件
-		File csvFile = CSVUtils.createCSVFile(Arrays.asList(TRAFFIC_HEADERS), dataTrafficService.getDataTraffic(),
-				downloadFilePath, FILENAME_TRAFFIC);
-		csvExport(req, resp, csvFile);
 	}
 	
 	private void logExport(HttpServletRequest req, HttpServletResponse resp){
