@@ -42,6 +42,22 @@ public class ObjectUtils {
 	/**
 	 * 
 	 * Description:
+	 * @param collection
+	 * @return
+	 * @author Matthew Xu
+	 * @date Jan 13, 2021
+	 */
+	public static boolean isStringCollectionStrictEmpty(Collection<String> collection) {
+		for (String str : collection) {
+			if(str != null && str.length() != 0)
+				return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 
+	 * Description:
 	 * @param array
 	 * @return
 	 * @author Matthew Xu

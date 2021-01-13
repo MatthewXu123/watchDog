@@ -2,20 +2,20 @@
 package watchDog.service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import watchDog.bean.SiteInfo;
-import watchDog.bean.constant.CommonConstants;
 import watchDog.controller.UploadController;
 import watchDog.dao.SiteInfoDAO;
 import watchDog.util.CSVUtils;
+import watchDog.util.ObjectUtils;
 
 /**
  * Description:
@@ -32,45 +32,87 @@ public class DataTrafficService {
 	private static final String UNUSED_WITH_TRAFFIC = "未使用，但已有流量";
 	private static final String PROJECT_REMOVED = "项目已停止";
 	
-	public void getDataFromCsv() {
+	private List<TrafficInfo> getDataFromCsv() {
+		List<TrafficInfo> totalList = new ArrayList<>();
 		try {
 			File file = new File(UploadController.UPLOAD_DIRECTORY + UploadController.PATH_TRAFFIC);
 			File[] listFiles = file.listFiles();
-			Iterator<String[]> traffiCsv = CSVUtils.readCsv(listFiles[0], CommonConstants.CHARSET_UTF8);
-			Map<String, SiteInfo> cardNumberSiteMap = SiteInfoDAO.INSTANCE.getSiteInfoWithRinfo();
+			List<String[]> traffiCsv = CSVUtils.readCsv(listFiles[0],'\t');
+			
 			List<TrafficInfo> unusedList = new ArrayList<>();
 			List<TrafficInfo> removedList = new ArrayList<>();
 			List<TrafficInfo> normalList = new ArrayList<>();
-			while(traffiCsv.hasNext()){
-				String[] trafficRowArray = traffiCsv.next();
-				String cardNumber = trafficRowArray[2];
-				double trafficCount = Double.parseDouble(trafficRowArray[3]);
-				SiteInfo siteInfo = cardNumberSiteMap.get(cardNumber);
+			Map<String, List<String>> cardNumberInfoMap = SiteInfoDAO.INSTANCE.getSiteInfoWithRinfo();
+			for (String[] trafficRowArray : traffiCsv) {
+				String cardNumber = trafficRowArray[2].trim();
+				double trafficCount = Double.parseDouble(trafficRowArray[3].trim());
+				
+				List<String> infoList = cardNumberInfoMap.get(cardNumber);
 				TrafficInfo trafficInfo = new TrafficInfo();
 				trafficInfo.setCardNumber(cardNumber);
-				if(siteInfo == null){
+				trafficInfo.setTrafficCount(trafficCount);
+				if(ObjectUtils.isStringCollectionStrictEmpty(infoList)){
+					// We can't get the project info about the simcard,
+					// but the data traffic has created.
 					if(trafficCount > 0){
 						trafficInfo.setComment(UNUSED_WITH_TRAFFIC);
 						unusedList.add(trafficInfo);
-					}else{
-						
-					}
-						
+					}else
+						normalList.add(trafficInfo);
 				}else{
-					trafficInfo.setSiteInfo(siteInfo);
-					normalList.add(trafficInfo);
+					String registerationProject = infoList.get(0);
+					String remoteProProject = infoList.get(1);
+					// If we find the project by the card number in the registration info and we can't find
+					// the project in the remotepro.
+					if(StringUtils.isNotBlank(registerationProject) && StringUtils.isBlank(remoteProProject)){
+						trafficInfo.setComment(PROJECT_REMOVED);
+						removedList.add(trafficInfo);
+					}else{
+						SiteInfo siteInfo = new SiteInfo();
+						siteInfo.setDescription(remoteProProject);
+						siteInfo.setManDescription(infoList.get(2));
+						siteInfo.setCusDescription(infoList.get(3));
+						trafficInfo.setSiteInfo(siteInfo);
+						trafficInfo.setDeadline(infoList.get(4));
+						normalList.add(trafficInfo);
+					}
 				}
 					
 			}
-		} catch (UnsupportedEncodingException | FileNotFoundException e) {
-			e.printStackTrace();
+			Collections.sort(normalList);
+			totalList.addAll(unusedList);
+			totalList.addAll(removedList);
+			totalList.addAll(normalList);
+		} catch (IOException e) {
+			LOGGER.error("",e);
 		}
 
+		return totalList;
+	}
+	
+	private List<List<Object>> getDataTraffic(){
+		List<List<Object>> dataTrafficList = new ArrayList<>();
+		List<TrafficInfo> dataFromCsv = getDataFromCsv();
+		for (TrafficInfo trafficInfo : dataFromCsv) {
+			List<Object> list = new ArrayList<>();
+			list.add(trafficInfo.getCardNumber());
+			SiteInfo siteInfo = trafficInfo.getSiteInfo();
+			list.add(siteInfo != null ? siteInfo.getDescription() : "");
+			list.add(siteInfo != null ? siteInfo.getManDescription() : "");
+			list.add(siteInfo != null ? siteInfo.getCusDescription() : "");
+			list.add(trafficInfo.getDeadline());
+			list.add(trafficInfo.getTrafficCount());
+			list.add(trafficInfo.getComment());
+			
+			dataTrafficList.add(list);
+		}
+		return dataTrafficList;
 	}
 	
 	private class TrafficInfo implements Comparable<TrafficInfo>{
 		private String cardNumber;
 		private SiteInfo siteInfo;
+		private String deadline;
 		private double trafficCount;
 		private String comment;
 		
@@ -98,12 +140,21 @@ public class DataTrafficService {
 		public void setComment(String comment) {
 			this.comment = comment;
 		}
-		
+		public String getDeadline() {
+			return deadline;
+		}
+		public void setDeadline(String deadline) {
+			this.deadline = deadline;
+		}
 		@Override
 		public int compareTo(TrafficInfo o) {
 			return (int) (this.trafficCount - o.getTrafficCount());
 		}
 		
+	}
+	
+	public static void main(String[] args) {
+		DataTrafficService.INSTANCE.getDataTraffic();
 	}
 	
 }

@@ -37,14 +37,17 @@ public class FileSevice {
 	 * @date Apr 1, 2020
 	 */
 	public static List<List<Object>> getSiteDataList(String[] csvHeaders) {
-		List<SiteInfo> siteList = Dog.getInstance().getInfos();
 		List<List<Object>> dataList = new ArrayList<List<Object>>();
-		for (SiteInfo site : siteList) {
-			List<Object> row = new ArrayList<>();
-			for (String header : csvHeaders) {
-				row.add(CSVUtils.getFieldValueByFieldName(header, site));
+		try {
+			List<SiteInfo> siteList = Dog.getInstance().getInfos();
+			for (SiteInfo site : siteList) {
+				List<Object> row = new ArrayList<>();
+				for (String header : csvHeaders) {
+					row.add(CSVUtils.getFieldValueByFieldName(header, site));
+				}
+				dataList.add(row);
 			}
-			dataList.add(row);
+		} catch (Exception e) {
 		}
 		return dataList;
 	}

@@ -13,9 +13,14 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 /**
@@ -28,9 +33,9 @@ public class CSVUtils {
 
 	private static final String CSV_DELIMITER = ",";
 
-	public static Iterator<String[]> readCsv(File file, String charset) throws UnsupportedEncodingException, FileNotFoundException {
-		return new CSVReaderBuilder(new BufferedReader(new InputStreamReader(new FileInputStream(file), charset)))
-				.build().iterator();
+	public static List<String[]> readCsv(File file, char separator) throws IOException{
+        return new CSVReaderBuilder(Files.newBufferedReader(file.toPath(),StandardCharsets.UTF_8))
+        		.withCSVParser(new CSVParserBuilder().withSeparator(separator).build()).build().readAll();
 	}
 
 	/**

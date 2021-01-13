@@ -150,32 +150,41 @@ public class SiteInfoDAO extends BaseDAO{
         }
     }
 	
-	public Map<String, SiteInfo> getSiteInfoWithRinfo() {
-		String sql = "SELECT s.card_number ,c.description , man.description as man, cus.description as cus ,w.deadline FROM PUBLIC.cfsupervisors AS c"
-				+ " LEFT JOIN public.private_wechat_receiver AS w ON w.supervisor_id = c.id "
-				+ " LEFT JOIN public.cfcompany AS p ON c.ksite=p.code "
-				+ " LEFT JOIN cfcommunities AS man ON man.node=any(p.communities) AND subltree(man.node,0,1) = 'MAN' "
-				+ " LEFT JOIN cfcommunities AS cus ON cus.node=any(p.communities) AND subltree(cus.node,0,1) = 'CUS' "
-				+ " INNER JOIN wechat.registeration_info i ON i.vpn_address = c.ipaddress "
-				+ " INNER JOIN wechat.simcard s ON s.id = i.simcard_id ";
-		Map<String, SiteInfo> cardNumberSiteInfoMap = new HashMap<>();
+	/**
+	 * 
+	 * Description:
+	 * @return
+	 * @author Matthew Xu
+	 * @date Jan 13, 2021
+	 */
+	public Map<String, List<String>> getSiteInfoWithRinfo() {
+		String sql = "SELECT s.card_number, i.project ,c.description ,man.description AS man , cus.description AS cus, w.deadline FROM WECHAT.simcard s"
+					+ " LEFT JOIN WECHAT.registeration_info i ON i.simcard_id = s.id "
+					+ " LEFT JOIN PUBLIC.cfsupervisors c ON i.vpn_address = c.ipaddress "
+					+ " LEFT JOIN PUBLIC.private_wechat_receiver AS w ON w.supervisor_id = c.id"
+					+ " LEFT JOIN PUBLIC.cfcompany AS p ON c.ksite=p.code "
+					+ " LEFT JOIN cfcommunities AS man ON man.node=any(p.communities) AND subltree(man.node,0,1) = 'MAN' "
+					+ " LEFT JOIN cfcommunities AS cus ON cus.node=any(p.communities) AND subltree(cus.node,0,1) = 'CUS' "
+					+ " GROUP BY s.card_number, i.project ,c.description ,man.description , cus.description , w.deadline ;";
+		Map<String, List<String>> cardNumberInfoMap = new HashMap<>();
         try{
         	RecordSet rs = dataBaseMgr.executeQuery(sql);
 	        for(int i = 0;i < rs.size(); i++)
 	        {
 	        	Record r = rs.get(i);
-	        	SiteInfo siteInfo = new SiteInfo();
-	        	siteInfo.setDescription(r.get(1) != null ? (String)r.get(1) : "");
-	        	siteInfo.setManDescription(r.get(2) != null ? (String)r.get(2) : "");
-	        	siteInfo.setCusDescription(r.get(3) != null ? (String)r.get(3) : "");
-	        	siteInfo.setDeadline(r.get(4) != null ? (Date)r.get(4) : null);
-	        	cardNumberSiteInfoMap.put(r.get(0) != null ? (String)r.get(0) : "", siteInfo);
+	        	List<String> list = new ArrayList<>();
+	        	list.add(r.get(1) != null ? (String)r.get(1) : "");
+	        	list.add(r.get(2) != null ? (String)r.get(1) : "");
+	        	list.add(r.get(3) != null ? (String)r.get(1) : "");
+	        	list.add(r.get(4) != null ? (String)r.get(1) : "");
+	        	list.add(r.get(5) != null ? DateTool.format((Date)r.get(5)) : "");
+	        	cardNumberInfoMap.put(r.get(0) != null ? (String)r.get(0) : "", list);
 	        }
         }
         catch(Exception ex){
         	ex.printStackTrace();
         }
-        return cardNumberSiteInfoMap;
+        return cardNumberInfoMap;
 	}
 	
 }
