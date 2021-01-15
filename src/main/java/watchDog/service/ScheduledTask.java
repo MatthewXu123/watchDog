@@ -20,7 +20,6 @@ import java.util.TimerTask;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
-import org.apache.tomcat.jni.Time;
 
 import me.chanjar.weixin.common.util.StringUtils;
 import watchDog.bean.Property;
@@ -35,12 +34,12 @@ import watchDog.thread.AlarmNotificationMain;
 import watchDog.thread.WechatApplicationThread;
 import watchDog.thread.scheduletask.AlarmFaxInfoCheckTask;
 import watchDog.thread.scheduletask.MailTask;
+import watchDog.thread.scheduletask.MemberExportTask;
 import watchDog.thread.scheduletask.SimpleCallingTask;
 import watchDog.thread.scheduletask.WechatDeptCheckTask;
-import watchDog.thread.scheduletask.WechatMemberCheckTask;
 import watchDog.util.DateTool;
-import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.bean.WechatMsg;
+import watchDog.wechat.bean.WechatUser;
 import watchDog.wechat.util.sender.Sender;
 
 public class ScheduledTask {
@@ -113,7 +112,9 @@ public class ScheduledTask {
     
     Timer mailTaskTimer = new Timer("MailTaskTimer");
     mailTaskTimer.schedule(MailTask.INSTANCE, DateTool.getFirstDayOfCurrentWeek(), MailTask.RUNNING_PERIOD);
-    //mailTaskTimer.schedule(MailTask.INSTANCE, 0, ONE_DAY * 7);
+    
+    Timer memberExportTimer = new Timer("MemberExportTimer");
+    memberExportTimer.schedule(MemberExportTask.INSTANCE, 0, MemberExportTask.RUNNING_PERIOD);
   }
   
   class WeeklyReportManager extends TimerTask {

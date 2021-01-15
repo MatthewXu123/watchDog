@@ -1,6 +1,6 @@
 CREATE TABLE wechat.retail_project
 (
-    id SERIAL,
+    id SERIAL primary key,
     customer text,
     description text,
     ip text,
@@ -16,7 +16,7 @@ CREATE TABLE wechat.retail_project
     commission_planned_time date,
     commission_start_time date,
     warranty_start_time date,
-    warranty_period integer,
+    warranty_period date,
     warranty_end_time date,
     project_type text,
     project_status text,

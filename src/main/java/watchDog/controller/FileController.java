@@ -49,18 +49,18 @@ public class FileController extends HttpServlet implements BaseController{
 	
 	private DataTrafficService dataTrafficService = DataTrafficService.INSTANCE;
 
-	private static final String[] SITE_HEADERS = new String[] { "description", "manDescription", "ktype", "ip",
+	public static final String[] SITE_HEADERS = new String[] { "description", "manDescription", "ktype", "ip",
 			"lastSynch", "deadline", "checkNetwork", "channel", "tagId", "tagId2", "tagId3", "comment" };
 	
-	private static final String[] MEMBER_HEADERS = new String[] { "厂商", "客户", "门店", "士兵", "军官","链接" ,"微信服务到期"};
+	public static final String[] MEMBER_HEADERS = new String[] { "厂商", "客户", "门店", "士兵", "军官","链接" ,"微信服务到期"};
 	
-	private static final String[] TRAFFIC_HEADERS = new String[] { "卡号", "项目", "工程商", "客户", "流量","服务到期时间","备注"};
+	public static final String[] TRAFFIC_HEADERS = new String[] { "卡号", "项目", "ip","工程商", "客户", "流量","服务到期时间","备注"};
 
-	private static final String FIELNAME_SITES = "siteinfo";
+	public static final String FIELNAME_SITES = "siteinfo";
 	
-	private static final String FILENAME_MEMBER = "member";
+	public static final String FILENAME_MEMBER = "member";
 	
-	private static final String FILENAME_TRAFFIC = "traffic";
+	public static final String FILENAME_TRAFFIC = "traffic";
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

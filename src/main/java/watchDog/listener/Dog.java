@@ -71,7 +71,9 @@ public class Dog implements ServletContextListener{
     		
     		new ScheduledTask();
     		SimpleCallingService.getInstance().start();
-		}    
+		}
+		else
+		    dog.alarm = dog.getAlarmThread();
 	}
 	public AlarmNotificationThread getAlarmThread()
 	{

@@ -192,7 +192,10 @@ public class AlarmNotificationMain {
 		if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL1)
 			sql += "and " + AlarmService.importantAlarmSQL("active") + " ";
 		else if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT) {
+		    //repeat alarm, maximum 10 days
+		    Date dayxBefore = DateTool.addDays(-10);
 			sql += "and " + AlarmService.criticalAlarmSQL("active");
+			sql += "and active.inserttime>='"+ DateTool.format(dayxBefore, "yyyy-MM-dd HH:mm:ss")+"' ";
 		} else if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL2) {
 			sql += "and " + AlarmService.criticalAlarmSQL("active")
 					+ "and not exists(select * from private_alarm_important as p where idsite=active.kidsupervisor and idalarm=active.idalarm) ";
@@ -283,6 +286,11 @@ public class AlarmNotificationMain {
 					Entry<Integer, List<Alarm>> entry = (Entry) it.next();
 					int idsite = entry.getKey();
 					SiteInfo s = Dog.getInstance().getSiteInfoByIdSite(idsite);
+					if(s == null)
+					{
+					    logger.error("siteInfo null:"+idsite);
+					    continue;
+					}
 					list = entry.getValue();
 					list = orderList(list);
 					Map<Integer, Integer> offlineMap = lineOfflineNum.get(entry.getKey());
@@ -297,16 +305,33 @@ public class AlarmNotificationMain {
 					Alarm tmpAlarm = null;
 					if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT && list != null
 							&& list.size() > 0) {
-						int importantAlarmNum = list.size();
-						msg += "\n" + list.get(0).getSite() + "\n";
-						msg += "有" + importantAlarmNum + "条重要报警未处理\n";
-						Sender wx = Sender.getInstance(s.getChannel());
-						if (wx instanceof SenderWechat) {
-							msg += alarmSurroundURL(list.get(0).getIdSite(), "查看报警");
-						}
-						List<String> l = new ArrayList<String>();
-						l.add(msg);
-						result.put(list.get(0).getIdent(), l);
+					    Date now = new Date();
+				        List<Alarm> filteredList = list;
+				        Integer minutes = s.getSendTag2Delay();
+				        //repeat alarm's life must>sendTag2Delay
+                        if (minutes > 0) 
+                        {
+                            filteredList = new ArrayList<>();
+    				        for(Alarm alarm: list)
+    				        {
+    				            Date d = DateTool.add(alarm.getStartTime(), minutes, Calendar.MINUTE);
+    				            if(now.after(d))
+    				                filteredList.add(alarm);
+    				        }
+                        }
+                        if(filteredList.size()>0)
+                        {
+    						int importantAlarmNum = filteredList.size();
+    						msg += "\n" + filteredList.get(0).getSite() + "\n";
+    						msg += "有" + importantAlarmNum + "条重要报警未处理\n";
+    						Sender wx = Sender.getInstance(s.getChannel());
+    						if (wx instanceof SenderWechat) {
+    							msg += alarmSurroundURL(filteredList.get(0).getIdSite(), "查看报警");
+    						}
+    						List<String> l = new ArrayList<String>();
+    						l.add(msg);
+    						result.put(list.get(0).getIdent(), l);
+                        }
 						continue;
 					}
 					for (Alarm alarm : list) {
@@ -619,14 +644,12 @@ public class AlarmNotificationMain {
 						}
 						SiteInfo s = dog.getSiteInfo(ident);
 						if (s != null) {
-							// only ALDI resend every hour
-							if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT
-									&& s.getDescription().toUpperCase().indexOf("ALDI") < 0) {
-								Calendar c = Calendar.getInstance();
-								int hour = c.get(Calendar.HOUR_OF_DAY);
-								if (hour % 3 != 0)
-									continue;
-							}
+//							if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT) {
+//								Calendar c = Calendar.getInstance();
+//								int hour = c.get(Calendar.HOUR_OF_DAY);
+//								if (hour % 3 != 0)
+//									continue;
+//							}
 							String tagId = s.getTagId();
 							if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL2)
 								tagId = s.getTagId2();
@@ -636,13 +659,15 @@ public class AlarmNotificationMain {
 								if (StringUtils.isBlank(tagId))
 									tagId = s.getTagId2();
 							}
-							if (StringUtils.isBlank(tagId))
-								continue;
-							Sender wx = Sender.getInstance(s.getChannel());
-							sendOK = wx.sendIM(new WechatMsg.Builder(msg, s.getAgentId(), new String[]{tagId}).title(title)
-									.tagIds(WECHAT_APPLICATION_THREAD.getTagBySiteId(s.getSupervisorId()))
-									.build());
-							Dog.sleep(1000);
+							//critical alarms repeat, send 2 times
+							//1. to solder
+							//2. to commander
+							sendMsg(s,msg,tagId,title);
+							if (messagePurposeType == AlarmNotificationMain.MESSAGE_PURPOSE_TYPE_LEVEL1_REPEAT)
+							{
+							    tagId = s.getTagId2();
+							    sendMsg(s,msg,tagId,title);
+							}
 						}
 					}
 				}
@@ -650,7 +675,16 @@ public class AlarmNotificationMain {
 		}
 		return sendOK;
 	}
-
+	private static void sendMsg(SiteInfo s,String msg,String tagId,String title)
+	{
+	    if (StringUtils.isBlank(tagId))
+            return;
+	    Sender wx = Sender.getInstance(s.getChannel());
+        wx.sendIM(new WechatMsg.Builder(msg, s.getAgentId(), new String[]{tagId}).title(title)
+                .tagIds(WECHAT_APPLICATION_THREAD.getTagBySiteId(s.getSupervisorId()))
+                .build());
+        Dog.sleep(1000);
+	}
 	private String getLastQueryTime() {
 		Property p = PropertyMgr.getInstance().getProperty(PropertyMgr.LAST_QUERY_TIME);
 		if (p == null || p.getValue() == null || p.getValue().length() == 0) {
@@ -733,13 +767,10 @@ public class AlarmNotificationMain {
 		if (hour == lastRepeatCheckHour)
 			return false;
 		lastRepeatCheckHour = hour;
-		return true;
-		// if(hour>=6 && hour<=23 && hour % 3 == 0)
-		// {
-		// return true;
-		// }
-		//
-		// return false;
+//		return true;
+		if (lastRepeatCheckHour % 3 == 0)
+		    return true;
+		 return false;
 	}
 
 	private boolean checkPerHour() {

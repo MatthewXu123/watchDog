@@ -5,13 +5,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import watchDog.bean.SiteInfo;
 import watchDog.dao.SiteInfoDAO;
 import watchDog.util.CSVUtils;
 import watchDog.util.DateTool;
@@ -49,8 +49,16 @@ public class DataTrafficService {
 			double trafficCount = Double.parseDouble(trafficRowArray[3].trim());
 
 			List<String> infoList = cardNumberInfoMap.get(cardNumber);
+			String registerationProject = infoList.get(0);
+			String remoteProProject = infoList.get(1);
 			TrafficInfo trafficInfo = new TrafficInfo();
 			trafficInfo.setCardNumber(cardNumber);
+			trafficInfo.setProject(remoteProProject);
+			trafficInfo.setIp(infoList.get(2));
+			trafficInfo.setManDescription(infoList.get(3));
+			trafficInfo.setCusDescription(infoList.get(4));
+			trafficInfo.setDeadline(
+					StringUtils.isNotBlank(infoList.get(5)) ? DateTool.parse(infoList.get(5)) : null);
 			trafficInfo.setTrafficCount(trafficCount);
 			if (ObjectUtils.isStringCollectionStrictEmpty(infoList)) {
 				// We can't get the project info about the simcard,
@@ -61,8 +69,6 @@ public class DataTrafficService {
 				} else
 					normalList.add(trafficInfo);
 			} else {
-				String registerationProject = infoList.get(0);
-				String remoteProProject = infoList.get(1);
 				// If we find the project by the card number in the registration
 				// info and we can't find
 				// the project in the remotepro.
@@ -70,13 +76,6 @@ public class DataTrafficService {
 					trafficInfo.setComment(PROJECT_REMOVED);
 					removedList.add(trafficInfo);
 				} else {
-					SiteInfo siteInfo = new SiteInfo();
-					siteInfo.setDescription(remoteProProject);
-					siteInfo.setManDescription(infoList.get(2));
-					siteInfo.setCusDescription(infoList.get(3));
-					siteInfo.setDeadline(
-							StringUtils.isNotBlank(infoList.get(4)) ? DateTool.parse(infoList.get(4)) : null);
-					trafficInfo.setSiteInfo(siteInfo);
 					trafficInfo.setComment(NORMAL);
 					normalList.add(trafficInfo);
 				}
@@ -100,12 +99,11 @@ public class DataTrafficService {
 		for (TrafficInfo trafficInfo : dataFromCsv) {
 			List<Object> list = new ArrayList<>();
 			list.add("\t" + trafficInfo.getCardNumber());
-			SiteInfo siteInfo = trafficInfo.getSiteInfo();
-			boolean isSiteNotNull = siteInfo != null;
-			list.add(isSiteNotNull ? siteInfo.getDescription() : "");
-			list.add(isSiteNotNull ? siteInfo.getManDescription() : "");
-			list.add(isSiteNotNull ? siteInfo.getCusDescription() : "");
-			list.add(isSiteNotNull && siteInfo.getDeadline() != null ? DateTool.format(siteInfo.getDeadline()) : "");
+			list.add(trafficInfo.getProject());
+			list.add(trafficInfo.getIp());
+			list.add(trafficInfo.getManDescription());
+			list.add(trafficInfo.getCusDescription());
+			list.add(trafficInfo.getDeadline() != null ? DateTool.format(trafficInfo.getDeadline()) : "");
 			list.add(trafficInfo.getTrafficCount());
 			list.add(trafficInfo.getComment());
 
@@ -116,10 +114,15 @@ public class DataTrafficService {
 
 	private class TrafficInfo implements Comparable<TrafficInfo> {
 		private String cardNumber;
-		private SiteInfo siteInfo;
+		// cfsupervisors
+		private String project;
+		private String ip;
+		private String manDescription;
+		private String cusDescription;
+		private Date deadline;
 		private double trafficCount;
 		private String comment;
-
+		
 		public String getCardNumber() {
 			return cardNumber;
 		}
@@ -128,29 +131,73 @@ public class DataTrafficService {
 			this.cardNumber = cardNumber;
 		}
 
-		public SiteInfo getSiteInfo() {
-			return siteInfo;
+		public String getProject() {
+			return project;
 		}
 
-		public void setSiteInfo(SiteInfo siteInfo) {
-			this.siteInfo = siteInfo;
+		public void setProject(String project) {
+			this.project = project;
 		}
+
+		public String getIp() {
+			return ip;
+		}
+
+
+		public void setIp(String ip) {
+			this.ip = ip;
+		}
+
+
+		public String getManDescription() {
+			return manDescription;
+		}
+
+
+		public void setManDescription(String manDescription) {
+			this.manDescription = manDescription;
+		}
+
+
+		public String getCusDescription() {
+			return cusDescription;
+		}
+
+
+		public void setCusDescription(String cusDescription) {
+			this.cusDescription = cusDescription;
+		}
+
+
+		public Date getDeadline() {
+			return deadline;
+		}
+
+
+		public void setDeadline(Date deadline) {
+			this.deadline = deadline;
+		}
+
 
 		public double getTrafficCount() {
 			return trafficCount;
 		}
 
+
 		public void setTrafficCount(double trafficCount) {
 			this.trafficCount = trafficCount;
 		}
+
 
 		public String getComment() {
 			return comment;
 		}
 
+
 		public void setComment(String comment) {
 			this.comment = comment;
 		}
+
 
 		@Override
 		public int compareTo(TrafficInfo o) {

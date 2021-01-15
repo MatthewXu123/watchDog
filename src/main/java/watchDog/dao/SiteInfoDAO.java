@@ -158,14 +158,14 @@ public class SiteInfoDAO extends BaseDAO{
 	 * @date Jan 13, 2021
 	 */
 	public Map<String, List<String>> getSiteInfoWithRinfo() {
-		String sql = "SELECT s.card_number, i.project ,c.description ,man.description AS man , cus.description AS cus, w.deadline FROM WECHAT.simcard s"
+		String sql = "SELECT s.card_number, i.project , c.description ,c.ipaddress,man.description AS man , cus.description AS cus, w.deadline FROM WECHAT.simcard s"
 					+ " LEFT JOIN WECHAT.registeration_info i ON i.simcard_id = s.id "
 					+ " LEFT JOIN PUBLIC.cfsupervisors c ON i.vpn_address = c.ipaddress "
 					+ " LEFT JOIN PUBLIC.private_wechat_receiver AS w ON w.supervisor_id = c.id"
 					+ " LEFT JOIN PUBLIC.cfcompany AS p ON c.ksite=p.code "
 					+ " LEFT JOIN cfcommunities AS man ON man.node=any(p.communities) AND subltree(man.node,0,1) = 'MAN' "
 					+ " LEFT JOIN cfcommunities AS cus ON cus.node=any(p.communities) AND subltree(cus.node,0,1) = 'CUS' "
-					+ " GROUP BY s.card_number, i.project ,c.description ,man.description , cus.description , w.deadline ;";
+					+ " GROUP BY s.card_number, i.project ,c.description,c.ipaddress ,man.description , cus.description , w.deadline ;";
 		Map<String, List<String>> cardNumberInfoMap = new HashMap<>();
         try{
         	RecordSet rs = dataBaseMgr.executeQuery(sql);
@@ -174,10 +174,11 @@ public class SiteInfoDAO extends BaseDAO{
 	        	Record r = rs.get(i);
 	        	List<String> list = new ArrayList<>();
 	        	list.add(r.get(1) != null ? (String)r.get(1) : "");
-	        	list.add(r.get(2) != null ? (String)r.get(1) : "");
-	        	list.add(r.get(3) != null ? (String)r.get(1) : "");
-	        	list.add(r.get(4) != null ? (String)r.get(1) : "");
-	        	list.add(r.get(5) != null ? DateTool.format((Date)r.get(5)) : "");
+	        	list.add(r.get(2) != null ? (String)r.get(2) : "");
+	        	list.add(r.get(3) != null ? (String)r.get(3) : "");
+	        	list.add(r.get(4) != null ? (String)r.get(4) : "");
+	        	list.add(r.get(5) != null ? (String)r.get(5) : "");
+	        	list.add(r.get(6) != null ? DateTool.format((Date)r.get(6)) : "");
 	        	cardNumberInfoMap.put(r.get(0) != null ? (String)r.get(0) : "", list);
 	        }
         }
@@ -185,6 +186,10 @@ public class SiteInfoDAO extends BaseDAO{
         	ex.printStackTrace();
         }
         return cardNumberInfoMap;
+	}
+	
+	public static void main(String[] args) {
+		SiteInfoDAO.INSTANCE.getSiteInfoWithRinfo();
 	}
 	
 }

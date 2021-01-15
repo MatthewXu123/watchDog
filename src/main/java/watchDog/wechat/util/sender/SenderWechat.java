@@ -31,9 +31,13 @@ public class SenderWechat extends Sender {
 		if(StringUtils.isBlank(configStorage.getDebug())){
 			// Here use '&' not '&&'
 			logger.info(wechatMsg.toString());
-			return sendIM(WECHAT_MSG_TYPE_DEPT, wechatMsg.getDeptIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
+			boolean result = sendIM(WECHAT_MSG_TYPE_DEPT, wechatMsg.getDeptIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
 			& sendIM(WECHAT_MSG_TYPE_TAG, wechatMsg.getTagIds(), wechatMsg.getAgentId(), wechatMsg.getContent())
 			& sendIM(WECHAT_MSG_TYPE_USER, wechatMsg.getUserIds(), wechatMsg.getAgentId(), wechatMsg.getContent());
+			if(!result)
+			{
+			    logger.info("msg not sent");
+			}
 		}
 		return true;
 	}
@@ -89,7 +93,7 @@ public class SenderWechat extends Sender {
 					b = b.toTag(targetId);
 				else if (type == WECHAT_MSG_TYPE_USER && WechatUtil.isUserExist(targetId))
 					b = b.toUser(targetId);
-				else if (type == WECHAT_MSG_TYPE_DEPT  && !WechatUtil.isDeptEmptyOfMember(targetId))
+				else if (type == WECHAT_MSG_TYPE_DEPT)//  && !WechatUtil.isDeptEmptyOfMember(targetId)
 					b = b.toParty(targetId);
 				WxCpMessage msg = b.addArticle(article).build();
 				wxService.messageSend(msg);
