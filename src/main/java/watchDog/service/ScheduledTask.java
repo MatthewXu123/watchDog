@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import me.chanjar.weixin.common.util.StringUtils;
 import watchDog.bean.Property;
 import watchDog.bean.SiteInfo;
+import static watchDog.bean.constant.CommonConstants.*;
 import watchDog.config.json.UnitConfig;
 import watchDog.dao.TagDAO;
 import watchDog.database.DataBaseException;
@@ -53,12 +54,6 @@ public class ScheduledTask {
   Timer timerDummy = null;
   
   Timer timer = new Timer("ReportTimer");
-  
-  private static final long ONE_HOUR = 1000 * 3600;
-  
-  private static final long ONE_MINUTE = 1000 * 60;
-  
-  private static final long ONE_DAY = ONE_HOUR * 24;
   
   private static final long PERIOD_MAINTAINER_CHECK_TASK = ONE_HOUR * 24;
   
@@ -111,7 +106,7 @@ public class ScheduledTask {
     simpleCallingTaskTimer.schedule(SimpleCallingTask.getInstance(), 5*60*1000,5*60*1000);
     
     Timer mailTaskTimer = new Timer("MailTaskTimer");
-    mailTaskTimer.schedule(MailTask.INSTANCE, DateTool.getFirstDayOfCurrentWeek(), MailTask.RUNNING_PERIOD);
+    mailTaskTimer.schedule(MailTask.INSTANCE, 0, MailTask.RUNNING_PERIOD);
     
     Timer memberExportTimer = new Timer("MemberExportTimer");
     memberExportTimer.schedule(MemberExportTask.INSTANCE, 0, MemberExportTask.RUNNING_PERIOD);

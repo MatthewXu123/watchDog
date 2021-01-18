@@ -8,13 +8,9 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
-
-import watchDog.bean.Property;
+import watchDog.bean.constant.CommonConstants;
 import watchDog.controller.FileController;
 import watchDog.service.FileSevice;
-import watchDog.service.MailService;
-import watchDog.service.PropertyMgr;
-import watchDog.service.SiteInfoService;
 import watchDog.util.CSVUtils;
 import watchDog.util.DateTool;
 
@@ -29,7 +25,7 @@ public class MemberExportTask extends TimerTask implements BaseTask{
 	
 	public static final MemberExportTask INSTANCE = new MemberExportTask();
 	
-	public static final long RUNNING_PERIOD = ONE_DAY;
+	public static final long RUNNING_PERIOD = CommonConstants.ONE_DAY;
 	
 	private static final String EXPORT_PATH = "C:\\watchDog\\files\\members";
 	

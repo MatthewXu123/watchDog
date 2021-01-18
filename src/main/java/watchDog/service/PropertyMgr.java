@@ -13,6 +13,7 @@ import watchDog.database.DataBaseException;
 import watchDog.database.DatabaseMgr;
 import watchDog.database.Record;
 import watchDog.database.RecordSet;
+import watchDog.util.DateTool;
 
 public class PropertyMgr {
 	public static final String LAST_QUERY_TIME = "last_query_time";
@@ -20,9 +21,9 @@ public class PropertyMgr {
 	public static final String LAST_REPORT_TIME = "last_report_time";
 	public static final String IS_FIRST_REPORT = "is_first_report";
 	public static final String LAST_FAX_QUERY_TIME = "last_fax_query_time";
+	public static final String LAST_MAIL_QUERY_TIME = "last_mail_query_time";
 	public static final String WECHAT_ACCESS_TOKEN = "wechat_access_token";
 	public static final String WECHAT_EXPIRE_TIME = "wechat_expire_time";
-	public static final String LAST_MAIL_TIME = "last_mail_time";
 	private static final Logger LOGGER = Logger.getLogger(PropertyMgr.class);
 	Map<String, Property> map = new HashMap<>();
 	private static PropertyMgr me = null;
@@ -82,4 +83,15 @@ public class PropertyMgr {
 			LOGGER.error("", e);
 		}
 	}
+	
+	public boolean checkQueryFrequency(String queryKey, long queryCheckPeriod){
+		Date currentQueryTime = new Date();
+		Property property = me.getProperty(queryKey);
+		if(property == null || DateTool.diff(currentQueryTime, DateTool.parse(property.getValue())) >= queryCheckPeriod){
+			me.update(queryKey, DateTool.format(currentQueryTime, DateTool.DEFAULT_DATETIME_FORMAT));
+			return true;
+		}
+		return false;
+	}
+	
 }

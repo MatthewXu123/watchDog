@@ -11,19 +11,15 @@ import java.util.TimerTask;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-
 import watchDog.bean.SiteInfo;
 import watchDog.config.json.CommunityConfig;
 import watchDog.dao.SiteInfoDAO;
 import watchDog.listener.Dog;
-import watchDog.property.template.CommonMsgLogTemplate;
-import watchDog.property.template.WechatDeptLogTemplate;
 import watchDog.util.DateTool;
 import watchDog.util.ObjectUtils;
 import watchDog.util.RegexUtil;
 import watchDog.wechat.bean.WechatDept;
 import watchDog.wechat.bean.WechatUser;
-import watchDog.wechat.bean.WechatResult;
 import watchDog.wechat.util.WechatUtil;
 import watchDog.wechat.util.sender.Sender;
 

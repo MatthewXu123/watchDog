@@ -2,18 +2,11 @@
 
 package watchDog.thread.scheduletask;
 
-import java.util.Date;
+import static watchDog.util.LogUtil.faxInfoLogger;
+
 import java.util.TimerTask;
 
-import org.apache.commons.lang3.StringUtils;
-
-import watchDog.bean.Property;
-import watchDog.listener.Dog;
 import watchDog.service.FaxInfoService;
-import watchDog.service.PropertyMgr;
-import watchDog.util.DateTool;
-
-import static watchDog.util.LogUtil.*;
 
 /**
  * Description:

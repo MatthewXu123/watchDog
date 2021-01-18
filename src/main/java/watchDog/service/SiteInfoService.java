@@ -5,7 +5,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -126,31 +128,46 @@ public class SiteInfoService {
      * @author Matthew Xu
      * @date Dec 25, 2020
      */
-    public static List<SiteInfo> getSitesOutOfService(){
-        List<SiteInfo> list = new ArrayList<>();
+    public static Map<Integer, List<SiteInfo>> getSitesOutOfService(){
+    	// The list including sites out of service in one month.
+        List<SiteInfo> list1 = new ArrayList<>();
+        // The list including sites out of service in two months.
+        List<SiteInfo> list2 = new ArrayList<>();
+        Map<Integer, List<SiteInfo>> map = new HashMap<>();
         try {
             List<SiteInfo> infosWithTags = SiteInfoDAO.INSTANCE.getList(true);
             for (SiteInfo siteInfo : infosWithTags) {
                 if(siteInfo.getDeadline() != null){
                     int diff = DateTool.diffMonths(siteInfo.getDeadline(), new Date());
-                    if(0 < diff && diff <=2)
-                        list.add(siteInfo);
+                    if(0 < diff && diff <= 1)
+                    	list1.add(siteInfo);
+                    if(1 < diff && diff <= 2)
+                    	list2.add(siteInfo);
                 }
             }
             
-            if(ObjectUtils.isCollectionNotEmpty(list)){
-                Collections.sort(list, new Comparator<SiteInfo>() {
+            if(ObjectUtils.isCollectionNotEmpty(list1)){
+                Collections.sort(list1, new Comparator<SiteInfo>() {
                     @Override
                     public int compare(SiteInfo o1, SiteInfo o2) {
                         return  (int)DateTool.diffDays(o1.getDeadline(), o2.getDeadline());
                     }
                 });
             }
+            if(ObjectUtils.isCollectionNotEmpty(list2)){
+                Collections.sort(list2, new Comparator<SiteInfo>() {
+                    @Override
+                    public int compare(SiteInfo o1, SiteInfo o2) {
+                        return  (int)DateTool.diffDays(o1.getDeadline(), o2.getDeadline());
+                    }
+                });
+            }
+            
         } catch (Exception e) {
             LOGGER.error("" ,e);
         }
-        
-        
-        return list;
+        map.put(1, list1);
+        map.put(2, list2);
+        return map;
     }
 }
