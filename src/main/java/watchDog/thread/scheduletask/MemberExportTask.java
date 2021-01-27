@@ -37,7 +37,7 @@ public class MemberExportTask extends TimerTask implements BaseTask{
 			
 			BaseTask.getStartLog(LOGGER, this.getClass().getName());
 			CSVUtils.createCSVFile(Arrays.asList(FileController.MEMBER_HEADERS), FileSevice.INSTANCE.getSiteMemberList(),
-					EXPORT_PATH, DateTool.format(new Date(), "yyyyMMdd") + "members");
+					EXPORT_PATH, DateTool.format(new Date(), "yyyyMMddmm") + "members");
 		} catch (Exception e) {
 			LOGGER.error("",e);
 		}finally {

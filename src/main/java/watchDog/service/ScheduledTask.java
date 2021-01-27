@@ -1,5 +1,7 @@
 package watchDog.service;
 
+import static watchDog.bean.constant.CommonConstants.ONE_HOUR;
+import static watchDog.bean.constant.CommonConstants.ONE_MINUTE;
 import static watchDog.property.template.WechatReportMsgTemplate.MONTH_REPORT_TITLE;
 import static watchDog.property.template.WechatReportMsgTemplate.WEEK_REPORT_TITLE;
 import static watchDog.property.template.WechatReportMsgTemplate.getMonthlyReportContent;
@@ -24,7 +26,6 @@ import org.apache.log4j.Logger;
 import me.chanjar.weixin.common.util.StringUtils;
 import watchDog.bean.Property;
 import watchDog.bean.SiteInfo;
-import static watchDog.bean.constant.CommonConstants.*;
 import watchDog.config.json.UnitConfig;
 import watchDog.dao.TagDAO;
 import watchDog.database.DataBaseException;
