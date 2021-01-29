@@ -1,0 +1,39 @@
+[{
+        "code": "Al_Com_High_Press_L1",
+        "hint": "系统强制停机,注意货损",
+        "adviceIds": [
+            1,
+            2,
+            3,
+            4
+        ]
+    },
+    {
+        "code": "Al_High_Cond_Press_L1",
+        "hint": "系统热交换效率异常,长期报警会导致低效运行以及库温不受控",
+        "adviceIds": [
+            3,
+            4,
+            5,
+            6
+        ]
+    },
+    {
+        "code": "AL_Com_Phase_Error_L1",
+        "hint": "电源故障，系统强制停机,注意货损",
+        "adviceIds": [
+            7,
+            8
+        ]
+    },
+    {
+        "code": "AL_High_Suct_Press",
+        "hint": "系统热交换效率异常,长期报警会导致低效运行以及库温不受控",
+        "adviceIds": [
+            5,
+            9,
+            10,
+            11
+        ]
+    }
+]

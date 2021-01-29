@@ -12,15 +12,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import me.chanjar.weixin.common.util.StringUtils;
 import watchDog.bean.Alarm;
 import watchDog.bean.DeviceValueBean;
 import watchDog.bean.Property;
 import watchDog.bean.SiteInfo;
 import watchDog.bean.Suggestion;
+import watchDog.bean.config.SpecialAlarmAdviceDTO;
+import watchDog.bean.config.SpecialAlarmDTO;
+import watchDog.config.json.SpecialAlarmConfig;
 import watchDog.database.DataBaseException;
 import watchDog.database.DatabaseMgr;
 import watchDog.database.Record;
@@ -33,6 +36,7 @@ import watchDog.service.FaxInfoService;
 import watchDog.service.PropertyMgr;
 import watchDog.util.DateTool;
 import watchDog.util.HttpSendUtil;
+import watchDog.util.ObjectUtils;
 import watchDog.util.ValueRetrieve;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.bean.WechatUser;
@@ -425,6 +429,11 @@ public class AlarmNotificationMain {
 							}
 							alarmOfDeviceCounter++;
 							counter++;
+							if(alarmType == ACTIVE
+									&& ( messagePurposeType == MESSAGE_PURPOSE_TYPE_LEVEL1 || messagePurposeType == MESSAGE_PURPOSE_TYPE_LEVEL2)
+									&& SpecialAlarmConfig.isIncluded(alarm.getCode())){
+								msg += getAlarmAdvice(alarm.getCode());
+							}
 							int length = 0;
 							try {
 								length = (msgTmp + msg).getBytes("UTF-8").length;
@@ -443,6 +452,7 @@ public class AlarmNotificationMain {
 							} else {
 								msg = msgTmp + msg;
 							}
+							
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
@@ -461,6 +471,7 @@ public class AlarmNotificationMain {
 								}
 							}
 						}
+						
 						if (result.containsKey(ident)) {
 							result.get(ident).add(msg);
 						} else {
@@ -879,4 +890,24 @@ public class AlarmNotificationMain {
 	        wx.sendIM(wechatMsg);
 	    }
 	}
+	
+	private static String getAlarmAdvice(String code){
+		SpecialAlarmDTO alarm = SpecialAlarmConfig.getAlarmByCode(code);
+		String adviceMsg = "";
+		if(alarm != null){
+			List<SpecialAlarmAdviceDTO> advices = alarm.getAdvices();
+			if(ObjectUtils.isCollectionNotEmpty(advices)){
+				adviceMsg += "\n可能原因：";
+				for(int i = 0; i < advices.size(); i++){
+					SpecialAlarmAdviceDTO advice = advices.get(i);
+					adviceMsg += "\n" + (i + 1) + ". " + advice.getReason();
+					adviceMsg += "\n" + "建议：" + advice.getAdvice();
+					if(StringUtils.isNotBlank(advice.getVideoUrl()))
+						adviceMsg += "\n" + "参考视频：" + "<a href='" + advice.getVideoUrl() + "'>" + "点击查看</a>";
+				}
+			}
+		}
+		return adviceMsg;
+	}
+	
 }
