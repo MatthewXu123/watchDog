@@ -39,6 +39,7 @@ import watchDog.thread.scheduletask.MailTask;
 import watchDog.thread.scheduletask.MemberExportTask;
 import watchDog.thread.scheduletask.SimpleCallingTask;
 import watchDog.thread.scheduletask.WechatDeptCheckTask;
+import watchDog.thread.scheduletask.WechatMemberCheckTask;
 import watchDog.util.DateTool;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.bean.WechatUser;
@@ -111,6 +112,12 @@ public class ScheduledTask {
     
     Timer memberExportTimer = new Timer("MemberExportTimer");
     memberExportTimer.schedule(MemberExportTask.INSTANCE, 0, MemberExportTask.RUNNING_PERIOD);
+    
+    Calendar wechatMemberCheckTaskTime  = Calendar.getInstance();
+    wechatMemberCheckTaskTime.set(Calendar.HOUR_OF_DAY, 14);
+    Timer wechatMemberCheckTaskTimer = new Timer("WechatMemberCheckTaskTimer");
+    wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), WechatMemberCheckTask.RUNNING_PERIOD);
+    
   }
   
   class WeeklyReportManager extends TimerTask {

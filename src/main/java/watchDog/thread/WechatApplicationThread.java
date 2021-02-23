@@ -56,6 +56,7 @@ public class WechatApplicationThread extends MyThread {
 	private Map<String, List<WechatUser>> deptIdWechatMemberMap = new HashMap<>();
 	// <siteInfo, wechatMember>
 	private Map<SiteInfo, List<WechatUser>> siteWechatMemberMap = new ConcurrentHashMap<>();
+	private Map<SiteInfo, List<WechatUser>> siteWechatMemberMap4Export = new ConcurrentHashMap<>();
 	// <siteInfo, wechatMember>
 	private Map<SiteInfo, List<WechatUser>> oldSiteWechatMemberMap = new ConcurrentHashMap<>();
 	// <userId, WechatMember> all wechatMember
@@ -109,7 +110,7 @@ public class WechatApplicationThread extends MyThread {
 					
 					weChatMemberMap = initWeChatMemberMap();
 
-					siteWechatMemberMap = initSiteWechatMemberMap();
+					initSiteWechatMemberMap();
 
 					allWechatMemberSiteMap = initAllWechatMemberSiteMap();
 
@@ -274,40 +275,22 @@ public class WechatApplicationThread extends MyThread {
 	 * @author Matthew Xu
 	 * @date May 13, 2020
 	 */
-	private Map<SiteInfo, List<WechatUser>> initSiteWechatMemberMap() {
+	private void initSiteWechatMemberMap() {
 		List<SiteInfo> infos = Dog.getInfosWithTags();
-		if(isCollectionNotEmpty(infos)){
-			for (SiteInfo site : infos) {
-				List<WechatUser> allWechatMemberList = new ArrayList<>();
-				// get the wechat members accoring to the tag_id
-				String tagId = site.getTagId();
-				List<WechatUser> soldierWechatMemberList = deptIdWechatMemberMap.get(tagId);
-//				if (isCollectionEmpty(soldierWechatMemberList))
-//					soldierWechatMemberList = WechatUtil.getMemberByDeptId(tagId, WechatUtil.DONT_FECTH_CHILD);
-				
-				// get the wechat members accoring to the tag_id2
-				String tagId2 = site.getTagId2();
-				List<WechatUser> officerWechatMemberList = deptIdWechatMemberMap.get(tagId2);
-				/*if (isCollectionEmpty(officerWechatMemberList))
-					officerWechatMemberList = WechatUtil.getMemberByDeptId(tagId2, WechatUtil.DONT_FECTH_CHILD);*/
-				
-				// In case that the wechat API can't get the soldier group or the officer group...
-				if(runTime == 1 || (isCollectionNotEmpty(soldierWechatMemberList) && isCollectionNotEmpty(officerWechatMemberList))){
-					if(isCollectionNotEmpty(soldierWechatMemberList))
-						allWechatMemberList.addAll(soldierWechatMemberList);
-					if (isCollectionNotEmpty(officerWechatMemberList)) {
-						for (WechatUser officer : officerWechatMemberList) {
-							// in case that there are repeated persons
-							if (!allWechatMemberList.contains(officer))
-								allWechatMemberList.add(officer);
-						}
-					}
-					siteWechatMemberMap.put(site, allWechatMemberList);
-				}
-				
+		for (SiteInfo site : infos) {
+			List<WechatUser> allWechatMemberList = new ArrayList<>();
+			List<WechatUser> soldierWechatMemberList = deptIdWechatMemberMap.get(site.getTagId());
+			List<WechatUser> officerWechatMemberList = deptIdWechatMemberMap.get(site.getTagId2());
+
+			allWechatMemberList.addAll(soldierWechatMemberList);
+			allWechatMemberList.removeAll(officerWechatMemberList);
+			allWechatMemberList.addAll(officerWechatMemberList);
+			siteWechatMemberMap4Export.put(site, allWechatMemberList);
+			// In case that the wechat API can't get the soldier group or the officer group...
+			if (runTime == 1 || (isCollectionNotEmpty(soldierWechatMemberList) && isCollectionNotEmpty(officerWechatMemberList))) {
+				siteWechatMemberMap.put(site, allWechatMemberList);
 			}
 		}
-		return siteWechatMemberMap;
 	}
 
 	private void initTagCodeMap(){
@@ -684,6 +667,10 @@ public class WechatApplicationThread extends MyThread {
 
 	public Map<SiteInfo, List<WechatUser>> getSiteWechatMemberMap() {
 		return siteWechatMemberMap;
+	}
+
+	public Map<SiteInfo, List<WechatUser>> getSiteWechatMemberMap4Export() {
+		return siteWechatMemberMap4Export;
 	}
 
 }

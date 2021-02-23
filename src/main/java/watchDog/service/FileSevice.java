@@ -61,7 +61,7 @@ public class FileSevice {
 	 * @date Jul 16, 2020
 	 */
 	public static List<List<Object>> getSiteMemberList(){
-		Map<SiteInfo, List<WechatUser>> siteWechatMemberMap = Dog.getInstance().getWechatApplicationThread().getSiteWechatMemberMap();
+		Map<SiteInfo, List<WechatUser>> siteWechatMemberMap = Dog.getInstance().getWechatApplicationThread().getSiteWechatMemberMap4Export();
 		List<List<Object>> dataList = new ArrayList<List<Object>>();
 		for (Entry<SiteInfo, List<WechatUser>> siteMemberMap : siteWechatMemberMap.entrySet()) {
 			SiteInfo siteInfo = siteMemberMap.getKey();

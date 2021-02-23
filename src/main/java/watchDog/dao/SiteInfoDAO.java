@@ -188,8 +188,33 @@ public class SiteInfoDAO extends BaseDAO{
         return cardNumberInfoMap;
 	}
 	
+	public List<SiteInfo> getDailyAlarmConfiguredSites() {
+		String alarmIngoreTag = "#testalarm_ignore";
+		String alarmDesc = "每日测试报警";
+		String sql = "select c.id from public.cfsupervisors c"
+				+ " inner join public.lgalarmrecall r on c.id = r.kidsupervisor "
+				+ " inner join public.lgvariable v on v.iddevice = r.iddevice and v.kidsupervisor = r.kidsupervisor "
+				+ " left join tags.supervisortags t on t.kidsupervisor = c.id " 
+				+ " where v.description like '" + alarmDesc
+				+ "' and r.starttime > CURRENT_DATE" + " and ( t.tags is null or '" + alarmIngoreTag + "' <> any(t.tags)) "
+				+ " group by c.id";
+		List<SiteInfo> dailyAlarmConfiguredSites = new ArrayList<>();
+		try {
+			RecordSet rs = dataBaseMgr.executeQuery(sql);
+			for (int i = 0; i < rs.size(); i++) {
+				Record r = rs.get(i);
+				SiteInfo siteInfo = new SiteInfo();
+				siteInfo.setSupervisorId((int) r.get(0));
+				dailyAlarmConfiguredSites.add(siteInfo);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return dailyAlarmConfiguredSites;
+	}
+	
 	public static void main(String[] args) {
-		SiteInfoDAO.INSTANCE.getSiteInfoWithRinfo();
+		SiteInfoDAO.INSTANCE.getDailyAlarmConfiguredSites();
 	}
 	
 }
