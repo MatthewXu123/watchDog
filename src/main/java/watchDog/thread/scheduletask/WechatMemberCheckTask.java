@@ -1,7 +1,6 @@
 
 package watchDog.thread.scheduletask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TimerTask;
@@ -73,7 +72,7 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 				if(isAllConfiguerd)
 					dailyAlarmTestMsg += propertyConfig.getValue(WechatMemberMsgTemplate.DAT_ALL_CONFIG.getKey());
 				
-				if (msgList.size() == 0) {
+				if (!msgList.contains(dailyAlarmTestMsg)) {
 					msgList.add(dailyAlarmTestMsg);
 				}
 				for (String msg : msgList) {

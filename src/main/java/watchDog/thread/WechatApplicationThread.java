@@ -281,10 +281,13 @@ public class WechatApplicationThread extends MyThread {
 			List<WechatUser> allWechatMemberList = new ArrayList<>();
 			List<WechatUser> soldierWechatMemberList = deptIdWechatMemberMap.get(site.getTagId());
 			List<WechatUser> officerWechatMemberList = deptIdWechatMemberMap.get(site.getTagId2());
-
-			allWechatMemberList.addAll(soldierWechatMemberList);
-			allWechatMemberList.removeAll(officerWechatMemberList);
-			allWechatMemberList.addAll(officerWechatMemberList);
+			if(soldierWechatMemberList != null)
+			    allWechatMemberList.addAll(soldierWechatMemberList);
+			if(officerWechatMemberList != null)
+			{
+    			allWechatMemberList.removeAll(officerWechatMemberList);
+    			allWechatMemberList.addAll(officerWechatMemberList);
+			}
 			siteWechatMemberMap4Export.put(site, allWechatMemberList);
 			// In case that the wechat API can't get the soldier group or the officer group...
 			if (runTime == 1 || (isCollectionNotEmpty(soldierWechatMemberList) && isCollectionNotEmpty(officerWechatMemberList))) {

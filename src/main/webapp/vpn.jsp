@@ -27,6 +27,9 @@
     <input id="input_manage" type="text" placeholder="输入你想要踢掉的ip,例如：ppp209" style="width: 15%;">
     <button id="vpnKickBtn">确定</button>
 <% } %>
+    <form action="/watchDog/vpn/mobile555666888">
+        <input name="siteName" type="text" value="" placeholder="输入站点名称" style="width: 15%;"><button type="submit">查询</button>
+    </form>
     <div id="input_manage_info"></div>
     <table>
         <tr>

@@ -194,9 +194,12 @@ public class SiteInfoDAO extends BaseDAO{
 		String sql = "select c.id from public.cfsupervisors c"
 				+ " inner join public.lgalarmrecall r on c.id = r.kidsupervisor "
 				+ " inner join public.lgvariable v on v.iddevice = r.iddevice and v.kidsupervisor = r.kidsupervisor "
-				+ " left join tags.supervisortags t on t.kidsupervisor = c.id " 
-				+ " where v.description like '" + alarmDesc
-				+ "' and r.starttime > CURRENT_DATE" + " and ( t.tags is null or '" + alarmIngoreTag + "' <> any(t.tags)) "
+				+ " where v.description like '" + alarmDesc + "' and r.starttime > CURRENT_DATE" 
+				+ " group by c.id"
+				+ " union"
+				+ " select c.id from public.cfsupervisors c"
+				+ " inner join tags.supervisortags t on t.kidsupervisor = c.id " 
+				+ " where '" + alarmIngoreTag + "' = any(t.tags) "
 				+ " group by c.id";
 		List<SiteInfo> dailyAlarmConfiguredSites = new ArrayList<>();
 		try {
@@ -211,10 +214,6 @@ public class SiteInfoDAO extends BaseDAO{
 			ex.printStackTrace();
 		}
 		return dailyAlarmConfiguredSites;
-	}
-	
-	public static void main(String[] args) {
-		SiteInfoDAO.INSTANCE.getDailyAlarmConfiguredSites();
 	}
 	
 }

@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,10 +16,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-
+import me.chanjar.weixin.common.util.StringUtils;
 import watchDog.bean.PageVPNInfo;
 import watchDog.service.VPNService;
 import watchDog.util.HttpServletUtil;
@@ -64,8 +63,20 @@ public class VPNController extends HttpServlet implements BaseController {
 	}
 	private void view(HttpServletRequest req, HttpServletResponse resp) {
 	    List<PageVPNInfo> lines = vpnService.getVPNServerOutPut();
+	    String siteName = req.getParameter("siteName");
+	    List<PageVPNInfo> list = new ArrayList<>();
+	    if(StringUtils.isNotBlank(siteName) && lines != null)
+	    {
+	        for(PageVPNInfo info:lines)
+	        {
+	            if(info.getIp().indexOf(siteName)>=0)
+	                list.add(info);
+	        }
+	    }
+	    else
+	        list = lines;
 		try {
-			req.setAttribute("lines", lines);
+			req.setAttribute("lines", list);
 			req.getRequestDispatcher("../vpn.jsp").forward(req, resp);
 		} catch (IOException e) {
 			e.printStackTrace();
