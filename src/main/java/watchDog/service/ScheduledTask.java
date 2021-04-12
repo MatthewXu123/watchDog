@@ -108,7 +108,13 @@ public class ScheduledTask {
     simpleCallingTaskTimer.schedule(SimpleCallingTask.getInstance(), 5*60*1000,5*60*1000);
     
     Timer mailTaskTimer = new Timer("MailTaskTimer");
-    mailTaskTimer.schedule(MailTask.INSTANCE, 0, MailTask.RUNNING_PERIOD);
+    Calendar mailTaskTime  = Calendar.getInstance();
+    mailTaskTime.set(Calendar.DAY_OF_WEEK, 6);
+    mailTaskTime.set(Calendar.HOUR_OF_DAY, 14);
+    mailTaskTime.set(Calendar.MINUTE, 0);
+    mailTaskTime.set(Calendar.SECOND, 0);
+    mailTaskTime.set(Calendar.MILLISECOND, 0);
+    mailTaskTimer.schedule(MailTask.INSTANCE, mailTaskTime.getTime(), MailTask.RUNNING_PERIOD);
     
     Timer memberExportTimer = new Timer("MemberExportTimer");
     memberExportTimer.schedule(MemberExportTask.INSTANCE, 0, MemberExportTask.RUNNING_PERIOD);

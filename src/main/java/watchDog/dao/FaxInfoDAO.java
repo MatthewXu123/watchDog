@@ -3,6 +3,7 @@ import static watchDog.config.json.FaxRuleConfig.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,6 +47,8 @@ public class FaxInfoDAO extends BaseDAO {
 	// The threshold value of the account of high-temp alarms.
 	private static final int THRESHOLD_COUNT_HT_ALARMS = 4;
 	
+	private static final String DEVMOD_CODE_MPXPROV4 = "mpxprov4";
+	
 	private static final int DO_NOT_DISTURB_BEGIN = 22;
 	
 	private static final int DO_NOT_DISTURB_END = 8;
@@ -53,6 +56,10 @@ public class FaxInfoDAO extends BaseDAO {
 	private static final String TAG_CALL_IGNORE = "#c_ignore";
 	
 	private static final String[] highTempAlarmCodes = {CODE_TAG_HIGH_TEMP,CODE_HIGH_TEMP,CODE_LT_HIGH_TEMP,CODE_MT_HIGH_TEMP};
+	
+	private Map<String, String> devmodCodeMap = new HashMap<String, String>(){{
+		put(DEVMOD_CODE_MPXPROV4, "Po4");
+	}};
 	
 	private FaxInfoDAO() {
 	}
@@ -171,7 +178,7 @@ public class FaxInfoDAO extends BaseDAO {
 					faxInfo.setIdalarmList(idalarmList);
 					List<WechatUser> wechatMemberList = new ArrayList<>();
 					
-					if(StringUtils.isBlank(realAlarmCode) && realAlarmCode.equals(CODE_UNIT_OFFLINE)){
+					if(StringUtils.isNotBlank(realAlarmCode) && realAlarmCode.equals(CODE_UNIT_OFFLINE)){
 						WechatUser wechatMember = new WechatUser();
 						wechatMember.setName("Neil");
 						wechatMember.setUserid("Neil");
@@ -239,19 +246,20 @@ public class FaxInfoDAO extends BaseDAO {
 				thresholdValue = THRESHOLD_MT_TEU;
 			}
 			
-			String sql = " select d.description,d.code as devcode,v.code as code from lgdevice d "
-					+ " inner join lgvariable v on d.iddevice = v.iddevice and d.kidsupervisor = v.kidsupervisor"
-					+ " where v.code = 'Po4'"
-					+ " and (d.devmodcode like 'mpxprov4' or d.devmodcode like 'IR 33 - C' or d.devmodcode like 'mpxprostep2'  )"
+			String sql = " select d.description,d.code as devcode,d.devmodcode from lgdevice d "
+					+ " where d.devmodcode like 'mpxprov4'"
 					+ cabinetCondition
 					+ " and d.kidsupervisor = ? order by random() limit 10";
 			RecordSet rs = dataBaseMgr.executeQuery(sql, new Object[]{idsite});
 			if (rs != null && rs.size() > 0) {
 				for(int i = 0; i < rs.size(); i++){
+					if(flag)
+						break;
 					// Get the real-time value of the specified variables.
-					String devCode =  (String)rs.get(i).get("devcode");
-					String code =  (String)rs.get(i).get("code");
-					Map<String, String> codeValueMap = ValueRetrieve.getValue(ipaddress, devCode, code);
+					String devmodcode =  (String)rs.get(i).get("devmodcode");
+					String devcode =  (String)rs.get(i).get("devcode");
+					Map<String, String> codeValueMap = ValueRetrieve.getValue(ipaddress, devcode, devmodCodeMap.get(devmodcode));
+					faxInfoLogger.info(ipaddress + ":" + devcode + ":" + codeValueMap);
 					if(ObjectUtils.isMapNotEmpty(codeValueMap)){
 						for(String value : codeValueMap.values()){
 							if(!value.contains("*") && Double.parseDouble(value) >= thresholdValue){
@@ -271,7 +279,7 @@ public class FaxInfoDAO extends BaseDAO {
 		}
 		return flag; 
 	}
-		
+	
 
 	/**
 	 * 

@@ -1253,8 +1253,10 @@ public class AlarmService {
 	
 	public static String criticalAlarmSQL(String alarmTable)
 	{
-		return "((device.devmodcode like 'mpxpro%' and var.code in('s_HI','s_LSH','s_LO','s_pre1','s_pre2','s_pre3','s_pre4','s_pre6')) "+
-		         "or (device.devmodcode ='pRackCNL1' and "+alarmTable+".priority in ('1','2')) "
+		return "((device.devmodcode like 'mpxpro%' and var.code in('s_HI','s_LSH','s_LO','s_pre1','s_pre2','s_pre3','s_pre4','s_pre6')) "
+				+ "or (device.devmodcode ='pRackCNL1' and "+alarmTable+".priority in ('1','2')) "
+		       + "or (device.devmodcode like 'IR33%' and var.code in('ALR_HIGH_TEMP','ALR_LOW_TEMP','S_ALM_ALTA_TEMP_COND','S_ALM_SONDA_1','S_ALM_SONDA_2')) "
+		       + "or (lower(device.devmodcode) like 'mpxone%' and var.code in('BAS_HI','BAS_E1','BAS_E2', 'BAS_LO', 'BAS dor')) "
 		       + "or (lower(device.devmodcode) like 'heos%' and var.code in('Al_Supply_Probe',"+
                 "'Al_Defrost_Probe',"+
                 "'Al_Return_Probe',"+

@@ -11,12 +11,9 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.junit.Test;
 
-import watchDog.database.DataBaseException;
 import watchDog.database.DatabaseMgr;
 import watchDog.database.RecordSet;
 import watchDog.util.DateTool;

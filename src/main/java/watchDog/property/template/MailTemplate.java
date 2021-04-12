@@ -10,6 +10,7 @@ public enum MailTemplate {
 
 	MAIL_OOS_TITLE("mail_oos_title"),
 	MAIL_OOS_CONTENT("mail_oos_content"),
+	MAIL_OOS_CONTENT_ALREADY("mail_oos_content_already"),
 	MAIL_OOS_BODY("mail_oos_body"),
 	MAIL_OOS_EMPTY("mail_oos_empty");
 	

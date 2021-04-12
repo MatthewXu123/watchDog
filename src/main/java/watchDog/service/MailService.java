@@ -39,6 +39,7 @@ public class MailService{
 	public void sendServiceMails(){
 		try {
 			Map<Integer, List<SiteInfo>> sitesOutOfService = SiteInfoService.getSitesOutOfService();
+			List<SiteInfo> list0 = sitesOutOfService.get(0);
 			List<SiteInfo> list1 = sitesOutOfService.get(1);
 			List<SiteInfo> list2 = sitesOutOfService.get(2);
 			if(ObjectUtils.isCollectionNotEmpty(list1) || ObjectUtils.isCollectionNotEmpty(list2)){
@@ -48,6 +49,8 @@ public class MailService{
 					content += getMailContent(1, list1);
 				if(ObjectUtils.isCollectionNotEmpty(list2))
 					content += getMailContent(2, list2);
+				if(ObjectUtils.isCollectionNotEmpty(list0))
+					content += getMailContent(0, list0);
 				MailUtil.sendMail(mailDTO, title, content);
 			}else{
 				LOGGER.info(propertyConfig.getValue(MailTemplate.MAIL_OOS_EMPTY.getKey()));
@@ -68,7 +71,8 @@ public class MailService{
 	 * @date Jan 18, 2021
 	 */
 	private String getMailContent(int month, List<SiteInfo> list){
-		String content = propertyConfig.getValue(MailTemplate.MAIL_OOS_CONTENT.getKey(), new Object[]{month});
+		String content = month == 0 ? propertyConfig.getValue(MailTemplate.MAIL_OOS_CONTENT_ALREADY.getKey())
+				: propertyConfig.getValue(MailTemplate.MAIL_OOS_CONTENT.getKey(), new Object[]{month});
 		for (SiteInfo siteInfo : list) {
 			content += propertyConfig.getValue(MailTemplate.MAIL_OOS_BODY.getKey(),
 					new Object[]{siteInfo.getDescription()
