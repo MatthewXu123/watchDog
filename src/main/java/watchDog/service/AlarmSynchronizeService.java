@@ -17,6 +17,7 @@ import org.dom4j.Element;
 import watchDog.database.DatabaseMgr;
 import watchDog.database.RecordSet;
 import watchDog.util.DateTool;
+import watchDog.util.LogUtil;
 import watchDog.util.ObjectUtils;
 import watchDog.util.ValueRetrieve;
 
@@ -182,6 +183,8 @@ public class AlarmSynchronizeService {
 						logger.info("ip:" + ip + ",supervisorId:" + supervisorId + ",reset num:"+idAlarms.length+",idalarms:" + idAlarmStr);
 						AlarmManageService.reset(supervisorId, idAlarms, "auto", "",false);
 					}
+				}else{
+					LogUtil.testLogger.info("本次查询无结果：ip：" + ip + "，id：" + supervisorId);
 				}
 				
 				
