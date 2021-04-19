@@ -26,7 +26,7 @@ public class DeviceServiceImpl implements DeviceService{
 	}
 	
 	// cmd
-	private static final String CMD_QUERY_DEVICES = "input=<cmd action='read_devices' lang='c'/>";
+	private static final String CMD_QUERY_DEVICES = "<cmd action='read_devices' lang='c'/>";
 	
 	@Override
 	public Device getDevices(String ip) {
@@ -34,7 +34,6 @@ public class DeviceServiceImpl implements DeviceService{
 			String result = sendQuery(ip, CMD_QUERY_DEVICES);
 			System.out.println(result);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

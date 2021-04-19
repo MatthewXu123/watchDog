@@ -21,6 +21,7 @@ public class HttpSendUtil {
 	public static final String APPLICATION_JSON = "application/json;charset=UTF-8";
 	public static final String APPLICATION_TEXT_PLAIN = "text/plain;charset=UTF-8";
 	public static final String APPLICATION_FORM_DATA = "multipart/form-data;charset=UTF-8";
+	public static final String APPLICATION_XML = "application/xml;charset=UTF-8";
 	
 	public static final String CHAR_ENCODING_UTF8 = "UTF-8";
 	
@@ -53,10 +54,12 @@ public class HttpSendUtil {
             URLConn.setConnectTimeout(30000);
             URLConn.setReadTimeout(30000);
             URLConn.setRequestProperty("Content-Type", contentType);
-            URLConn.setRequestProperty("Content-Length", String.valueOf(params.getBytes().length));
-            DataOutputStream dos = new DataOutputStream(URLConn.getOutputStream());
+            //URLConn.setRequestProperty("Content-Length", String.valueOf(params.getBytes().length));
+            /*DataOutputStream dos = new DataOutputStream(URLConn.getOutputStream());
             dos.write(params.getBytes(CHAR_ENCODING_UTF8));
-            dos.flush();
+            dos.flush();*/
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(URLConn.getOutputStream(),"utf-8"));  
+            out.println(params);
             
             br = new BufferedReader(new InputStreamReader(URLConn.getInputStream(), encodType));
 
