@@ -534,9 +534,9 @@ public class WechatApplicationThread extends MyThread {
 	 * @date May 22, 2020
 	 */
 	public List<WechatUser> getAlarmFaxCallUsers(String deptId) {
+		List<WechatUser> wechatMemberList = new ArrayList<>();
 		if(isMapNotEmpty(deptIdWechatMemberMap) ){
 			List<WechatUser> wechatMembers = deptIdWechatMemberMap.get(deptId);
-			List<WechatUser> wechatMemberList = new ArrayList<>();
 			if (isCollectionNotEmpty(wechatMembers)) {
 				for (WechatUser wechatMember : wechatMembers) {
 					if (wechatMember.getName().contains(SKIP_SUFFIX) || !wechatMember.getName().endsWith(SOLIDER_SUFFIX))
@@ -545,10 +545,10 @@ public class WechatApplicationThread extends MyThread {
 					wechatMemberList.add(wechatMember);
 				}
 			}
-			return wechatMemberList;
 		}
-		return null;
+		return wechatMemberList;
 	}
+	
 	public List<WechatUser> getMessageReceiver(String deptId,String[] types)
 	{
 	    return getMessageReceiver(null,deptId,types);
