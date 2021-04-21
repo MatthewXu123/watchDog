@@ -2,9 +2,17 @@
 package watchDog.danfoss.service.impl;
 
 import java.io.IOException;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
 
 import watchDog.bean.Device;
 import watchDog.danfoss.service.DeviceService;
+import watchDog.service.EnergyService;
 
 /**
  * Description:
@@ -25,16 +33,23 @@ public class DeviceServiceImpl implements DeviceService{
 	private DeviceServiceImpl(){
 	}
 	
-	// cmd
-	private static final String CMD_QUERY_DEVICES = "<cmd action='read_devices' lang='c'/>";
+	private static final Logger logger = Logger.getLogger(DeviceServiceImpl.class);
 	
 	@Override
 	public Device getDevices(String ip) {
 		try {
-			String result = sendQuery(ip, CMD_QUERY_DEVICES);
-			System.out.println(result);
-		} catch (IOException e) {
-			e.printStackTrace();
+			Document doc = getXMLResult(ip, QUERY_CMD_SERVICE.getDevicesCMD());
+			if(doc != null){
+				Element rootElement = doc.getRootElement();
+				String unitName = rootElement.elementText("unit_name");
+				List<Element> deviceElements = rootElement.elements("device");
+				for (Element deviceElement : deviceElements) {
+					String nodetype = deviceElement.attributeValue("nodetype");
+					String name = deviceElement.elementText("name");
+				}
+			}
+		} catch (IOException | DocumentException e) {
+			logger.error("", e);
 		}
 		return null;
 	}
