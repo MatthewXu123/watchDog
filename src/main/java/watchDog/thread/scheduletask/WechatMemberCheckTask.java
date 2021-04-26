@@ -32,7 +32,7 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 
 	private static final Logger logger = Logger.getLogger(WechatMemberCheckTask.class);
 	
-	public static final long RUNNING_PERIOD = CommonConstants.ONE_WEEK;
+	public static final long RUNNING_PERIOD = CommonConstants.ONE_DAY;
 	
 	private static final String SOLDIER_DEPT_SUFFIX = "_士兵";
 

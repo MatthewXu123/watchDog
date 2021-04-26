@@ -135,10 +135,10 @@ public class AlarmSynchronizeService {
 								needLoop = false;
 								continue;
 							}
-							if(mapBefore.size()<200){
+							/*if(mapBefore.size()<200){
 								needLoop = false;
 								continue;
-							}
+							}*/
 	
 							while(needLoop){
 								if((max-min)<=minCheckNo){
