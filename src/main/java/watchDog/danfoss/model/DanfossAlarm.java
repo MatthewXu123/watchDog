@@ -6,6 +6,6 @@ package watchDog.danfoss.model;
  * @author Matthew Xu
  * @date Apr 19, 2021
  */
-public class Alarm {
+public class DanfossAlarm {
 
 }

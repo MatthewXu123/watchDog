@@ -1,7 +1,9 @@
 
 package watchDog.danfoss.service;
 
-import watchDog.bean.Device;
+import java.util.List;
+
+import watchDog.danfoss.model.DanfossDevice;
 
 /**
  * Description:
@@ -10,5 +12,5 @@ import watchDog.bean.Device;
  */
 public interface DeviceService extends BaseSevice {
 
-	Device getDevices(String ip);
+	List<DanfossDevice> getDevices(String ip);
 }
