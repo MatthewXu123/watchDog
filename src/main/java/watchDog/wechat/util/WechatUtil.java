@@ -201,6 +201,8 @@ public class WechatUtil {
 	 * @date Nov 25, 2020
 	 */
 	public static WechatDept getWechatDeptById(String wechatDeptId){
+		if(StringUtils.isBlank(wechatDeptId))
+			return null;
 		try {
 			List<WechatDept> wechatDepts =  getDeptListByDeptId(wechatDeptId);
 			for (WechatDept wechatDept : wechatDepts) {
