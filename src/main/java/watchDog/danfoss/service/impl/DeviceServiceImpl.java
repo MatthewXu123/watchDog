@@ -73,8 +73,8 @@ public class DeviceServiceImpl implements DeviceService{
 					device.setPoint(str2Integer(deviceElement.attributeValue("point")));
 					device.setIsRunningOrDefrosting(str2Boolean(deviceElement.attributeValue("state")));
 					device.setStatus(deviceElement.attributeValue("status"));
-					device.setSuctionId(null);
-					
+					device.setSuctionId(str2Integer(deviceElement.attributeValue("suction_id")));
+					device.setValue(deviceElement.attributeValue("value"));
 					
 				}
 			}
