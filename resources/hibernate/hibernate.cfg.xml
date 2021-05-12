@@ -5,10 +5,10 @@
 <hibernate-configuration>
    <session-factory>
    <property name="hibernate.dialect">
-      org.hibernate.dialect.MySQLDialect
+      org.hibernate.dialect.
    </property>
    <property name="hibernate.connection.driver_class">
-      com.mysql.jdbc.Driver
+      org.postgresql.Driver
    </property>
 
    <!-- Assume test is the database name -->
