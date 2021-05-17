@@ -1,6 +1,7 @@
 
 package watchDog.danfoss.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,15 +18,17 @@ import watchDog.danfoss.enums.DeviceType;
  * @date Apr 19, 2021
  */
 @Entity
-@Table(name = "danfoss_device")
+@Table(name = "device")
 public class DanfossDevice {
 
+	@Id
+	private int id;
+	
 	private String name;
 	
 	// model + '_' +  version
 	// e.g, 080Z0124_012x
-	@Id
-	private String id;
+	private String deviceId;
 	
 	private DeviceType type;
 	
@@ -98,12 +101,20 @@ public class DanfossDevice {
 		this.name = name;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 
 	public DeviceType getType() {
@@ -272,7 +283,7 @@ public class DanfossDevice {
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		DanfossDevice danfossDevice = new DanfossDevice();
-		danfossDevice.setId("111");
+		danfossDevice.setId(111);
 		danfossDevice.setName("danfoss");
 		em.persist(danfossDevice);
 		tx.commit();
