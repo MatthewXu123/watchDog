@@ -28,9 +28,9 @@ public class DanfossEntityManagerTest {
 	@Test
 	public void testBatchSave() {
 		DanfossDevice danfossDevice1 = new DanfossDevice();
-		danfossDevice1.setName("test3");
+		danfossDevice1.setName("test5");
 		DanfossDevice danfossDevice2 = new DanfossDevice();
-		danfossDevice2.setName("test4");
+		danfossDevice2.setName("test666");
 		List<DanfossDevice> list = new ArrayList<>();
 		list.add(danfossDevice1);
 		list.add(danfossDevice2);
@@ -42,19 +42,17 @@ public class DanfossEntityManagerTest {
 		DanfossDevice danfossDevice = new DanfossDevice();
 		danfossDevice.setId(1);
 		danfossDevice.setName("test3");
-		danfossDevice.setDeviceId("deviceId");
+		danfossDevice.setDeviceId("deviceId333");
 		em.update(danfossDevice);
 	}
 	
 	@Test
 	public void testBatchUpdate() {
 		DanfossDevice danfossDevice = new DanfossDevice();
-		danfossDevice.setId(1);
-		danfossDevice.setName("test3333");
+		danfossDevice.setName("test3333444");
 		
 		DanfossDevice danfossDevice2 = new DanfossDevice();
-		danfossDevice2.setId(2);
-		danfossDevice2.setName("test34444");
+		danfossDevice2.setName("test34444555");
 		danfossDevice2.setDeviceId("deviceId");
 		
 		List<Object> list = new ArrayList<>();
@@ -71,8 +69,16 @@ public class DanfossEntityManagerTest {
 	
 	@Test
 	public void testFind() {
-		DanfossDevice danfossDevice = em.find(DanfossDevice.class, 1);
+		DanfossDevice danfossDevice = em.find(DanfossDevice.class, 2);
 		System.out.println(danfossDevice);
+	}
+	
+	@Test
+	public void testGetQueryList() {
+		List<DanfossDevice> queryList = em.getQueryList("select d from danfoss.device d ", DanfossDevice.class);
+		for (DanfossDevice danfossDevice : queryList) {
+			System.out.println(danfossDevice);
+		}
 	}
 
 }
