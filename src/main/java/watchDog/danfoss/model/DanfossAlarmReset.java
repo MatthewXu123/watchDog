@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * @author Matthew Xu
  * @date May 17, 2021
  */
-@Entity
+//@Entity
 @Table(name = "alarmreset")
 public class DanfossAlarmReset {
 

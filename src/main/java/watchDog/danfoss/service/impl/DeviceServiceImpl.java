@@ -7,8 +7,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.xmlbeans.impl.xb.xsdschema.DerivationControl;
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -16,7 +14,6 @@ import org.dom4j.Element;
 import watchDog.danfoss.enums.DeviceType;
 import watchDog.danfoss.model.DanfossDevice;
 import watchDog.danfoss.service.DeviceService;
-import watchDog.service.EnergyService;
 
 /**
  * Description:
@@ -58,7 +55,7 @@ public class DeviceServiceImpl implements DeviceService{
 						device.setSuctionNum(str2Integer(deviceElement.elementText("num_suction")));
 						continue;
 					}
-					device.setId(deviceElement.elementText("device_id"));
+					device.setDeviceId(deviceElement.elementText("device_id"));
 					device.setAddr(deviceElement.attributeValue("addr"));
 					device.setHasActiveAlarms(str2Boolean(deviceElement.attributeValue("alarm")));
 					device.setIsCondenserWithRack(str2Boolean(deviceElement.attributeValue("condenser")));

@@ -1,13 +1,10 @@
 
 package watchDog.danfoss.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Persistence;
 import javax.persistence.Table;
 
 import watchDog.danfoss.enums.DeviceType;
@@ -22,6 +19,7 @@ import watchDog.danfoss.enums.DeviceType;
 public class DanfossDevice {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	private String name;
@@ -276,18 +274,16 @@ public class DanfossDevice {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-	public static void main(String[] args) {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("danfoss");
-		EntityManager em = factory.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		DanfossDevice danfossDevice = new DanfossDevice();
-		danfossDevice.setId(111);
-		danfossDevice.setName("danfoss");
-		em.persist(danfossDevice);
-		tx.commit();
-		em.close();
+
+	@Override
+	public String toString() {
+		return "DanfossDevice [id=" + id + ", name=" + name + ", deviceId=" + deviceId + ", type=" + type
+				+ ", suctionNum=" + suctionNum + ", rackId=" + rackId + ", addr=" + addr + ", hasActiveAlarms="
+				+ hasActiveAlarms + ", isCondenserWithRack=" + isCondenserWithRack + ", ctrlVal=" + ctrlVal
+				+ ", isDefrosting=" + isDefrosting + ", moduleAddr=" + moduleAddr + ", modelName=" + modelName
+				+ ", multicaseName=" + multicaseName + ", node=" + node + ", nodeType=" + nodeType + ", isOnline="
+				+ isOnline + ", point=" + point + ", rackId2=" + rackId2 + ", isRunningOrDefrosting="
+				+ isRunningOrDefrosting + ", status=" + status + ", suctionId=" + suctionId + ", value=" + value + "]";
 	}
 	
 }

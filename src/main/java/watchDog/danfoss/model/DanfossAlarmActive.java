@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * @author Matthew Xu
  * @date Apr 19, 2021
  */
-@Entity
+//@Entity
 @Table(name = "alarmactive")
 public class DanfossAlarmActive {
 
