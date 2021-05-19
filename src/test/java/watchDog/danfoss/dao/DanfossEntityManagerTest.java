@@ -75,7 +75,7 @@ public class DanfossEntityManagerTest {
 	
 	@Test
 	public void testGetQueryList() {
-		List<DanfossDevice> queryList = em.getQueryList("select d from danfoss.device d ", DanfossDevice.class);
+		List<DanfossDevice> queryList = em.getQueryList("SELECT d FROM DanfossDevice d ", DanfossDevice.class);
 		for (DanfossDevice danfossDevice : queryList) {
 			System.out.println(danfossDevice);
 		}
