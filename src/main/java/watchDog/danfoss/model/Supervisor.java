@@ -4,8 +4,10 @@ package watchDog.danfoss.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  * Description:
@@ -13,17 +15,18 @@ import javax.persistence.Table;
  * @date May 17, 2021
  */
 @Entity
-@Table(name = "supervisor")
-public class DanfossSupervisor {
+public class Supervisor {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	private String name;
 	
 	private String ip;
 	
-	@OneToMany(mappedBy = "danfossSupervisor")
-	private List<DanfossDevice> devices;
+	@OneToMany(mappedBy = "supervisor")
+	private List<Device> devices;
 
 	public int getId() {
 		return id;
@@ -49,12 +52,17 @@ public class DanfossSupervisor {
 		this.ip = ip;
 	}
 
-	public List<DanfossDevice> getDevices() {
+	public List<Device> getDevices() {
 		return devices;
 	}
 
-	public void setDevices(List<DanfossDevice> devices) {
+	public void setDevices(List<Device> devices) {
 		this.devices = devices;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Supervisor [id=" + id + ", name=" + name + ", ip=" + ip + ", devices=" + devices + "]";
+	}
+
 }

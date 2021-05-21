@@ -17,19 +17,19 @@ import org.apache.log4j.Logger;
  * @author Matthew Xu
  * @date May 17, 2021
  */
-public class DanfossEntityManager {
+public class CustomizedEntityManager {
 
-	private static final Logger logger = Logger.getLogger(DanfossEntityManager.class);
+	private static final Logger logger = Logger.getLogger(CustomizedEntityManager.class);
 	
-	private static DanfossEntityManager INSTANCE = null;
+	private static CustomizedEntityManager INSTANCE = null;
 	
 	private static EntityManager em = null;
 	
 	private static EntityTransaction et = null;
 	
-	public static DanfossEntityManager getInstance() {
+	public static CustomizedEntityManager getInstance() {
 		if(INSTANCE == null){
-			INSTANCE = new DanfossEntityManager(); 
+			INSTANCE = new CustomizedEntityManager(); 
 			EntityManagerFactory factory = Persistence.createEntityManagerFactory("danfoss");
 			em = factory.createEntityManager();
 			et = em.getTransaction();
@@ -37,7 +37,7 @@ public class DanfossEntityManager {
 		return INSTANCE;
 	}
 	
-	private DanfossEntityManager(){
+	private CustomizedEntityManager(){
 		
 	}
 	

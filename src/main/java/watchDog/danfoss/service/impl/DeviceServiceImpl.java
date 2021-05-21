@@ -12,7 +12,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import watchDog.danfoss.enums.DeviceType;
-import watchDog.danfoss.model.DanfossDevice;
+import watchDog.danfoss.model.Device;
 import watchDog.danfoss.service.DeviceService;
 
 /**
@@ -37,8 +37,8 @@ public class DeviceServiceImpl implements DeviceService{
 	private static final Logger logger = Logger.getLogger(DeviceServiceImpl.class);
 	
 	@Override
-	public List<DanfossDevice> getDevices(String ip) {
-		List<DanfossDevice> deviceList = new ArrayList<>();
+	public List<Device> getDevices(String ip) {
+		List<Device> deviceList = new ArrayList<>();
 		try {
 			Document doc = getXMLResult(ip, QUERY_CMD_SERVICE.getDevicesCMD());
 			if(doc != null){
@@ -47,7 +47,7 @@ public class DeviceServiceImpl implements DeviceService{
 				String software = rootElement.elementText("software");
 				List<Element> deviceElements = rootElement.elements("device");
 				for (Element deviceElement : deviceElements) {
-					DanfossDevice device = new DanfossDevice();
+					Device device = new Device();
 					device.setType(DeviceType.valueOf(deviceElement.elementText("type")));
 					device.setName(deviceElement.elementText("name"));
 					device.setRackId(str2Integer(deviceElement.attributeValue("rack_id")));
@@ -73,12 +73,23 @@ public class DeviceServiceImpl implements DeviceService{
 					device.setSuctionId(str2Integer(deviceElement.attributeValue("suction_id")));
 					device.setValue(deviceElement.attributeValue("value"));
 					
+					deviceList.add(device);
 				}
 			}
 		} catch (IOException | DocumentException e) {
 			logger.error("", e);
 		}
-		return null;
+		return deviceList;
+	}
+	
+	public static void main(String[] args) {
+		DeviceService deviceService = DeviceServiceImpl.getInstance();
+		deviceService.getDevices("47.99.193.207");
+	}
+
+	@Override
+	public boolean storeDevices(String ip) {
+		return CUSTOMIZED_ENTITY_MANAGER.batchSave(this.getDevices(ip));
 	}
 	
 	private Integer str2Integer(String str){
@@ -99,12 +110,6 @@ public class DeviceServiceImpl implements DeviceService{
 			return result;
 		}
 		return result;
-	}
-	
-	
-	public static void main(String[] args) {
-		DeviceService deviceService = DeviceServiceImpl.getInstance();
-		deviceService.getDevices("47.99.193.207");
 	}
 
 }

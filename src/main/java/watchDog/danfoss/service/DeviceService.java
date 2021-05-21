@@ -3,14 +3,16 @@ package watchDog.danfoss.service;
 
 import java.util.List;
 
-import watchDog.danfoss.model.DanfossDevice;
+import watchDog.danfoss.model.Device;
 
 /**
  * Description:
  * @author Matthew Xu
  * @date Apr 19, 2021
  */
-public interface DeviceService extends BaseSevice {
+public interface DeviceService extends BaseService {
 
-	List<DanfossDevice> getDevices(String ip);
+	List<Device> getDevices(String ip);
+	
+	boolean storeDevices(String ip);
 }

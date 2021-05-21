@@ -8,6 +8,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 
+import watchDog.danfoss.dao.CustomizedEntityManager;
 import watchDog.danfoss.service.impl.DeviceServiceImpl;
 import watchDog.danfoss.service.impl.QueryCMDServiceImpl;
 import watchDog.util.HttpSendUtil;
@@ -17,11 +18,13 @@ import watchDog.util.HttpSendUtil;
  * @author Matthew Xu
  * @date Apr 19, 2021
  */
-public interface BaseSevice {
+public interface BaseService {
 
 	public static final DeviceService DEVICE_SERVICE = DeviceServiceImpl.getInstance();
 	
 	public static final QueryCMDService QUERY_CMD_SERVICE = QueryCMDServiceImpl.getInstance();
+	
+	public static final CustomizedEntityManager CUSTOMIZED_ENTITY_MANAGER = CustomizedEntityManager.getInstance();
 	
 	default Document getXMLResult(String ip, String cmd) throws DocumentException, IOException{
 		return xmlParse(sendQuery(ip, cmd));

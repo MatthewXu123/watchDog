@@ -1,14 +1,16 @@
 
 package watchDog.danfoss.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 import watchDog.danfoss.enums.DeviceType;
 
@@ -18,8 +20,7 @@ import watchDog.danfoss.enums.DeviceType;
  * @date Apr 19, 2021
  */
 @Entity
-@Table(name = "device")
-public class DanfossDevice {
+public class Device {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,20 +28,24 @@ public class DanfossDevice {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "supervisorId", insertable = false, updatable = false)
-	private DanfossSupervisor danfossSupervisor;
+	private Supervisor supervisor;
 	
 	private String name;
 	
 	// model + '_' +  version
 	// e.g, 080Z0124_012x
+	@Column(name = "device_id")
 	private String deviceId;
 	
+	@Enumerated(value = EnumType.STRING)
 	private DeviceType type;
 	
 	// Number of suction groups configured for the pack/rack group(PACK_ONLY or RACK_ONLY devices)
+	@Column(name = "suction_num")
 	private Integer suctionNum;
 	
 	// ID to link sunction group back to the pack/rack group device
+	
 	private Integer rackId;
 	
 	// Text description of device attribute 'node'.
@@ -281,16 +286,25 @@ public class DanfossDevice {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	
+	public Supervisor getSupervisor() {
+		return supervisor;
+	}
+
+	public void setSupervisor(Supervisor supervisor) {
+		this.supervisor = supervisor;
+	}
 
 	@Override
 	public String toString() {
-		return "DanfossDevice [id=" + id + ", name=" + name + ", deviceId=" + deviceId + ", type=" + type
-				+ ", suctionNum=" + suctionNum + ", rackId=" + rackId + ", addr=" + addr + ", hasActiveAlarms="
-				+ hasActiveAlarms + ", isCondenserWithRack=" + isCondenserWithRack + ", ctrlVal=" + ctrlVal
-				+ ", isDefrosting=" + isDefrosting + ", moduleAddr=" + moduleAddr + ", modelName=" + modelName
+		return "DanfossDevice [id=" + id + ", supervisor=" + supervisor + ", name=" + name + ", deviceId=" + deviceId
+				+ ", type=" + type + ", suctionNum=" + suctionNum + ", rackId=" + rackId + ", addr=" + addr
+				+ ", hasActiveAlarms=" + hasActiveAlarms + ", isCondenserWithRack=" + isCondenserWithRack + ", ctrlVal="
+				+ ctrlVal + ", isDefrosting=" + isDefrosting + ", moduleAddr=" + moduleAddr + ", modelName=" + modelName
 				+ ", multicaseName=" + multicaseName + ", node=" + node + ", nodeType=" + nodeType + ", isOnline="
 				+ isOnline + ", point=" + point + ", rackId2=" + rackId2 + ", isRunningOrDefrosting="
 				+ isRunningOrDefrosting + ", status=" + status + ", suctionId=" + suctionId + ", value=" + value + "]";
 	}
+
 	
 }

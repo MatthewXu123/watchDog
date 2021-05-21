@@ -15,6 +15,7 @@ public enum DeviceType {
 	EVAP,
 	EVAPIO,
 	CONDENSER,
+	COND,
 	COMPRESSOR;
 	
 }

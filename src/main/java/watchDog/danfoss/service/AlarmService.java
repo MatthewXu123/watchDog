@@ -6,6 +6,6 @@ package watchDog.danfoss.service;
  * @author Matthew Xu
  * @date Apr 19, 2021
  */
-public interface AlarmService extends BaseSevice {
+public interface AlarmService extends BaseService {
 
 }
