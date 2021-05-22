@@ -58,7 +58,7 @@ public class DeviceServiceImpl implements DeviceService{
 					device.setDeviceId(deviceElement.elementText("device_id"));
 					device.setAddr(deviceElement.attributeValue("addr"));
 					device.setHasActiveAlarms(str2Boolean(deviceElement.attributeValue("alarm")));
-					device.setIsCondenserWithRack(str2Boolean(deviceElement.attributeValue("condenser")));
+					device.setIsCondWithRack(str2Boolean(deviceElement.attributeValue("condenser")));
 					device.setCtrlVal(deviceElement.attributeValue("ctrl_val"));
 					device.setIsDefrosting(str2Boolean(deviceElement.attributeValue("defrost")));
 					device.setModuleAddr(str2Integer(deviceElement.attributeValue("mod")));
@@ -68,7 +68,7 @@ public class DeviceServiceImpl implements DeviceService{
 					device.setNodeType(str2Integer(deviceElement.attributeValue("nodetype")));
 					device.setIsOnline(str2Boolean(deviceElement.attributeValue("online")));
 					device.setPoint(str2Integer(deviceElement.attributeValue("point")));
-					device.setIsRunningOrDefrosting(str2Boolean(deviceElement.attributeValue("state")));
+					device.setIsRunOrDefrost(str2Boolean(deviceElement.attributeValue("state")));
 					device.setStatus(deviceElement.attributeValue("status"));
 					device.setSuctionId(str2Integer(deviceElement.attributeValue("suction_id")));
 					device.setValue(deviceElement.attributeValue("value"));
