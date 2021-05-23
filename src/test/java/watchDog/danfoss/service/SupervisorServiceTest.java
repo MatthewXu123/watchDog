@@ -26,4 +26,11 @@ public class SupervisorServiceTest {
 		supervisorService.save(supervisor);
 	}
 
+	@Test
+	public void testFindOneByIp(){
+		Supervisor supervisor = supervisorService.findOneByIp("47.99.193.207");
+		System.out.println(supervisor.getId());
+		System.out.println(supervisor.getName());
+		System.out.println(supervisor);
+	}
 }

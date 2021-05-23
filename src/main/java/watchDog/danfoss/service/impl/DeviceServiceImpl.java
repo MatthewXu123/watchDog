@@ -13,6 +13,7 @@ import org.dom4j.Element;
 
 import watchDog.danfoss.enums.DeviceType;
 import watchDog.danfoss.model.Device;
+import watchDog.danfoss.model.Supervisor;
 import watchDog.danfoss.service.DeviceService;
 
 /**
@@ -37,10 +38,11 @@ public class DeviceServiceImpl implements DeviceService{
 	private static final Logger logger = Logger.getLogger(DeviceServiceImpl.class);
 	
 	@Override
-	public List<Device> getDevices(String ip) {
+	public List<Device> getDevicesFromXML(String ip) {
 		List<Device> deviceList = new ArrayList<>();
+		Supervisor supervisor = SUPERVISOR_SERVICE.findOneByIp(ip);
 		try {
-			Document doc = getXMLResult(ip, QUERY_CMD_SERVICE.getDevicesCMD());
+			Document doc = getXMLResult(ip, XML_QUERY_SERVICE.getDevicesCMD());
 			if(doc != null){
 				Element rootElement = doc.getRootElement();
 				String unitName = rootElement.elementText("unit_name");
@@ -48,6 +50,7 @@ public class DeviceServiceImpl implements DeviceService{
 				List<Element> deviceElements = rootElement.elements("device");
 				for (Element deviceElement : deviceElements) {
 					Device device = new Device();
+					device.setSupervisor(supervisor);
 					device.setType(DeviceType.valueOf(deviceElement.elementText("type")));
 					device.setName(deviceElement.elementText("name"));
 					device.setRackId(str2Integer(deviceElement.attributeValue("rack_id")));
@@ -84,12 +87,12 @@ public class DeviceServiceImpl implements DeviceService{
 	
 	public static void main(String[] args) {
 		DeviceService deviceService = DeviceServiceImpl.getInstance();
-		deviceService.getDevices("47.99.193.207");
+		deviceService.getDevicesFromXML("47.99.193.207");
 	}
 
 	@Override
 	public boolean storeDevices(String ip) {
-		return CUSTOMIZED_ENTITY_MANAGER.batchSave(this.getDevices(ip));
+		return CUSTOMIZED_ENTITY_MANAGER.batchSave(this.getDevicesFromXML(ip));
 	}
 	
 	private Integer str2Integer(String str){
@@ -110,6 +113,17 @@ public class DeviceServiceImpl implements DeviceService{
 			return result;
 		}
 		return result;
+	}
+
+	@Override
+	public List<Device> findAllByIp(String ip) {
+		List<Device> devices = new ArrayList<>();
+		try {
+			devices = CUSTOMIZED_ENTITY_MANAGER.getQueryList(PROPERTY_CONFIG.getValue(getQueryPropertiesKey(), new Object[]{ "'" + ip + "'"}), Device.class);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		return devices;
 	}
 
 }

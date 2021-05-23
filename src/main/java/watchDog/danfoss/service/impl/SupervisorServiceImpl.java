@@ -32,7 +32,26 @@ public class SupervisorServiceImpl implements SupervisorService {
 
 	@Override
 	public boolean save(Supervisor supervisor) {
-		return CUSTOMIZED_ENTITY_MANAGER.save(supervisor);
+		boolean isSaveOk = false;
+		try {
+			isSaveOk = CUSTOMIZED_ENTITY_MANAGER.save(supervisor);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return isSaveOk;
 	}
 
+	@Override
+	public Supervisor findOneByIp(String ip) {
+		Supervisor supervisor = new Supervisor();
+		try {
+			supervisor = CUSTOMIZED_ENTITY_MANAGER.getQuerySingle(PROPERTY_CONFIG.getValue(getQueryPropertiesKey()
+					, new Object[]{"'" + ip + "'"})
+					, Supervisor.class);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return supervisor;
+	}
+	
 }

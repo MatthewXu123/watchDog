@@ -10,7 +10,9 @@ import org.dom4j.DocumentHelper;
 
 import watchDog.danfoss.dao.CustomizedEntityManager;
 import watchDog.danfoss.service.impl.DeviceServiceImpl;
-import watchDog.danfoss.service.impl.QueryCMDServiceImpl;
+import watchDog.danfoss.service.impl.XMLQueryServiceImpl;
+import watchDog.danfoss.service.impl.SupervisorServiceImpl;
+import watchDog.property.template.PropertyConfig;
 import watchDog.util.HttpSendUtil;
 
 /**
@@ -22,9 +24,13 @@ public interface BaseService {
 
 	public static final DeviceService DEVICE_SERVICE = DeviceServiceImpl.getInstance();
 	
-	public static final QueryCMDService QUERY_CMD_SERVICE = QueryCMDServiceImpl.getInstance();
+	public static final SupervisorService SUPERVISOR_SERVICE = SupervisorServiceImpl.getInstance();
+	
+	public static final XMLQueryService XML_QUERY_SERVICE = XMLQueryServiceImpl.getInstance();
 	
 	public static final CustomizedEntityManager CUSTOMIZED_ENTITY_MANAGER = CustomizedEntityManager.getInstance();
+	
+	public static final PropertyConfig PROPERTY_CONFIG = PropertyConfig.INSTANCE;
 	
 	default Document getXMLResult(String ip, String cmd) throws DocumentException, IOException{
 		return xmlParse(sendQuery(ip, cmd));
@@ -45,5 +51,13 @@ public interface BaseService {
 			doc = DocumentHelper.parseText(result);
 		}
 		return doc;
+	}
+	
+	default String getQueryPropertiesKey(){
+		return this.getClass().getName() + "." + new Throwable().getStackTrace()[1].getMethodName();
+	}
+	
+	default String getQueryPropertiesKeyOnlyMethod(){
+		return new Throwable().getStackTrace()[1].getMethodName();
 	}
 }

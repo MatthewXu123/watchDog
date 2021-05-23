@@ -1,8 +1,6 @@
 
 package watchDog.danfoss.service;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import org.junit.Test;
@@ -24,7 +22,7 @@ public class DeviceServiceTest {
 	 */
 	@Test
 	public void testGetDevices() {
-		List<Device> devices = deviceService.getDevices("47.99.193.207");
+		List<Device> devices = deviceService.getDevicesFromXML("47.99.193.207");
 		for (Device device : devices) {
 			System.out.println(device);
 		}
@@ -37,5 +35,14 @@ public class DeviceServiceTest {
 	public void testStoreDevices() {
 		deviceService.storeDevices("47.99.193.207");
 	}
+	
+	@Test
+	public void testFindAllByIp(){
+		List<Device> devices = deviceService.findAllByIp("47.99.193.207");
+		for (Device device : devices) {
+			System.out.println(device);
+		}
+	}
+	
 
 }

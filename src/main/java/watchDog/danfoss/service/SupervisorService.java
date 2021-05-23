@@ -11,4 +11,6 @@ import watchDog.danfoss.model.Supervisor;
 public interface SupervisorService extends BaseService{
 
 	boolean save(Supervisor supervisor);
+	
+	Supervisor findOneByIp(String ip);
 }

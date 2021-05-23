@@ -12,7 +12,9 @@ import watchDog.danfoss.model.Device;
  */
 public interface DeviceService extends BaseService {
 
-	List<Device> getDevices(String ip);
+	List<Device> getDevicesFromXML(String ip);
 	
 	boolean storeDevices(String ip);
+	
+	List<Device> findAllByIp(String ip);
 }

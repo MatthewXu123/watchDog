@@ -1,6 +1,7 @@
 
 package watchDog.danfoss.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -176,8 +177,24 @@ public class CustomizedEntityManager {
 	 * @date May 18, 2021
 	 */
 	public <T> List<T> getQueryList(String sql, Class<T> clazz){
-		TypedQuery<T> query = em.createQuery(sql, clazz);
-		return query.getResultList();
+		List<T> list = new ArrayList<>();
+		try {
+			list = em.createQuery(sql, clazz).getResultList();
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return list;
+	}
+	
+	
+	public <T> T getQuerySingle(String sql, Class<T> clazz){
+		T t = null;
+		try {
+			t = em.createQuery(sql, clazz).getSingleResult();
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return t;
 	}
 	
 }

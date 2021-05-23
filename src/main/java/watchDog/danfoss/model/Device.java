@@ -1,6 +1,8 @@
 
 package watchDog.danfoss.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import watchDog.danfoss.enums.DeviceType;
 
@@ -26,8 +29,8 @@ public class Device {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "supervisorId", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "supervisor_id", referencedColumnName = "id")
 	private Supervisor supervisor;
 	
 	private String name;
@@ -114,6 +117,9 @@ public class Device {
 	
 	// current reading of device.
 	private String value;
+	
+	@OneToMany(mappedBy = "device", fetch = FetchType.LAZY)
+	private List<Alarm> alarms;
 
 	public String getName() {
 		return name;
@@ -309,13 +315,13 @@ public class Device {
 
 	@Override
 	public String toString() {
-		return "Device [id=" + id + ", supervisor=" + supervisor + ", name=" + name + ", deviceId=" + deviceId
-				+ ", type=" + type + ", suctionNum=" + suctionNum + ", rackId=" + rackId + ", addr=" + addr
-				+ ", hasActiveAlarms=" + hasActiveAlarms + ", isCondWithRack=" + isCondWithRack + ", ctrlVal=" + ctrlVal
-				+ ", isDefrosting=" + isDefrosting + ", moduleAddr=" + moduleAddr + ", modelName=" + modelName
-				+ ", multicaseName=" + multicaseName + ", node=" + node + ", nodeType=" + nodeType + ", isOnline="
-				+ isOnline + ", point=" + point + ", rackId2=" + rackId2 + ", isRunOrDefrost=" + isRunOrDefrost
-				+ ", status=" + status + ", suctionId=" + suctionId + ", value=" + value + "]";
+		return "Device [id=" + id + ", name=" + name + ", deviceId=" + deviceId + ", type=" + type + ", suctionNum="
+				+ suctionNum + ", rackId=" + rackId + ", addr=" + addr + ", hasActiveAlarms=" + hasActiveAlarms
+				+ ", isCondWithRack=" + isCondWithRack + ", ctrlVal=" + ctrlVal + ", isDefrosting=" + isDefrosting
+				+ ", moduleAddr=" + moduleAddr + ", modelName=" + modelName + ", multicaseName=" + multicaseName
+				+ ", node=" + node + ", nodeType=" + nodeType + ", isOnline=" + isOnline + ", point=" + point
+				+ ", rackId2=" + rackId2 + ", isRunOrDefrost=" + isRunOrDefrost + ", status=" + status + ", suctionId="
+				+ suctionId + ", value=" + value + "]";
 	}
 
 }
