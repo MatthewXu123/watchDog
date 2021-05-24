@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,8 +24,7 @@ import watchDog.danfoss.enums.DeviceType;
 public class Device {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private String id;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "supervisor_id", referencedColumnName = "id")
@@ -129,11 +126,11 @@ public class Device {
 		this.name = name;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -178,7 +175,7 @@ public class Device {
 	}
 
 	public Boolean getHasActiveAlarms() {
-		return hasActiveAlarms != null && hasActiveAlarms;
+		return hasActiveAlarms;
 	}
 
 	public void setHasActiveAlarms(Boolean hasActiveAlarms) {

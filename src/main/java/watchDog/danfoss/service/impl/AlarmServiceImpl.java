@@ -33,25 +33,40 @@ public class AlarmServiceImpl implements AlarmService {
 	private static final Logger logger = Logger.getLogger(AlarmServiceImpl.class);
 
 	@Override
-	public Map<String, List<Alarm>> getAlarmsFromXML(String ip) {
+	public List<Alarm> getActiveAlarmsFromXMLAndStoreAlarms(String ip) {
 		List<Device> devices = DEVICE_SERVICE.findAllByIp(ip);
 		Supervisor supervisor = SUPERVISOR_SERVICE.findOneByIp(ip);
-		Map<String, List<Alarm>> alarmMap = new HashMap<>();
-
+		List<Alarm> activeAlarms = new ArrayList<>();
 		try {
 			for (Device device : devices) {
-				Document doc = getXMLResult(ip, XML_QUERY_SERVICE.getDeviceAlarmCMD(device.getNodeType(), device.getNode(), device.getModuleAddr(), device.getPoint()));
-				if (doc != null) {
-					Element rootElement = doc.getRootElement();
-					// active,acked,cleared
-					for (AlarmType _alarmType : AlarmType.values()) {
-						String alarmType = _alarmType.toString();
-						List<Alarm> currentAlarms = alarmMap.get(alarmType);
-						if (currentAlarms == null)
-							currentAlarms = new ArrayList<>();
-						currentAlarms.addAll(getAlarmsByAlarmType(rootElement, alarmType, device, supervisor));
-						alarmMap.put(alarmType, currentAlarms);
+				// If the device doesn't have the attribute 'alarm'
+				if (device.getHasActiveAlarms() != null) {
+					// nodetype,node,mod,point
+					Document doc = getXMLResult(ip, XML_QUERY_SERVICE.getDeviceAlarmCMD(device.getNodeType(),
+							device.getNode(), device.getModuleAddr(), device.getPoint()));
+					List<Alarm> xmlAlarms = new ArrayList<>();
+					List<Alarm> dbAlarms = ALARM_SERVICE.findAlarmsByDeviceId(device.getId());
+					if (doc != null) {
+						Element rootElement = doc.getRootElement();
+						// active,acked,cleared
+						for (AlarmType alarmType : AlarmType.values()) {
+							List<Alarm> alarms = getAlarmsByAlarmType(rootElement, alarmType.toString(), device, supervisor);
+							xmlAlarms.addAll(alarms);
+							if(alarmType.equals(AlarmType.active))
+								activeAlarms.addAll(alarms);
+						}
 					}
+					List<Alarm> batchSaveAlarms = new ArrayList<>();
+					List<Alarm> batchUpdateAlarms = new ArrayList<>();
+
+					for (Alarm alarm : xmlAlarms) {
+						if (!dbAlarms.contains(alarm))
+							batchSaveAlarms.add(alarm);
+						else
+							batchUpdateAlarms.add(alarm);
+					}
+					CUSTOMIZED_ENTITY_MANAGER.batchSave(batchSaveAlarms);
+					CUSTOMIZED_ENTITY_MANAGER.batchUpdate(batchUpdateAlarms);
 				}
 
 			}
@@ -59,12 +74,13 @@ public class AlarmServiceImpl implements AlarmService {
 			logger.error("", e);
 		}
 
-		return alarmMap;
+		return activeAlarms;
 	}
 
 	/**
 	 * 
 	 * Description:
+	 * 
 	 * @param rootElement
 	 * @param alarmType
 	 * @param device
@@ -79,8 +95,8 @@ public class AlarmServiceImpl implements AlarmService {
 		List<Alarm> alarms = new ArrayList<>();
 		// e.g.
 		// <active>
-		//		<ref name = "--- S5 Error">42927</ref>
-		//		<total_active>1</total_active>
+		// <ref name = "--- S5 Error">42927</ref>
+		// <total_active>1</total_active>
 		// </active>
 		int total = str2Integer(activeEle.element("total_" + alarmType).getText());
 		if (total > 0) {
@@ -89,6 +105,7 @@ public class AlarmServiceImpl implements AlarmService {
 				Alarm alarm = new Alarm();
 				alarm.setId(str2Integer(element.getText()));
 				alarm.setName(element.attributeValue("name"));
+				alarm.setAlarmType(AlarmType.valueOf(alarmType));
 				alarm.setDevice(device);
 				alarm.setSupervisor(supervisor);
 
@@ -101,7 +118,19 @@ public class AlarmServiceImpl implements AlarmService {
 
 	public static void main(String[] args) {
 		AlarmServiceImpl alarmService = new AlarmServiceImpl();
-		alarmService.getAlarmsFromXML("47.99.193.207");
+		alarmService.getActiveAlarmsFromXMLAndStoreAlarms("47.99.193.207");
+	}
+
+	@Override
+	public List<Alarm> findAlarmsByDeviceId(String deviceId) {
+		List<Alarm> alarms = new ArrayList<>();
+		try {
+			alarms = CUSTOMIZED_ENTITY_MANAGER.getQueryList(
+					PROPERTY_CONFIG.getValue(getQueryPropertiesKey(), new Object[] { deviceId }), Alarm.class);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return alarms;
 	}
 
 }

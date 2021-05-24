@@ -9,6 +9,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 
 import watchDog.danfoss.dao.CustomizedEntityManager;
+import watchDog.danfoss.service.impl.AlarmServiceImpl;
 import watchDog.danfoss.service.impl.DeviceServiceImpl;
 import watchDog.danfoss.service.impl.XMLQueryServiceImpl;
 import watchDog.danfoss.service.impl.SupervisorServiceImpl;
@@ -25,6 +26,8 @@ public interface BaseService {
 	public static final DeviceService DEVICE_SERVICE = DeviceServiceImpl.getInstance();
 	
 	public static final SupervisorService SUPERVISOR_SERVICE = SupervisorServiceImpl.getInstance();
+	
+	public static final AlarmService ALARM_SERVICE = AlarmServiceImpl.getInstance();
 	
 	public static final XMLQueryService XML_QUERY_SERVICE = XMLQueryServiceImpl.getInstance();
 	

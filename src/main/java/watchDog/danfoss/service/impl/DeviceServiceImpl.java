@@ -75,7 +75,8 @@ public class DeviceServiceImpl implements DeviceService{
 					device.setStatus(deviceElement.attributeValue("status"));
 					device.setSuctionId(str2Integer(deviceElement.attributeValue("suction_id")));
 					device.setValue(deviceElement.attributeValue("value"));
-					
+					// Set the id
+					device.setId(getId(supervisor.getId(), device));
 					deviceList.add(device);
 				}
 			}
@@ -115,6 +116,11 @@ public class DeviceServiceImpl implements DeviceService{
 			logger.error("",e);
 		}
 		return devices;
+	}
+
+	@Override
+	public String getId(int supervisorId, Device device) {
+		return supervisorId + "_" + device.getNodeType() + "_" + device.getNode() + "_" + device.getModuleAddr() + "_" + device.getPoint();
 	}
 
 }

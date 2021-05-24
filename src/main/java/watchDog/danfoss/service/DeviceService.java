@@ -17,4 +17,6 @@ public interface DeviceService extends BaseService {
 	boolean storeDevices(String ip);
 	
 	List<Device> findAllByIp(String ip);
+	
+	String getId(int supervisorId, Device device);
 }

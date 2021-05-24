@@ -21,8 +21,8 @@ public class SupervisorServiceTest {
 	@Test
 	public void testSave() {
 		Supervisor supervisor = new Supervisor();
-		supervisor.setIp("47.99.193.2072");
-		supervisor.setName("store3");
+		supervisor.setIp("47.99.193.207");
+		supervisor.setName("store1");
 		supervisorService.save(supervisor);
 	}
 
