@@ -87,34 +87,25 @@ public class DeviceServiceImpl implements DeviceService{
 	
 	public static void main(String[] args) {
 		DeviceService deviceService = DeviceServiceImpl.getInstance();
-		deviceService.getDevicesFromXML("47.99.193.207");
+		deviceService.storeDevices("47.99.193.207");
 	}
 
 	@Override
 	public boolean storeDevices(String ip) {
-		return CUSTOMIZED_ENTITY_MANAGER.batchSave(this.getDevicesFromXML(ip));
+		List<Device> xmlDevices = this.getDevicesFromXML(ip);
+		List<Device> dbDevices = DEVICE_SERVICE.findAllByIp(ip);
+		List<Device> batchSaveDevices = new ArrayList<>();
+		List<Device> batchUpdateDevices = new ArrayList<>();
+		
+		for (Device device : xmlDevices) {
+			if(!dbDevices.contains(device))
+				batchSaveDevices.add(device);
+			else
+				batchUpdateDevices.add(device);
+		}
+		return CUSTOMIZED_ENTITY_MANAGER.batchSave(batchSaveDevices) & CUSTOMIZED_ENTITY_MANAGER.batchUpdate(batchUpdateDevices);
 	}
 	
-	private Integer str2Integer(String str){
-		Integer result = null;
-		try {
-			result = StringUtils.isBlank(str) ? null : Integer.valueOf(str);
-		} catch (Exception e) {
-			return result;
-		}
-		return result;
-	}
-	
-	private Boolean str2Boolean(String str){
-		Boolean result = null;
-		try {
-			result = StringUtils.isBlank(str) ? null : (str.equals("1") ? true : false);
-		} catch (Exception e) {
-			return result;
-		}
-		return result;
-	}
-
 	@Override
 	public List<Device> findAllByIp(String ip) {
 		List<Device> devices = new ArrayList<>();

@@ -2,6 +2,7 @@
 package watchDog.danfoss.service;
 
 import java.util.List;
+import java.util.Map;
 
 import watchDog.danfoss.model.Alarm;
 
@@ -12,7 +13,7 @@ import watchDog.danfoss.model.Alarm;
  */
 public interface AlarmService extends BaseService {
 
-	List<Alarm> getAlarmsFromXML(String ip);
+	Map<String, List<Alarm>> getAlarmsFromXML(String ip);
 	
 	//List<Alarm> getAlarmsFromXML(String ip, )
 }

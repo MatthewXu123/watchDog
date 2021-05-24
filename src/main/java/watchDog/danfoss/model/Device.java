@@ -178,7 +178,7 @@ public class Device {
 	}
 
 	public Boolean getHasActiveAlarms() {
-		return hasActiveAlarms;
+		return hasActiveAlarms != null && hasActiveAlarms;
 	}
 
 	public void setHasActiveAlarms(Boolean hasActiveAlarms) {
@@ -311,6 +311,63 @@ public class Device {
 
 	public void setIsRunOrDefrost(Boolean isRunOrDefrost) {
 		this.isRunOrDefrost = isRunOrDefrost;
+	}
+
+	public List<Alarm> getAlarms() {
+		return alarms;
+	}
+
+	public void setAlarms(List<Alarm> alarms) {
+		this.alarms = alarms;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((moduleAddr == null) ? 0 : moduleAddr.hashCode());
+		result = prime * result + ((node == null) ? 0 : node.hashCode());
+		result = prime * result + ((nodeType == null) ? 0 : nodeType.hashCode());
+		result = prime * result + ((point == null) ? 0 : point.hashCode());
+		result = prime * result + ((supervisor == null) ? 0 : supervisor.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Device other = (Device) obj;
+		if (moduleAddr == null) {
+			if (other.moduleAddr != null)
+				return false;
+		} else if (!moduleAddr.equals(other.moduleAddr))
+			return false;
+		if (node == null) {
+			if (other.node != null)
+				return false;
+		} else if (!node.equals(other.node))
+			return false;
+		if (nodeType == null) {
+			if (other.nodeType != null)
+				return false;
+		} else if (!nodeType.equals(other.nodeType))
+			return false;
+		if (point == null) {
+			if (other.point != null)
+				return false;
+		} else if (!point.equals(other.point))
+			return false;
+		if (supervisor == null) {
+			if (other.supervisor != null)
+				return false;
+		} else if (!supervisor.equals(other.supervisor))
+			return false;
+		return true;
 	}
 
 	@Override

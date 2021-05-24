@@ -8,7 +8,7 @@ package watchDog.danfoss.enums;
  */
 public enum AlarmType {
 
-	ACTIVE,
-	ACKED,
-	CLEARED;
+	active,
+	acked,
+	cleared;
 }

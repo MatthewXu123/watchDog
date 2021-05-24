@@ -60,4 +60,24 @@ public interface BaseService {
 	default String getQueryPropertiesKeyOnlyMethod(){
 		return new Throwable().getStackTrace()[1].getMethodName();
 	}
+	
+	default Integer str2Integer(String str){
+		Integer result = null;
+		try {
+			result = StringUtils.isBlank(str) ? null : Integer.valueOf(str);
+		} catch (Exception e) {
+			return result;
+		}
+		return result;
+	}
+	
+	default Boolean str2Boolean(String str){
+		Boolean result = null;
+		try {
+			result = StringUtils.isBlank(str) ? null : (str.equals("1") ? true : false);
+		} catch (Exception e) {
+			return result;
+		}
+		return result;
+	}
 }
