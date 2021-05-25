@@ -40,7 +40,6 @@ public class DanfossEntityManagerTest {
 	@Test
 	public void testUpdate() {
 		Device danfossDevice = new Device();
-		danfossDevice.setId(1);
 		danfossDevice.setName("test3");
 		danfossDevice.setDeviceId("deviceId333");
 		em.update(danfossDevice);

@@ -15,6 +15,8 @@ import watchDog.danfoss.service.impl.XMLQueryServiceImpl;
 import watchDog.danfoss.service.impl.SupervisorServiceImpl;
 import watchDog.property.template.PropertyConfig;
 import watchDog.util.HttpSendUtil;
+import watchDog.wechat.util.sender.Sender;
+import watchDog.wechat.util.sender.SenderWechat;
 
 /**
  * Description:
@@ -34,6 +36,8 @@ public interface BaseService {
 	public static final CustomizedEntityManager CUSTOMIZED_ENTITY_MANAGER = CustomizedEntityManager.getInstance();
 	
 	public static final PropertyConfig PROPERTY_CONFIG = PropertyConfig.INSTANCE;
+	
+	public static final Sender SENDER_WECHAT = SenderWechat.getInstance();
 	
 	default Document getXMLResult(String ip, String cmd) throws DocumentException, IOException{
 		return xmlParse(sendQuery(ip, cmd));

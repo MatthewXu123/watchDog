@@ -32,11 +32,18 @@ public class PropertyConfig {
 	
 	private static final String PATH_DANFOSS_XML_QUERY = "templateProperties/DanfossXMLQuery.properties";
 	
+	private static final String PATH_DANFOSS_NOTIFICATION = "templateProperties/DanfossNotification.properties";
+	
 	private PropertyConfig(){};
 
 	{
 		try {
-			String[] paths = new String[]{PATH_WECHAT_MSG_TEMPLATE, PATH_LOG_TEMPLATE, PATH_MAIL_TEMPLATE,PATH_DANFOSS_SQL,PATH_DANFOSS_XML_QUERY};
+			String[] paths = new String[]{PATH_WECHAT_MSG_TEMPLATE
+					, PATH_LOG_TEMPLATE
+					, PATH_MAIL_TEMPLATE
+					, PATH_DANFOSS_SQL
+					, PATH_DANFOSS_XML_QUERY
+					, PATH_DANFOSS_NOTIFICATION};
 			for (String path : paths)
 				prop.load(new InputStreamReader(PropertyConfig.class.getClassLoader().getResourceAsStream(path), "UTF-8"));       
 		} catch (IOException e) {

@@ -33,6 +33,15 @@ public class Supervisor {
 	
 	@OneToMany(mappedBy = "supervisor", fetch = FetchType.LAZY)
 	private List<Alarm> alarms;
+	
+	@Column(name = "soldier_dept_id")
+	private String soldierDeptId;
+	
+	@Column(name = "officer_dept_id")
+	private String officerDeptId;
+	
+	@Column(name = "agent_id")
+	private String agentId = "6";
 
 	public int getId() {
 		return id;
@@ -65,11 +74,44 @@ public class Supervisor {
 	public void setDevices(List<Device> devices) {
 		this.devices = devices;
 	}
+	
+	public List<Alarm> getAlarms() {
+		return alarms;
+	}
+
+	public void setAlarms(List<Alarm> alarms) {
+		this.alarms = alarms;
+	}
+
+	public String getSoldierDeptId() {
+		return soldierDeptId;
+	}
+
+	public void setSoldierDeptId(String soldierDeptId) {
+		this.soldierDeptId = soldierDeptId;
+	}
+
+	public String getOfficerDeptId() {
+		return officerDeptId;
+	}
+
+	public void setOfficerDeptId(String officerDeptId) {
+		this.officerDeptId = officerDeptId;
+	}
+
+	public String getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
+	}
 
 	@Override
 	public String toString() {
-		return "Supervisor [id=" + id + ", name=" + name + ", ip=" + ip + ", devices=" + devices + "]";
+		return "Supervisor [id=" + id + ", name=" + name + ", ip=" + ip + ", devices=" + devices + ", alarms=" + alarms
+				+ ", soldierDeptId=" + soldierDeptId + ", officerDeptId=" + officerDeptId + ", agentId=" + agentId
+				+ "]";
 	}
 
-	
 }
