@@ -23,7 +23,7 @@ public class DailyAlarmTestService {
 		
 	}
 	
-	public List<SiteInfo> getDailyAlarmConfiguredSites(){
-		return SiteInfoDAO.INSTANCE.getDailyAlarmConfiguredSites();
+	public List<SiteInfo> getDailyAlarmNotConfiguredSites(){
+		return SiteInfoDAO.INSTANCE.getDailyAlarmNotConfiguredSites();
 	}
 }

@@ -48,24 +48,19 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 		try {
 			if(DateTool.isTodayWorkday()){
 				logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_START.getKey(), new Object[]{this.getClass().getName()}));
-				List<SiteInfo> infosWithTags = Dog.getInfosWithTags();
-				List<SiteInfo> dailyAlarmConfiguredSites = dailyAlarmTestService.getDailyAlarmConfiguredSites();
+				
+				// Daily alarm test
+				List<SiteInfo> dailyAlarmNotConfiguredSites = dailyAlarmTestService.getDailyAlarmNotConfiguredSites();
 				String dailyAlarmTestMsg = propertyConfig.getValue(WechatMemberMsgTemplate.DAT_NO_CONFIG_TITLE.getKey());
 				boolean isAllConfiguerd = true;
 				Set<String> msgList = new TreeSet<>();
-				for (SiteInfo siteInfo : infosWithTags) {
-					// Daily alarm test
-					if(siteInfo.getCheckNetwork() && !dailyAlarmConfiguredSites.contains(siteInfo)){
+				for (SiteInfo siteInfo : dailyAlarmNotConfiguredSites) {
 						isAllConfiguerd = false;
 						if(dailyAlarmTestMsg.getBytes("UTF-8").length > 2000){
 							msgList.add(dailyAlarmTestMsg);
 							dailyAlarmTestMsg = "";
 						}
 						dailyAlarmTestMsg += propertyConfig.getValue(WechatMemberMsgTemplate.DAT_NO_CONFIG.getKey(), new Object[]{siteInfo.getDescription(), siteInfo.getIp()});
-					}
-					
-					// Daily update of the site description
-					updateSiteDescription(siteInfo);
 				}
 				
 				// Send msg about daily alarms.
@@ -77,6 +72,13 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 				}
 				for (String msg : msgList) {
 					sender.sendIMOfflineMsg(new WechatMsg.Builder(msg).build());
+				}
+				
+				List<SiteInfo> infosWithTags = Dog.getInfosWithTags();
+				// Daily update of the site description
+				for (SiteInfo siteInfo : infosWithTags) {
+					if(siteInfo.getCheckNetwork())
+					updateSiteDescription(siteInfo);
 				}
 				
 				logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_END.getKey(), new Object[]{this.getClass().getName()}));

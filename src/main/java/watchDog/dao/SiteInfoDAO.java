@@ -188,32 +188,35 @@ public class SiteInfoDAO extends BaseDAO{
         return cardNumberInfoMap;
 	}
 	
-	public List<SiteInfo> getDailyAlarmConfiguredSites() {
+	public List<SiteInfo> getDailyAlarmNotConfiguredSites() {
 		String alarmIngoreTag = "#testalarm_ignore";
 		String alarmDesc = "每日测试报警";
-		String sql = "select c.id from public.cfsupervisors c"
-				+ " inner join public.lgalarmrecall r on c.id = r.kidsupervisor "
-				+ " inner join public.lgvariable v on v.iddevice = r.iddevice and v.kidsupervisor = r.kidsupervisor "
-				+ " where v.description like '" + alarmDesc + "' and r.starttime > CURRENT_DATE" 
-				+ " group by c.id"
-				+ " union"
-				+ " select c.id from public.cfsupervisors c"
-				+ " inner join tags.supervisortags t on t.kidsupervisor = c.id " 
-				+ " where '" + alarmIngoreTag + "' = any(t.tags) "
-				+ " group by c.id";
-		List<SiteInfo> dailyAlarmConfiguredSites = new ArrayList<>();
+		String sql = "select s.id, s.description,s.ipaddress from public.cfsupervisors s "
+				+ " inner join private_wechat_receiver w on w.supervisor_id = s.id "
+				+ " where (s.id not in("
+				+ " select c.id from public.cfsupervisors c "
+				+ " inner join public.lgalarmrecall r on c.id = r.kidsupervisor  "
+				+ " inner join public.lgvariable v on v.iddevice = r.iddevice and v.kidsupervisor = r.kidsupervisor  "
+				+ " where v.description like '每日测试报警' and r.starttime > CURRENT_DATE "
+				+ " and r.inserttime <= (CURRENT_DATE + interval '10 hour 30 minute') group by c.id "
+				+ " union select c.id from public.cfsupervisors c "
+				+ " inner join tags.supervisortags t on t.kidsupervisor = c.id  where '" + alarmIngoreTag + "' = any(t.tags)  group by c.id"
+				+ ")) and s.probeissue = true and w.checknetwork = true";
+		List<SiteInfo> dailyAlarmNotConfiguredSites = new ArrayList<>();
 		try {
 			RecordSet rs = dataBaseMgr.executeQuery(sql);
 			for (int i = 0; i < rs.size(); i++) {
 				Record r = rs.get(i);
 				SiteInfo siteInfo = new SiteInfo();
 				siteInfo.setSupervisorId((int) r.get(0));
-				dailyAlarmConfiguredSites.add(siteInfo);
+				siteInfo.setDescription((String) r.get(1));
+				siteInfo.setIp((String) r.get(2));
+				dailyAlarmNotConfiguredSites.add(siteInfo);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return dailyAlarmConfiguredSites;
+		return dailyAlarmNotConfiguredSites;
 	}
 	
 }

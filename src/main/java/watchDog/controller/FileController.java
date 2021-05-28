@@ -26,6 +26,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 
 import watchDog.service.DataTrafficService;
 import watchDog.service.FileSevice;
@@ -42,7 +43,7 @@ import watchDog.util.ZipCompressor;
  */
 @WebServlet(urlPatterns = { "/file/siteExport", "/file/memberExport","/file/logExport","/file/trafficExport" })
 public class FileController extends HttpServlet implements BaseController{
-
+    private static final Logger logger = Logger.getLogger(FileController.class);
 	private static final long serialVersionUID = 1L;
 	
 	private static final FileSevice fileService = FileSevice.INSTANCE;
@@ -117,6 +118,7 @@ public class FileController extends HttpServlet implements BaseController{
 					downloadFilePath, FILENAME_TRAFFIC);
 			csvExport(req, resp, csvFile);
 		} catch (Exception e) {
+		    logger.error("",e);
 			resp.sendRedirect("/watchDog/retail/view");
 		}
 	}

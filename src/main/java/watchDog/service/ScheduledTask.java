@@ -80,17 +80,17 @@ public class ScheduledTask {
   public ScheduledTask() {
 	logger.info("ScheduledTask start...");
 	// timer for report
-    Calendar c = DateTool.getInstanceDate(9, 0, 0);
-    c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-    c.add(Calendar.DATE, 7);
-    Date nextTime = c.getTime();
-    Property reportStr = PropertyMgr.getInstance().getProperty("is_first_report");
-    boolean isFirstReport = !(reportStr != null && reportStr.getValue() != null && reportStr.getValue().length() != 0 && !"true".equals(reportStr.getValue()));
-    if (isFirstReport) {
-      this.timerDummy = new Timer();
-      this.timerDummy.schedule(new WeeklyReportManager(), 10*60*1000);
-    } 
-    this.timer.schedule(new WeeklyReportManager(), nextTime, 1000*3600*24*7);
+//    Calendar c = DateTool.getInstanceDate(9, 0, 0);
+//    c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+//    c.add(Calendar.DATE, 7);
+//    Date nextTime = c.getTime();
+//    Property reportStr = PropertyMgr.getInstance().getProperty("is_first_report");
+//    boolean isFirstReport = !(reportStr != null && reportStr.getValue() != null && reportStr.getValue().length() != 0 && !"true".equals(reportStr.getValue()));
+//    if (isFirstReport) {
+//      this.timerDummy = new Timer();
+//      this.timerDummy.schedule(new WeeklyReportManager(), 10*60*1000);
+//    } 
+    //this.timer.schedule(new WeeklyReportManager(), nextTime, 1000*3600*24*7);
     
     Timer timerAlarmSyncTimer = new Timer("AlarmSynchronizeTimer");
     timerAlarmSyncTimer.schedule(new AlarmSynchronizeManager(), DELAY_ALARM_SYNCHRONIZATION, PERIOD_ALARM_SYNCHRONIZATION);
