@@ -282,7 +282,9 @@ public class ScheduledTask {
 					Map.Entry en = it.next();
 					SiteInfo site = (SiteInfo) en.getValue();
 					if (!"boss".equals(site.getKtype())
-							|| (StringUtils.isBlank(site.getTagId()) && StringUtils.isBlank(site.getTagId2())))
+							|| (StringUtils.isBlank(site.getTagId()) && StringUtils.isBlank(site.getTagId2())
+							|| !site.getCheckNetwork()
+							|| !site.getProbeissue()))
 						continue;
 					String ip = site.getIp();
 					Integer supervisorId = site.getSupervisorId();

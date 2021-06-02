@@ -72,6 +72,15 @@ public class AlarmSynchronizeService {
 		return result;
 	}
     
+	public static void main(String[] args) {
+		try {
+			getAlarmFromBoss("192.168.89.10");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
     public static Map<String,String> getAlarmFromBoss(String ip) throws IOException{
     	return getAlarmFromBoss(ip,null,null,200);
     }
