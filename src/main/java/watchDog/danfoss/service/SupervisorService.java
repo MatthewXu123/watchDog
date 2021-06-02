@@ -1,6 +1,8 @@
 
 package watchDog.danfoss.service;
 
+import java.util.List;
+
 import watchDog.danfoss.model.Supervisor;
 
 /**
@@ -13,4 +15,6 @@ public interface SupervisorService extends BaseService{
 	boolean save(Supervisor supervisor);
 	
 	Supervisor findOneByIp(String ip);
+	
+	List<Supervisor> findAll();
 }

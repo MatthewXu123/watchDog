@@ -1,6 +1,8 @@
 
 package watchDog.danfoss.service;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import watchDog.danfoss.model.Supervisor;
@@ -32,5 +34,13 @@ public class SupervisorServiceTest {
 		System.out.println(supervisor.getId());
 		System.out.println(supervisor.getName());
 		System.out.println(supervisor);
+	}
+	
+	@Test
+	public void testFindAll(){
+		List<Supervisor> list = supervisorService.findAll();
+		for (Supervisor supervisor : list) {
+			System.out.println(supervisor);
+		}
 	}
 }

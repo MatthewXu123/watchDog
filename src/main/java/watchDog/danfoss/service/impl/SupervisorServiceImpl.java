@@ -1,6 +1,9 @@
 
 package watchDog.danfoss.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import watchDog.danfoss.model.Supervisor;
@@ -52,6 +55,18 @@ public class SupervisorServiceImpl implements SupervisorService {
 			logger.error("", e);
 		}
 		return supervisor;
+	}
+
+	@Override
+	public List<Supervisor> findAll() {
+		List<Supervisor> supervisors = new ArrayList<>();
+		try {
+			supervisors = CUSTOMIZED_ENTITY_MANAGER.getQueryList(PROPERTY_CONFIG.getValue(getQueryPropertiesKey())
+					, Supervisor.class);
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+		return supervisors;
 	}
 	
 }
