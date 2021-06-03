@@ -1,6 +1,7 @@
 
 package watchDog.danfoss.model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import watchDog.danfoss.enums.DeviceType;
 
@@ -117,6 +120,14 @@ public class Device {
 	
 	@OneToMany(mappedBy = "device", fetch = FetchType.LAZY)
 	private List<Alarm> alarms;
+	
+	@Column(name = "create_time", updatable = false)
+	@CreationTimestamp
+	private Date createTime;
+	
+	@Column(name = "update_time")
+	@CreationTimestamp
+	private Date updateTime;
 
 	public String getName() {
 		return name;
@@ -318,6 +329,22 @@ public class Device {
 		this.alarms = alarms;
 	}
 	
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -375,7 +402,8 @@ public class Device {
 				+ ", moduleAddr=" + moduleAddr + ", modelName=" + modelName + ", multicaseName=" + multicaseName
 				+ ", node=" + node + ", nodeType=" + nodeType + ", isOnline=" + isOnline + ", point=" + point
 				+ ", rackId2=" + rackId2 + ", isRunOrDefrost=" + isRunOrDefrost + ", status=" + status + ", suctionId="
-				+ suctionId + ", value=" + value + "]";
+				+ suctionId + ", value=" + value + ", alarms=" + alarms + ", createTime=" + createTime + ", updateTime="
+				+ updateTime + "]";
 	}
 
 }

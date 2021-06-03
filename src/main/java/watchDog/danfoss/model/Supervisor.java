@@ -1,6 +1,7 @@
 
 package watchDog.danfoss.model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 /**
  * Description:
@@ -42,6 +45,14 @@ public class Supervisor {
 	
 	@Column(name = "agent_id")
 	private String agentId = "6";
+	
+	@Column(name = "create_time", updatable = false)
+	@CreationTimestamp
+	private Date createTime;
+	
+	@Column(name = "update_time")
+	@CreationTimestamp
+	private Date updateTime;
 
 	public int getId() {
 		return id;
@@ -107,11 +118,27 @@ public class Supervisor {
 		this.agentId = agentId;
 	}
 
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
 	@Override
 	public String toString() {
 		return "Supervisor [id=" + id + ", name=" + name + ", ip=" + ip + ", devices=" + devices + ", alarms=" + alarms
 				+ ", soldierDeptId=" + soldierDeptId + ", officerDeptId=" + officerDeptId + ", agentId=" + agentId
-				+ "]";
+				+ ", createTime=" + createTime + ", updateTime=" + updateTime + "]";
 	}
 
 }

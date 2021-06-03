@@ -1,6 +1,8 @@
 
 package watchDog.danfoss.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import watchDog.danfoss.enums.AlarmType;
 
@@ -35,6 +39,14 @@ public class Alarm {
 	@ManyToOne
 	@JoinColumn(name = "supervisor_id", referencedColumnName = "id")
 	private Supervisor supervisor;
+	
+	@Column(name = "create_time", updatable = false)
+	@CreationTimestamp
+	private Date createTime;
+	
+	@Column(name = "update_time")
+	@CreationTimestamp
+	private Date updateTime;
 
 	public int getId() {
 		return id;
@@ -75,6 +87,22 @@ public class Alarm {
 	public void setSupervisor(Supervisor supervisor) {
 		this.supervisor = supervisor;
 	}
+	
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 
 	@Override
 	public int hashCode() {
@@ -97,6 +125,11 @@ public class Alarm {
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Alarm [id=" + id + ", name=" + name + ", alarmType=" + alarmType + ", createTime=" + createTime
+				+ ", updateTime=" + updateTime + "]";
+	}
 	
 }

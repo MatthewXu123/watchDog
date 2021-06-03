@@ -25,6 +25,8 @@ public class SupervisorServiceTest {
 		Supervisor supervisor = new Supervisor();
 		supervisor.setIp("47.99.193.207");
 		supervisor.setName("store1");
+		supervisor.setSoldierDeptId("3303");
+		supervisor.setOfficerDeptId("3304");
 		supervisorService.save(supervisor);
 	}
 

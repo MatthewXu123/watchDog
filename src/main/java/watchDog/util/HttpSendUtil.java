@@ -62,7 +62,7 @@ public class HttpSendUtil {
 			connection.setRequestProperty("Accept-Encoding", "gzip");
 			connection.connect();
 			DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
-            dos.write(params.getBytes(CHAR_ENCODING_UTF8));
+            dos.write(params.getBytes(encodType));
             dos.flush();
 
 			if (200 == connection.getResponseCode()) {
@@ -73,7 +73,7 @@ public class HttpSendUtil {
 						is = new GZIPInputStream(is);
 				}
 
-				br = new BufferedReader(new InputStreamReader(is));
+				br = new BufferedReader(new InputStreamReader(is, encodType));
 				String line;
 				while ((line = br.readLine()) != null) {
 					receive.append(line).append("\r\n");
