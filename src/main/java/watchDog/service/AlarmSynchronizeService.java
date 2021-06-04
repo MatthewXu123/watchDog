@@ -41,6 +41,7 @@ public class AlarmSynchronizeService {
 			xml = ValueRetrieve.sendHttpsPost("https://" + ip + "/boss/servlet/MasterXML", postStr);
 			if(xml.contains("&"))
 				xml = xml.replaceAll("&", "&amp;");
+			LogUtil.testLogger.info("ip:" + ip + ",iddevice:" + iddevice + ",length:" + xml.length());
 			if(StringUtils.isBlank(xml))
 				return result;
 			doc = DocumentHelper.parseText(xml);
