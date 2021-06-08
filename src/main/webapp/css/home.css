@@ -16,6 +16,10 @@ table {
 	border-collapse: collapse;
 }
 
+.td-red{
+	background-color:red;
+}
+
 .input-confirm {
 	position: fixed;
 	right: 10px;

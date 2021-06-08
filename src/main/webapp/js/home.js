@@ -18,6 +18,7 @@ $(function() {
 	$(".input-networkcheck").click(function() {
 		if ($(this).prop("checked")) {
 			$(this).prev().val("true");
+			$(this).parent().removeClass("td-red");
 		} else {
 			$(this).prev().val("false");
 		}
