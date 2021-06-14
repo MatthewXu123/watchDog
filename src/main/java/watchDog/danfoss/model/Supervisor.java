@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * Description:
  * @author Matthew Xu
@@ -35,6 +37,7 @@ public class Supervisor {
 	private List<Device> devices;
 	
 	@OneToMany(mappedBy = "supervisor", fetch = FetchType.LAZY)
+	@JSONField(serialize = false)
 	private List<Alarm> alarms;
 	
 	@Column(name = "soldier_dept_id")

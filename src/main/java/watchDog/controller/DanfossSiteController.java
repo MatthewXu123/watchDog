@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
@@ -34,7 +33,7 @@ import watchDog.util.HttpServletUtil;
  * @author Matthew Xu
  * @date Apr 1, 2020
  */
-@WebServlet(urlPatterns = { "/dsites/view", "/dsites/getData", "/dsites/edit"})
+@WebServlet(urlPatterns = { "/dsites/view", "/dsites/getData", "/dsites/edit", "/dsites/save", "/dsites/delete"})
 public class DanfossSiteController extends HttpServlet implements BaseController{
 	
 	private static final Logger logger = Logger.getLogger(DanfossSiteController.class);
@@ -96,6 +95,35 @@ public class DanfossSiteController extends HttpServlet implements BaseController
 		} catch (Exception e) {
 			logger.error("",e);
 		}
+	}
+	
+	private void save(HttpServletRequest req, HttpServletResponse resp){
+		try {
+			JSONObject supervisorObj = JSONObject.parseObject(req.getParameter("supervisor"));
+			Supervisor supervisor = supervisorObj.toJavaObject(Supervisor.class);
+			if(supervisorService.save(supervisor))
+				BaseController.returnSuccess(resp);
+			else
+				BaseController.returnFailure(resp);
+		} catch (Exception e) {
+			logger.error("",e);
+		}
+		
+	}
+	
+	private void delete(HttpServletRequest req, HttpServletResponse resp){
+		try {
+			String ids = req.getParameter("ids");
+			String[] idsArray = ids.split(",");
+			for (String id : idsArray) {
+				supervisorService.deleteOneById(Integer.valueOf(id));
+			}
+			BaseController.returnSuccess(resp);
+		} catch (Exception e) {
+			logger.error("",e);
+			BaseController.returnFailure(resp);
+		}
+		
 	}
 	
 

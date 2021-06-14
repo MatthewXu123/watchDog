@@ -3,10 +3,35 @@ $(function() {
 	//$('#table').editable();
 	var oTable = new TableInit();
 	oTable.Init();
-	$("#registerationDateInput").datepicker({
-		language:"zh-CN",
+	$("#btn_delete").click(function() {
+		if (confirm("确认要删除吗？")) {
+			var ids = "";
+			$("input[name='btSelectItem']:checked").each(function() {
+				ids += $(this).parents("tr").attr("data-uniqueid") + ",";
+			})
+			$.ajax({
+				type : "post",
+				url : "/watchDog/dsites/delete",
+				data : {
+					"ids": ids,
+				},
+				dataType : 'JSON',
+				success : function(data, status) {
+					if (status == "success") {
+						alert('提交数据成功');
+					}
+				},
+				error : function() {
+					alert('编辑失败');
+				},
+				complete : function() {
+
+				}
+
+			});
+
+		}
 	});
-	$('#registerationDateInput').datepicker('setDate', new Date());
 	$("#btn_submit").click(function(){
 		$(".form-notblank").each(function(){
 			if($(this).val() == null || $(this).val().length == 0){
@@ -16,22 +41,11 @@ $(function() {
 				$(this).css("border", "1px solid #ccc");
 			}
 		});
-		
-		if($("#isUpdatedInput").prop("checked"))
-			$("#isUpdatedInput").val(true);
-		else
-			$("#isUpdatedInput").val(false);
-		
-		if($("#isConnectedInput").prop("checked"))
-			$("#isConnectedInput").val(true);
-		else
-			$("#isConnectedInput").val(false);
-		
 		$.ajax({
 			method:"post",
-			url:"/watchDog/rinfo/save",
+			url:"/watchDog/dsites/save",
 			data:{
-				"rinfo":JSON.stringify($('#save_form').serializeObject()),
+				"supervisor":JSON.stringify($('#save_form').serializeObject()),
 			},
 	        //contentType:"application/json",  //缺失会出现URL编码，无法转成json对象
 	        dataType : 'JSON',
@@ -46,53 +60,8 @@ $(function() {
 			},
 		})
 	});
-	$("#btn_save_simcard").click(function(){
-		var count = $("#input_cardNumberCount").val();
-		if (isNaN(count) || count==""){
-			alert("数量必须是数字");
-			return;
-		}
-		
-		var countInt = parseInt(count);
-		if (countInt <= 0){
-			alert("数量必须是正整数");
-			return;
-		}
-		$.ajax({
-			method:"POST",
-			url:"/watchDog/simcard/create",
-			data:{
-				"simcard":JSON.stringify($('#form_save_simcard').serializeObject()),
-			},
-			//contentType:'application/json',
-			dataType:'JSON',
-			success:function(data,status){
-				if (status == "success") {
-					var res = data.data;
-					var successfulCards = res.successful;
-					var registeredCardNumber = "\n成功注册的卡号如下:\n";
-					for(var key in successfulCards){
-						var simcard = successfulCards[key];
-						registeredCardNumber += simcard.cardNumber + ","
-					}
-					
-					var failedCards = res.failed;
-					var unregisteredCardNumber = "\n未成功注册的卡号如下(原因是可能已重复)：\n";
-					for(var key in failedCards){
-						var simcard = failedCards[key];
-						unregisteredCardNumber += simcard.cardNumber + ","
-					}
-					
-					alert(registeredCardNumber + unregisteredCardNumber);
-				}
-			},
-			error:function(){
-				alert('创建失败');
-			}
-		})
-	})
-	/*var oButtonInit = new ButtonInit();
-	oButtonInit.Init();*/
+	//var oButtonInit = new ButtonInit();
+	//oButtonInit.Init();
 });
 var TableInit = function() {
 	var oTableInit = new Object();
@@ -126,9 +95,9 @@ var TableInit = function() {
 			showExport: true,                     //是否显示导出
             exportDataType: "basic",              //basic', 'all', 'selected'.
 			columns : [ 
-			/*{
+			{
 				checkbox : true
-			}, */
+			}, 
 			{
 				field : 'name',
 				title : '店名',
@@ -280,59 +249,15 @@ $("#btn_edit").click(function() {
 	}
 
 })
+*/
 
 // (4)删除及批量删除
 
-$("#btn_delete").click(function() {
-	if (confirm("确认要删除吗？")) {
-		var idlist = "";
-		$("input[name='btSelectItem']:checked").each(function() {
-			idlist += $(this).parents("tr").attr("data-uniqueid") + ",";
-		})
-		alert("删除的列表为" + idlist);
-
-	}
-});*/
 var ButtonInit = function () {
     var oInit = new Object();
     var postdata = {};
 
     oInit.Init = function () {
-        /*$("#btn_add").click(function () {
-            $("#addModal").text("新增");
-            $("#myModal").find(".form-control").val("");
-            $('#myModal').modal();
-
-            postdata.DEPARTMENT_ID = "";
-        	*//**
-        	 * 新增一行数据
-        	 *//*
-        	var count = $('#table').bootstrapTable('getData').length;
-    	    // newFlag == 1的数据为新规的数据
-    	    $('#table').bootstrapTable('insertRow',{index:count,row:{}});
-        });*/
-
-        //$("#btn_edit").click(function () {
-        //    var arrselections = $("#tb_departments").bootstrapTable('getSelections');
-        //    if (arrselections.length > 1) {
-        //        toastr.warning('只能选择一行进行编辑');
-
-        //        return;
-        //    }
-        //    if (arrselections.length <= 0) {
-        //        toastr.warning('请选择有效数据');
-
-        //        return;
-        //    }
-        //    $("#myModalLabel").text("编辑");
-        //    $("#txt_departmentname").val(arrselections[0].DEPARTMENT_NAME);
-        //    $("#txt_parentdepartment").val(arrselections[0].PARENT_ID);
-        //    $("#txt_departmentlevel").val(arrselections[0].DEPARTMENT_LEVEL);
-        //    $("#txt_statu").val(arrselections[0].STATUS);
-
-        //    postdata.DEPARTMENT_ID = arrselections[0].DEPARTMENT_ID;
-        //    $('#myModal').modal();
-        //});
 
          $("#btn_delete").click(function () {
              var arrselections = $("#table").bootstrapTable('getSelections');
@@ -366,34 +291,6 @@ var ButtonInit = function () {
              });
          });
 
-        //$("#btn_submit").click(function () {
-        //    postdata.DEPARTMENT_NAME = $("#txt_departmentname").val();
-        //    postdata.PARENT_ID = $("#txt_parentdepartment").val();
-        //    postdata.DEPARTMENT_LEVEL = $("#txt_departmentlevel").val();
-        //    postdata.STATUS = $("#txt_statu").val();
-        //    $.ajax({
-        //        type: "post",
-        //        url: "/Home/GetEdit",
-        //        data: { "": JSON.stringify(postdata) },
-        //        success: function (data, status) {
-        //            if (status == "success") {
-        //                toastr.success('提交数据成功');
-        //                $("#tb_departments").bootstrapTable('refresh');
-        //            }
-        //        },
-        //        error: function () {
-        //            toastr.error('Error');
-        //        },
-        //        complete: function () {
-
-        //        }
-
-        //    });
-        //});
-
-        //$("#btn_query").click(function () {
-        //    $("#tb_departments").bootstrapTable('refresh');
-        //});
     };
 
     return oInit;

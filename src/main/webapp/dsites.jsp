@@ -31,7 +31,6 @@
 </head>
 <body>
 	<div class="col-sm-12">
-		<!-- Example Events -->
 		<div class="example-wrap">
 			<h4 class="example-title">Danfoss Sites</h4>
 			<div class="example">
@@ -39,17 +38,13 @@
 					<button id="btn_add" type="button" class="btn btn-default"  data-toggle="modal" data-target="#addModal">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true">新增</span>
 					</button>
-					<!-- <button id="btn_edit" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
-					</button> -->
-					<!-- <button id="btn_delete" type="button" class="btn btn-default">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
-					</button> -->
+					<button id="btn_delete" type="button" class="btn btn-default">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true">删除</span>
+					</button>
 				</div>
 				<table id="table"></table>
 			</div>
 		</div>
-		<!-- End Example Events -->
 	</div>
 	<!-- Modal begin -->
 	<div class="modal" id="addModal" tabindex="-1" role="dialog"
@@ -61,86 +56,31 @@
 					<h4 class="modal-title" id="myModalLabel">新增</h4>
 				</div>
 				<div class="modal-body">
-					<!-- <form action="/watchDog/rinfo/save" method="POST"> -->
 						<form id="save_form">
 						<div class="form-group">
-							<label for="vpnAddressInput" class="col-md-2">VPN地址</label>
+							<label for="nameInput" class="col-md-2">店名</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="vpnAddressInput" name="vpnAddress" value="192.168.">
+								<input type="text" class="form-control" id="nameInput" name="name" >
 							</div>
-							<label for="registerationDateInput" class="col-md-2">注册日期</label>
+							<label for="ipInput" class="col-md-2">ip</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="registerationDateInput" name="registerationDate">
+								<input type="text" class="form-control" id="ipInput" name="ip">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="purchaserInput" class="col-md-2">采购方</label>
+							<label for="soldierDeptIdInput" class="col-md-2">士兵部门id</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="purchaserInput" name="purchaser">
+								<input type="text" class="form-control" id="soldierDeptIdInput" name="soldierDeptId" >
 							</div>
-							<label for="projectInput" class="col-md-2">项目名</label>
+							<label for="officerDeptIdInput" class="col-md-2">军官部门id</label>
 							<div class="col-md-4">
-								<input type="text" class="form-control" id="projectInput" name="project">
+								<input type="text" class="form-control" id="officerDeptIdInput" name="officerDeptId">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="servicePeroidInput" class="col-md-2">服务年限</label>
+							<label for="agentIdInput" class="col-md-2">agentId</label>
 							<div class="col-md-4">
-								<select class="form-control" name="servicePeriod">
-      								<option>1</option>
-      								<option>2</option>
-      								<option>3</option>
-      							</select>
-							</div>
-							<label for="productCodeInput" class="col-md-2">产品型号</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" id="productCodeInput" name="productCode">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="productMacInput" class="col-md-2">产品Mac</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" id="productMacInput" name="productMac">
-							</div>
-							<label for="routerMacInput" class="col-md-2">路由器Mac</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" id="routerMacInput" name="routerMac">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="routerManufacturerInput" class="col-md-2">路由器厂商</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" id="routerManufacturerInput" name="routerManufacturer">
-							</div>
-							<label for="originalVersionInput" class="col-md-2">出厂版本</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" id="originalVersionInput" name="originalVersion">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="isUpdatedInput" class="col-md-2">是否升级</label>
-							<div class="col-md-4">
-								<input class="form-check-input" type="checkbox" value="" id="isUpdatedInput" name="isUpdated">
-							</div>
-							<label for="isConnectedInput" class="col-md-2">是否4G连接</label>
-							<div class="col-md-4">
-								<input class="form-check-input" type="checkbox" value="" id="isConnectedInput" name="isConnected">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="simCardInput" class="col-md-2">sim卡号</label>
-							<div class="col-md-10">
-								<select class="form-control" name="simCardId">
-									<c:forEach items="${simcardList}" var="item">
-										<option value="${item.id}">${item.cardNumber}</option>
-									</c:forEach>
-      							</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="commentInput" class="col-md-2">备注</label>
-							<div class="col-md-10">
-								<input type="textarea" class="form-control" id="commentInput" name="comment">
+								<input type="text" class="form-control" id="agentIdInput" name="agentId" value="6">
 							</div>
 						</div>
 					</form>

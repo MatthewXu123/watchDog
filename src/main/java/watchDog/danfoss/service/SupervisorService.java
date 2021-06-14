@@ -1,6 +1,7 @@
 
 package watchDog.danfoss.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import watchDog.danfoss.model.Supervisor;
@@ -19,4 +20,9 @@ public interface SupervisorService extends BaseService{
 	List<Supervisor> findAll();
 	
 	boolean updateOne(Supervisor supervisor);
+	
+	boolean delete(Collection<Supervisor> supervisors);
+	
+	boolean deleteOneById(int id);
+	
 }

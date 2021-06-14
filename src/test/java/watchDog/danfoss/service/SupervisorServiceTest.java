@@ -45,4 +45,10 @@ public class SupervisorServiceTest {
 			System.out.println(supervisor);
 		}
 	}
+	
+	@Test
+	public void testDeleteOneById(){
+		boolean deleteOneById = supervisorService.deleteOneById(2);
+		System.out.println(deleteOneById);
+	}
 }

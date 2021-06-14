@@ -137,7 +137,29 @@ public class CustomizedEntityManager {
 	public boolean delete(Object obj){
 		try {
 			et.begin();
-			em.remove(obj);
+			em.remove(em.merge(obj));
+			et.commit();
+		} catch (Exception e) {
+			logger.error("", e);
+			return false;
+		}
+		return true;
+	} 
+	
+	/**
+	 * 
+	 * Description:
+	 * @param obj
+	 * @return
+	 * @author Matthew Xu
+	 * @date May 18, 2021
+	 */
+	public boolean batchDelete(Collection<?> objs){
+		try {
+			et.begin();
+			for (Object obj : objs) {
+				em.remove(em.merge(obj));
+			}
 			et.commit();
 		} catch (Exception e) {
 			logger.error("", e);
