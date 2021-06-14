@@ -26,4 +26,4 @@
    <mapping resource="Employee.hbm.xml"/>
 
 </session-factory>
-</hibernate-configuration> y6
+</hibernate-configuration>

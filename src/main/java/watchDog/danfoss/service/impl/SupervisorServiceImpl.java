@@ -68,5 +68,15 @@ public class SupervisorServiceImpl implements SupervisorService {
 		}
 		return supervisors;
 	}
+
+	@Override
+	public boolean updateOne(Supervisor supervisor) {
+		try {
+			return CUSTOMIZED_ENTITY_MANAGER.update(supervisor);
+		} catch (Exception e) {
+			logger.error("", e);
+			return false;
+		}
+	}
 	
 }

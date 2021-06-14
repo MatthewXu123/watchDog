@@ -17,4 +17,6 @@ public interface SupervisorService extends BaseService{
 	Supervisor findOneByIp(String ip);
 	
 	List<Supervisor> findAll();
+	
+	boolean updateOne(Supervisor supervisor);
 }
