@@ -128,10 +128,10 @@ public class ScheduledTask {
     wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), WechatMemberCheckTask.RUNNING_PERIOD);
     
     Timer danfossDeviceSynchronizationTask = new Timer("DanfossDeviceSynchronizationTask");
-    danfossDeviceSynchronizationTask.scheduleAtFixedRate(DanfossDeviceSynchronizationTask.INSTANCE, 0, DanfossDeviceSynchronizationTask.RUNNING_PERIOD);
+    danfossDeviceSynchronizationTask.scheduleAtFixedRate(DanfossDeviceSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 10, DanfossDeviceSynchronizationTask.RUNNING_PERIOD);
     
     Timer danfossAlarmSynchronizationTask = new Timer("DanfossAlarmSynchronizationTask");
-    danfossAlarmSynchronizationTask.scheduleAtFixedRate(DanfossAlarmSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 10, DanfossAlarmSynchronizationTask.RUNNING_PERIOD);
+    danfossAlarmSynchronizationTask.scheduleAtFixedRate(DanfossAlarmSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 15, DanfossAlarmSynchronizationTask.RUNNING_PERIOD);
     
   }
   
