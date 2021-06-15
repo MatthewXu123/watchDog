@@ -34,7 +34,7 @@ public class NotificationSeviceImpl implements NotificationService {
 			SENDER_WECHAT.sendIM(new WechatMsg.Builder(
 					PROPERTY_CONFIG.getValue(getQueryPropertiesKeyOnlyMethod(), new Object[]{supervisor.getName(), alarm.getName(), alarm.getDevice().getName()})
 					, supervisor.getAgentId()
-					, new String[]{supervisor.getSoldierDeptId(), supervisor.getOfficerDeptId()}).build());
+					, new String[]{supervisor.getSoldierDeptId()}).build());
 		}
 		return false;
 	}

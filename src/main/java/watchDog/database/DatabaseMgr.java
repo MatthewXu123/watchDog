@@ -35,18 +35,16 @@ public class DatabaseMgr {
 			source = new PGPoolingDataSource();  
 			source.setDataSourceName("First Source");  
 			WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
-			source.setServerName("localhost");
-            source.setPortNumber(5432);
-//			if(StringUtils.isNotBlank(configStorage.getDebug()))
-//			{
-//			    source.setServerName("localhost");
-//                source.setPortNumber(5432);
-//			}
-//			else
-//			{
-//    			source.setServerName("172.16.85.209");
-//                source.setPortNumber(1921);
-//			}
+			if(StringUtils.isNotBlank(configStorage.getDebug()))
+			{
+			    source.setServerName("localhost");
+                source.setPortNumber(5432);
+			}
+			else
+			{
+    			source.setServerName("172.16.85.209");
+                source.setPortNumber(1921);
+			}
 			source.setDatabaseName("remotevalue");
 			source.setUser("postgres");  
 			source.setPassword("postgres");  

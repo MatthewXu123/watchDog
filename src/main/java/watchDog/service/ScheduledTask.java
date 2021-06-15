@@ -128,10 +128,10 @@ public class ScheduledTask {
     wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), WechatMemberCheckTask.RUNNING_PERIOD);
     
     Timer danfossDeviceSynchronizationTask = new Timer("DanfossDeviceSynchronizationTask");
-    danfossDeviceSynchronizationTask.scheduleAtFixedRate(DanfossDeviceSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 10, DanfossDeviceSynchronizationTask.RUNNING_PERIOD);
+    danfossDeviceSynchronizationTask.scheduleAtFixedRate(DanfossDeviceSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 5, DanfossDeviceSynchronizationTask.RUNNING_PERIOD);
     
     Timer danfossAlarmSynchronizationTask = new Timer("DanfossAlarmSynchronizationTask");
-    danfossAlarmSynchronizationTask.scheduleAtFixedRate(DanfossAlarmSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 15, DanfossAlarmSynchronizationTask.RUNNING_PERIOD);
+    danfossAlarmSynchronizationTask.scheduleAtFixedRate(DanfossAlarmSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 8, DanfossAlarmSynchronizationTask.RUNNING_PERIOD);
     
   }
   
@@ -293,7 +293,7 @@ public class ScheduledTask {
 					if (!"boss".equals(site.getKtype())
 							|| (StringUtils.isBlank(site.getTagId()) && StringUtils.isBlank(site.getTagId2())
 							|| !site.getCheckNetwork()
-							|| !site.getProbeissue()))
+							|| (site.getProbeissue() == null || !site.getProbeissue())))
 						continue;
 					String ip = site.getIp();
 					Integer supervisorId = site.getSupervisorId();

@@ -124,7 +124,7 @@ public class AlarmServiceImpl implements AlarmService {
 		List<Alarm> alarms = new ArrayList<>();
 		try {
 			alarms = CUSTOMIZED_ENTITY_MANAGER.getQueryList(
-					PROPERTY_CONFIG.getValue(getQueryPropertiesKey(), new Object[] { deviceId }), Alarm.class);
+					PROPERTY_CONFIG.getValue(getQueryPropertiesKey(), new Object[] { "'" + deviceId + "'" }), Alarm.class);
 		} catch (Exception e) {
 			logger.error("", e);
 		}
