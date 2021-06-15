@@ -1,12 +1,9 @@
 
 package watchDog.property.template;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.MessageFormat;
-import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -31,11 +28,22 @@ public class PropertyConfig {
 	
 	private static final String PATH_MAIL_TEMPLATE = "templateProperties/MailTemplate.properties";
 	
+	private static final String PATH_DANFOSS_SQL = "templateProperties/DanfossSQL.properties";
+	
+	private static final String PATH_DANFOSS_XML_QUERY = "templateProperties/DanfossXMLQuery.properties";
+	
+	private static final String PATH_DANFOSS_NOTIFICATION = "templateProperties/DanfossNotification.properties";
+	
 	private PropertyConfig(){};
 
 	{
 		try {
-			String[] paths = new String[]{PATH_WECHAT_MSG_TEMPLATE, PATH_LOG_TEMPLATE, PATH_MAIL_TEMPLATE};
+			String[] paths = new String[]{PATH_WECHAT_MSG_TEMPLATE
+					, PATH_LOG_TEMPLATE
+					, PATH_MAIL_TEMPLATE
+					, PATH_DANFOSS_SQL
+					, PATH_DANFOSS_XML_QUERY
+					, PATH_DANFOSS_NOTIFICATION};
 			for (String path : paths)
 				prop.load(new InputStreamReader(PropertyConfig.class.getClassLoader().getResourceAsStream(path), "UTF-8"));       
 		} catch (IOException e) {

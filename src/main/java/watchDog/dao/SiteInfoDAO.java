@@ -219,4 +219,8 @@ public class SiteInfoDAO extends BaseDAO{
 		return dailyAlarmNotConfiguredSites;
 	}
 	
+	public static void main(String[] args) {
+		SiteInfoDAO.INSTANCE.getDailyAlarmConfiguredSites();
+	}
+	
 }

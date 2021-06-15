@@ -90,6 +90,10 @@ public class AlarmSynchronizeService {
     	return getAlarmFromBoss(ip,iddevice,start,3);
     }
     
+    public static void main(String[] args) throws IOException {
+		getAlarmFromBoss("192.168.90.67");
+	}
+    
     public static void doit(String ip,Integer supervisorId) throws IOException {
     	String sql = "select lgalarmactive.idalarm,lgalarmactive.starttime,lgalarmactive.iddevice "
     			+ " from lgalarmactive "

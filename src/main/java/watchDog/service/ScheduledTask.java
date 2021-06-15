@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import me.chanjar.weixin.common.util.StringUtils;
 import watchDog.bean.Property;
 import watchDog.bean.SiteInfo;
+import watchDog.bean.constant.CommonConstants;
 import watchDog.config.json.UnitConfig;
 import watchDog.dao.TagDAO;
 import watchDog.database.DataBaseException;
@@ -40,6 +41,8 @@ import watchDog.thread.scheduletask.MemberExportTask;
 import watchDog.thread.scheduletask.SimpleCallingTask;
 import watchDog.thread.scheduletask.WechatDeptCheckTask;
 import watchDog.thread.scheduletask.WechatMemberCheckTask;
+import watchDog.thread.scheduletask.danfoss.DanfossAlarmSynchronizationTask;
+import watchDog.thread.scheduletask.danfoss.DanfossDeviceSynchronizationTask;
 import watchDog.util.DateTool;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.bean.WechatUser;
@@ -123,6 +126,12 @@ public class ScheduledTask {
     wechatMemberCheckTaskTime.set(Calendar.HOUR_OF_DAY, 14);
     Timer wechatMemberCheckTaskTimer = new Timer("WechatMemberCheckTaskTimer");
     wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), WechatMemberCheckTask.RUNNING_PERIOD);
+    
+    Timer danfossDeviceSynchronizationTask = new Timer("DanfossDeviceSynchronizationTask");
+    danfossDeviceSynchronizationTask.scheduleAtFixedRate(DanfossDeviceSynchronizationTask.INSTANCE, 0, DanfossDeviceSynchronizationTask.RUNNING_PERIOD);
+    
+    Timer danfossAlarmSynchronizationTask = new Timer("DanfossAlarmSynchronizationTask");
+    danfossAlarmSynchronizationTask.scheduleAtFixedRate(DanfossAlarmSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 10, DanfossAlarmSynchronizationTask.RUNNING_PERIOD);
     
   }
   
