@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import watchDog.bean.SiteInfo;
 import watchDog.database.DataBaseException;
 import watchDog.database.Record;
@@ -19,6 +21,8 @@ import watchDog.util.DateTool;
  * @date May 14, 2020
  */
 public class SiteInfoDAO extends BaseDAO{
+	
+	private static final String DEFAULT_AGENT_ID = "6";
 	
 	public static final SiteInfoDAO INSTANCE = new SiteInfoDAO();
 	
@@ -113,6 +117,8 @@ public class SiteInfoDAO extends BaseDAO{
 	}
 	
 	public void saveOne(int supervisorId, Date deadline, boolean checkNetWorkFlag, String agentId, int channel, String tagId, String tagId2, String tagId3,String comment ){
+		if(StringUtils.isBlank(agentId))
+			agentId = DEFAULT_AGENT_ID;
 		Object[] params = new Object[]{supervisorId,deadline,checkNetWorkFlag,agentId,channel,tagId,tagId2,tagId3,comment};
 		String sql="insert into private_wechat_receiver(supervisor_id,deadline,checknetwork,agent_id,channel,tag_id,tag_id2,tag_id3,comment) values(?,?,?,?,?,?,?,?,?);";
 		try {
@@ -219,5 +225,7 @@ public class SiteInfoDAO extends BaseDAO{
 		return dailyAlarmNotConfiguredSites;
 	}
 	
-	
+	public static void main(String[] args) {
+		List<SiteInfo> list = SiteInfoDAO.INSTANCE.getList(null);
+	}
 }
