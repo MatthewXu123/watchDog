@@ -22,7 +22,7 @@ import com.alibaba.fastjson.JSON;
 import watchDog.bean.PageVPNInfo;
 import watchDog.bean.SiteInfo;
 import watchDog.listener.Dog;
-import watchDog.service.SiteInfoService;
+import watchDog.service.SiteService;
 import watchDog.service.VPNService;
 import watchDog.util.HttpServletUtil;
 
@@ -72,7 +72,7 @@ public class CSTController extends HttpServlet implements BaseController {
 	    SiteInfo s = Dog.getInstance().getSiteInfoByIP(ip);
 	    if(s != null)
 	    {
-	        SiteInfoService.commissioning(s);
+	        SiteService.commissioning(s);
 	        String json = JSON.toJSONString("OK");
 	        OutputStream os = resp.getOutputStream();
 	        Writer osw = new OutputStreamWriter(os, "utf-8");

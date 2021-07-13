@@ -1,6 +1,7 @@
 
 package watchDog.thread.scheduletask;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TimerTask;
@@ -9,15 +10,17 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import watchDog.bean.SiteInfo;
+import watchDog.bean.config.MailDTO;
 import watchDog.bean.constant.CommonConstants;
+import watchDog.config.json.MailConfig;
 import watchDog.listener.Dog;
 import watchDog.property.template.CommonMsgLogTemplate;
 import watchDog.property.template.WechatDeptLogTemplate;
 import watchDog.property.template.WechatMemberMsgTemplate;
 import watchDog.service.DailyAlarmTestService;
 import watchDog.util.DateTool;
+import watchDog.util.MailUtil;
 import watchDog.wechat.bean.WechatDept;
-import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.bean.WechatResult;
 import watchDog.wechat.util.WechatUtil;
 
@@ -37,6 +40,8 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 	private static final String SOLDIER_DEPT_SUFFIX = "_士兵";
 
 	private static final String OFFICER_DEPT_SUFFIX = "_军官";
+	
+	private static final MailDTO MAIL_DTO = MailConfig.getDailyAlarmMailConfig();
 	
 	private DailyAlarmTestService dailyAlarmTestService = DailyAlarmTestService.INSTANCE;
 
@@ -70,9 +75,13 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 				if (!msgList.contains(dailyAlarmTestMsg)) {
 					msgList.add(dailyAlarmTestMsg);
 				}
+				String mailContent = "";
 				for (String msg : msgList) {
-					sender.sendIMOfflineMsg(new WechatMsg.Builder(msg).build());
+					//sender.sendIMOfflineMsg(new WechatMsg.Builder(msg).build());
+					mailContent += msg;
 				}
+				
+				MailUtil.sendMail(MAIL_DTO, "WatchDog - Daily Alarm [" + DateTool.format(new Date(), "dd/MM") + "]" , mailContent);
 				
 				List<SiteInfo> infosWithTags = Dog.getInfosWithTags();
 				// Daily update of the site description

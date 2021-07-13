@@ -1,7 +1,18 @@
-{
-	"fromAddress":"carel_iot@163.com",
-	"authCode":"KOSVHGVRPJNLAMKA",
-	"toAddresses":["carly.yang@carel.com","kevin.ge@carel.com","matthew.xu@carel.com"],
-	"mailSmtpHost":"smtp.163.com",
-	"mailSmtpPort":"25"
-}
+[
+	{
+		"identifier":"1",
+		"fromAddress":"carel_iot@163.com",
+		"authCode":"KOSVHGVRPJNLAMKA",
+		"toAddresses":["tiffany.xu@carel","kevin.ge@carel.com"],
+		"mailSmtpHost":"smtp.163.com",
+		"mailSmtpPort":"25"
+	},
+	{
+		"identifier":"2",
+		"fromAddress":"carel_iot@163.com",
+		"authCode":"KOSVHGVRPJNLAMKA",
+		"toAddresses":["sky.hu@carel.com","kevin.ge@carel.com"],
+		"mailSmtpHost":"smtp.163.com",
+		"mailSmtpPort":"25"
+	}
+]
