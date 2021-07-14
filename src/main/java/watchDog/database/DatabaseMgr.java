@@ -8,7 +8,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.postgresql.ds.PGPoolingDataSource;
+
+import watchDog.wechat.service.WechatService;
+import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
 
 public class DatabaseMgr {
 
@@ -30,9 +34,18 @@ public class DatabaseMgr {
 		{
 			source = new PGPoolingDataSource();  
 			source.setDataSourceName("First Source");  
-			source.setServerName("localhost");  
+			WxXmlCpInMemoryConfigStorage configStorage = WechatService.getInstance().getStorage();
+			if(StringUtils.isNotBlank(configStorage.getDebug()))
+			{
+			    source.setServerName("localhost");
+                source.setPortNumber(5432);
+			}
+			else
+			{
+    			source.setServerName("172.16.85.209");
+                source.setPortNumber(1921);
+			}
 			source.setDatabaseName("remotevalue");
-			source.setPortNumber(5432);
 			source.setUser("postgres");  
 			source.setPassword("postgres");  
 			source.setMaxConnections(10);  

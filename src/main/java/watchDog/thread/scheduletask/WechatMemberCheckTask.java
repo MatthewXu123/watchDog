@@ -1,6 +1,7 @@
 
 package watchDog.thread.scheduletask;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TimerTask;
@@ -9,15 +10,17 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import watchDog.bean.SiteInfo;
+import watchDog.bean.config.MailDTO;
 import watchDog.bean.constant.CommonConstants;
+import watchDog.config.json.MailConfig;
 import watchDog.listener.Dog;
 import watchDog.property.template.CommonMsgLogTemplate;
 import watchDog.property.template.WechatDeptLogTemplate;
 import watchDog.property.template.WechatMemberMsgTemplate;
 import watchDog.service.DailyAlarmTestService;
 import watchDog.util.DateTool;
+import watchDog.util.MailUtil;
 import watchDog.wechat.bean.WechatDept;
-import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.bean.WechatResult;
 import watchDog.wechat.util.WechatUtil;
 
@@ -32,11 +35,13 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 
 	private static final Logger logger = Logger.getLogger(WechatMemberCheckTask.class);
 	
-	public static final long RUNNING_PERIOD = CommonConstants.ONE_WEEK;
+	public static final long RUNNING_PERIOD = CommonConstants.ONE_DAY;
 	
 	private static final String SOLDIER_DEPT_SUFFIX = "_士兵";
 
 	private static final String OFFICER_DEPT_SUFFIX = "_军官";
+	
+	private static final MailDTO MAIL_DTO = MailConfig.getDailyAlarmMailConfig();
 	
 	private DailyAlarmTestService dailyAlarmTestService = DailyAlarmTestService.INSTANCE;
 
@@ -48,24 +53,19 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 		try {
 			if(DateTool.isTodayWorkday()){
 				logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_START.getKey(), new Object[]{this.getClass().getName()}));
-				List<SiteInfo> infosWithTags = Dog.getInfosWithTags();
-				List<SiteInfo> dailyAlarmConfiguredSites = dailyAlarmTestService.getDailyAlarmConfiguredSites();
+				
+				// Daily alarm test
+				List<SiteInfo> dailyAlarmNotConfiguredSites = dailyAlarmTestService.getDailyAlarmNotConfiguredSites();
 				String dailyAlarmTestMsg = propertyConfig.getValue(WechatMemberMsgTemplate.DAT_NO_CONFIG_TITLE.getKey());
 				boolean isAllConfiguerd = true;
 				Set<String> msgList = new TreeSet<>();
-				for (SiteInfo siteInfo : infosWithTags) {
-					// Daily alarm test
-					if(siteInfo.getCheckNetwork() && !dailyAlarmConfiguredSites.contains(siteInfo)){
+				for (SiteInfo siteInfo : dailyAlarmNotConfiguredSites) {
 						isAllConfiguerd = false;
 						if(dailyAlarmTestMsg.getBytes("UTF-8").length > 2000){
 							msgList.add(dailyAlarmTestMsg);
 							dailyAlarmTestMsg = "";
 						}
 						dailyAlarmTestMsg += propertyConfig.getValue(WechatMemberMsgTemplate.DAT_NO_CONFIG.getKey(), new Object[]{siteInfo.getDescription(), siteInfo.getIp()});
-					}
-					
-					// Daily update of the site description
-					updateSiteDescription(siteInfo);
 				}
 				
 				// Send msg about daily alarms.
@@ -75,8 +75,19 @@ public class WechatMemberCheckTask extends TimerTask implements BaseTask {
 				if (!msgList.contains(dailyAlarmTestMsg)) {
 					msgList.add(dailyAlarmTestMsg);
 				}
+				String mailContent = "";
 				for (String msg : msgList) {
-					sender.sendIMOfflineMsg(new WechatMsg.Builder(msg).build());
+					//sender.sendIMOfflineMsg(new WechatMsg.Builder(msg).build());
+					mailContent += msg;
+				}
+				
+				MailUtil.sendMail(MAIL_DTO, "WatchDog - Daily Alarm [" + DateTool.format(new Date(), "dd/MM") + "]" , mailContent);
+				
+				List<SiteInfo> infosWithTags = Dog.getInfosWithTags();
+				// Daily update of the site description
+				for (SiteInfo siteInfo : infosWithTags) {
+					if(siteInfo.getCheckNetwork())
+					updateSiteDescription(siteInfo);
 				}
 				
 				logger.info(propertyConfig.getValue(CommonMsgLogTemplate.CL_END.getKey(), new Object[]{this.getClass().getName()}));

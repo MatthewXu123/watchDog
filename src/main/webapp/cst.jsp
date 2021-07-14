@@ -44,7 +44,7 @@ body{font-size:2rem}
                     <td>5. 站点备份是否上传到阿里云服务器</td>
                 </tr>
                 <tr>
-                    <td>请输入vpn内网IP,内容在路由器标签上,格式如192.168.89.38</td>
+                    <td>6. 请输入vpn内网IP,内容在路由器标签上,格式如192.168.89.38</td>
                 </tr>
 				<tr>
                     <td><input type="text" id="txt_ip" value="192.168."><button id="ip_btn">公网IP查询</button></td>

@@ -90,7 +90,7 @@ public class AlarmNotificationMain {
 				return;
 			}
 			String idents = dog.getIdents4AlarmChecking();
-			if (!StringUtils.isBlank(idents)) {
+			if (StringUtils.isNotBlank(idents)) {
 				String lastQueryTime = getLastQueryTime();
 				Date untilTime = new Date();
 				int messagePurposeType = MESSAGE_PURPOSE_TYPE_LEVEL1;

@@ -17,6 +17,7 @@ import org.dom4j.Element;
 import watchDog.database.DatabaseMgr;
 import watchDog.database.RecordSet;
 import watchDog.util.DateTool;
+import watchDog.util.LogUtil;
 import watchDog.util.ObjectUtils;
 import watchDog.util.ValueRetrieve;
 
@@ -40,6 +41,7 @@ public class AlarmSynchronizeService {
 			xml = ValueRetrieve.sendHttpsPost("https://" + ip + "/boss/servlet/MasterXML", postStr);
 			if(xml.contains("&"))
 				xml = xml.replaceAll("&", "&amp;");
+			LogUtil.testLogger.info("ip:" + ip + ",iddevice:" + iddevice + ",length:" + xml.length());
 			if(StringUtils.isBlank(xml))
 				return result;
 			doc = DocumentHelper.parseText(xml);
@@ -71,6 +73,15 @@ public class AlarmSynchronizeService {
 		return result;
 	}
     
+	public static void main(String[] args) {
+		try {
+			getAlarmFromBoss("192.168.89.10");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
     public static Map<String,String> getAlarmFromBoss(String ip) throws IOException{
     	return getAlarmFromBoss(ip,null,null,200);
     }
@@ -78,10 +89,6 @@ public class AlarmSynchronizeService {
     public static Map<String,String> getAlarmFromBoss(String ip,String iddevice,String start) throws IOException{
     	return getAlarmFromBoss(ip,iddevice,start,3);
     }
-    
-    public static void main(String[] args) throws IOException {
-		getAlarmFromBoss("192.168.90.67");
-	}
     
     public static void doit(String ip,Integer supervisorId) throws IOException {
     	String sql = "select lgalarmactive.idalarm,lgalarmactive.starttime,lgalarmactive.iddevice "
@@ -138,10 +145,10 @@ public class AlarmSynchronizeService {
 								needLoop = false;
 								continue;
 							}
-							if(mapBefore.size()<200){
+							/*if(mapBefore.size()<200){
 								needLoop = false;
 								continue;
-							}
+							}*/
 	
 							while(needLoop){
 								if((max-min)<=minCheckNo){
@@ -186,6 +193,8 @@ public class AlarmSynchronizeService {
 						logger.info("ip:" + ip + ",supervisorId:" + supervisorId + ",reset num:"+idAlarms.length+",idalarms:" + idAlarmStr);
 						AlarmManageService.reset(supervisorId, idAlarms, "auto", "",false);
 					}
+				}else{
+					LogUtil.testLogger.info("本次查询无结果：ip：" + ip + "，id：" + supervisorId);
 				}
 				
 				

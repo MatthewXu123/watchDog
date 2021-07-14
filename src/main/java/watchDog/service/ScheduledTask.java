@@ -83,17 +83,17 @@ public class ScheduledTask {
   public ScheduledTask() {
 	logger.info("ScheduledTask start...");
 	// timer for report
-    Calendar c = DateTool.getInstanceDate(9, 0, 0);
-    c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-    c.add(Calendar.DATE, 7);
-    Date nextTime = c.getTime();
-    Property reportStr = PropertyMgr.getInstance().getProperty("is_first_report");
-    boolean isFirstReport = !(reportStr != null && reportStr.getValue() != null && reportStr.getValue().length() != 0 && !"true".equals(reportStr.getValue()));
-    if (isFirstReport) {
-      this.timerDummy = new Timer();
-      this.timerDummy.schedule(new WeeklyReportManager(), 10*60*1000);
-    } 
-    this.timer.schedule(new WeeklyReportManager(), nextTime, 1000*3600*24*7);
+//    Calendar c = DateTool.getInstanceDate(9, 0, 0);
+//    c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+//    c.add(Calendar.DATE, 7);
+//    Date nextTime = c.getTime();
+//    Property reportStr = PropertyMgr.getInstance().getProperty("is_first_report");
+//    boolean isFirstReport = !(reportStr != null && reportStr.getValue() != null && reportStr.getValue().length() != 0 && !"true".equals(reportStr.getValue()));
+//    if (isFirstReport) {
+//      this.timerDummy = new Timer();
+//      this.timerDummy.schedule(new WeeklyReportManager(), 10*60*1000);
+//    } 
+    //this.timer.schedule(new WeeklyReportManager(), nextTime, 1000*3600*24*7);
     
     Timer timerAlarmSyncTimer = new Timer("AlarmSynchronizeTimer");
     timerAlarmSyncTimer.schedule(new AlarmSynchronizeManager(), DELAY_ALARM_SYNCHRONIZATION, PERIOD_ALARM_SYNCHRONIZATION);
@@ -128,10 +128,10 @@ public class ScheduledTask {
     wechatMemberCheckTaskTimer.scheduleAtFixedRate(WechatMemberCheckTask.INSTANCE, wechatMemberCheckTaskTime.getTime(), WechatMemberCheckTask.RUNNING_PERIOD);
     
     Timer danfossDeviceSynchronizationTask = new Timer("DanfossDeviceSynchronizationTask");
-    danfossDeviceSynchronizationTask.scheduleAtFixedRate(DanfossDeviceSynchronizationTask.INSTANCE, 0, DanfossDeviceSynchronizationTask.RUNNING_PERIOD);
+    danfossDeviceSynchronizationTask.scheduleAtFixedRate(DanfossDeviceSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 5, DanfossDeviceSynchronizationTask.RUNNING_PERIOD);
     
     Timer danfossAlarmSynchronizationTask = new Timer("DanfossAlarmSynchronizationTask");
-    danfossAlarmSynchronizationTask.scheduleAtFixedRate(DanfossAlarmSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 10, DanfossAlarmSynchronizationTask.RUNNING_PERIOD);
+    danfossAlarmSynchronizationTask.scheduleAtFixedRate(DanfossAlarmSynchronizationTask.INSTANCE, CommonConstants.ONE_MINUTE * 8, DanfossAlarmSynchronizationTask.RUNNING_PERIOD);
     
   }
   
@@ -291,7 +291,9 @@ public class ScheduledTask {
 					Map.Entry en = it.next();
 					SiteInfo site = (SiteInfo) en.getValue();
 					if (!"boss".equals(site.getKtype())
-							|| (StringUtils.isBlank(site.getTagId()) && StringUtils.isBlank(site.getTagId2())))
+							|| (StringUtils.isBlank(site.getTagId()) && StringUtils.isBlank(site.getTagId2())
+							|| !site.getCheckNetwork()
+							|| (site.getProbeissue() == null || !site.getProbeissue())))
 						continue;
 					String ip = site.getIp();
 					Integer supervisorId = site.getSupervisorId();

@@ -207,29 +207,22 @@ public class Dog implements ServletContextListener{
 			return null;
 		return siteInfoMap.get(ident);
 	}
-	public String getIdents4AlarmChecking()
-	{
+
+	public String getIdents4AlarmChecking() {
 		boolean first = true;
 		String result = "";
 		Iterator it = siteInfoMap.entrySet().iterator();
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.DATE, 1);
-		while(it.hasNext())
-		{
-			Map.Entry<String,SiteInfo> entry=(Map.Entry<String,SiteInfo>)it.next();
+		while (it.hasNext()) {
+			Map.Entry<String, SiteInfo> entry = (Map.Entry<String, SiteInfo>) it.next();
 			SiteInfo s = entry.getValue();
-			if((s.getDeadline() != null && (c.getTime()).after(s.getDeadline())))
+			if (s.getDeadline() == null || c.getTime().after(s.getDeadline()) || StringUtils.isBlank(s.getAgentId())
+					|| StringUtils.isBlank(s.getTagId()))
 				continue;
-			if(!StringUtils.isBlank(s.getAgentId()) && !StringUtils.isBlank(s.getTagId()))
-			{
-				if(first)
-				{
-					result += "'"+s.getIdent()+"'";
-					first = false;
-				}
-				else
-					result += ","+"'"+s.getIdent()+"'";
-			}
+
+			result += (first ? "" : ",") + "'" + s.getIdent() + "'";
+			first = false;
 		}
 		return result;
 	}

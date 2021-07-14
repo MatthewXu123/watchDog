@@ -16,24 +16,41 @@ import org.apache.log4j.Logger;
 
 
 import watchDog.bean.SiteInfo;
+import watchDog.bean.config.MailDTO;
+import watchDog.config.json.MailConfig;
 import watchDog.dao.SiteInfoDAO;
 import watchDog.database.DataBaseException;
 import watchDog.database.DatabaseMgr;
 import watchDog.database.RecordSet;
+import watchDog.property.template.MailTemplate;
+import watchDog.property.template.PropertyConfig;
 import watchDog.util.DateTool;
+import watchDog.util.MailUtil;
 import watchDog.util.ObjectUtils;
 import watchDog.wechat.bean.WechatMsg;
 import watchDog.wechat.service.WechatService;
 import watchDog.wechat.service.WechatService.WxXmlCpInMemoryConfigStorage;
 import watchDog.wechat.util.sender.Sender;
 
-public class SiteInfoService {
-    //buy_202001:1
+public class SiteService {
+   
+    private static final Logger LOGGER = Logger.getLogger(SiteService.class);
+    
+	public static final SiteService INSTANCE = new SiteService();
+	
+	private MailDTO mailDTO = MailConfig.getSitesOutOfServiceMailConfig();
+	
+	private PropertyConfig propertyConfig = PropertyConfig.INSTANCE;
+	
+	private static final String HINT_MISSING = "暂未填写";
+	
+	 //buy_202001:1
     //202001: buy at 2020-01
     //1: one year
     public static final String BUY_YEAR_TAG = "buy_";
     public static final String CST_TAG = "cst_";
-    private static final Logger LOGGER = Logger.getLogger(SiteInfoService.class);
+	
+    
     public static String getTag(SiteInfo siteInfo,String tag)
     {
         try{
@@ -173,5 +190,52 @@ public class SiteInfoService {
             });
         }
     }
+    
+    public void sendServiceMails(){
+		try {
+			Map<Integer, List<SiteInfo>> sitesOutOfService = SiteService.getSitesOutOfService();
+			List<SiteInfo> list0 = sitesOutOfService.get(0);
+			List<SiteInfo> list1 = sitesOutOfService.get(1);
+			List<SiteInfo> list2 = sitesOutOfService.get(2);
+			if(ObjectUtils.isCollectionNotEmpty(list1) || ObjectUtils.isCollectionNotEmpty(list2)){
+				String title = propertyConfig.getValue(MailTemplate.MAIL_OOS_TITLE.getKey());
+				String content = "";
+				if(ObjectUtils.isCollectionNotEmpty(list1))
+					content += getMailContent(1, list1);
+				if(ObjectUtils.isCollectionNotEmpty(list2))
+					content += getMailContent(2, list2);
+				if(ObjectUtils.isCollectionNotEmpty(list0))
+					content += getMailContent(0, list0);
+				MailUtil.sendMail(mailDTO, title, content);
+			}else{
+				LOGGER.info(propertyConfig.getValue(MailTemplate.MAIL_OOS_EMPTY.getKey()));
+			}
+			
+		} catch (Exception e) {
+			LOGGER.error("" ,e);
+		}
+	}
+	
+	/**
+	 * 
+	 * Description:
+	 * @param month
+	 * @param list
+	 * @return
+	 * @author Matthew Xu
+	 * @date Jan 18, 2021
+	 */
+	private String getMailContent(int month, List<SiteInfo> list){
+		String content = month == 0 ? propertyConfig.getValue(MailTemplate.MAIL_OOS_CONTENT_ALREADY.getKey())
+				: propertyConfig.getValue(MailTemplate.MAIL_OOS_CONTENT.getKey(), new Object[]{month});
+		for (SiteInfo siteInfo : list) {
+			content += propertyConfig.getValue(MailTemplate.MAIL_OOS_BODY.getKey(),
+					new Object[]{siteInfo.getDescription()
+							, StringUtils.isNotBlank(siteInfo.getCusDescription()) ? siteInfo.getCusDescription() : HINT_MISSING
+							, StringUtils.isNotBlank(siteInfo.getManDescription()) ? siteInfo.getManDescription() : HINT_MISSING
+							, DateTool.format(siteInfo.getDeadline())});
+		}
+		return content;
+	}
     
 }

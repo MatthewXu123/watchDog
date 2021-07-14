@@ -7,7 +7,7 @@ import java.util.TimerTask;
 import org.apache.log4j.Logger;
 
 import watchDog.bean.constant.CommonConstants;
-import watchDog.service.MailService;
+import watchDog.service.SiteService;
 
 /**
  * Description:
@@ -20,7 +20,7 @@ public class MailTask extends TimerTask implements BaseTask{
 	
 	public static final MailTask INSTANCE = new MailTask();
 	
-	private MailService mailService = MailService.INSTANCE;
+	private SiteService mailService = SiteService.INSTANCE;
 	
 	public static final long RUNNING_PERIOD = CommonConstants.ONE_WEEK;
 	

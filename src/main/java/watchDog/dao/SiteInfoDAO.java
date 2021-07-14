@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import watchDog.bean.SiteInfo;
 import watchDog.database.DataBaseException;
 import watchDog.database.Record;
@@ -19,6 +21,8 @@ import watchDog.util.DateTool;
  * @date May 14, 2020
  */
 public class SiteInfoDAO extends BaseDAO{
+	
+	private static final String DEFAULT_AGENT_ID = "6";
 	
 	public static final SiteInfoDAO INSTANCE = new SiteInfoDAO();
 	
@@ -113,6 +117,8 @@ public class SiteInfoDAO extends BaseDAO{
 	}
 	
 	public void saveOne(int supervisorId, Date deadline, boolean checkNetWorkFlag, String agentId, int channel, String tagId, String tagId2, String tagId3,String comment ){
+		if(StringUtils.isBlank(agentId))
+			agentId = DEFAULT_AGENT_ID;
 		Object[] params = new Object[]{supervisorId,deadline,checkNetWorkFlag,agentId,channel,tagId,tagId2,tagId3,comment};
 		String sql="insert into private_wechat_receiver(supervisor_id,deadline,checknetwork,agent_id,channel,tag_id,tag_id2,tag_id3,comment) values(?,?,?,?,?,?,?,?,?);";
 		try {
@@ -188,36 +194,38 @@ public class SiteInfoDAO extends BaseDAO{
         return cardNumberInfoMap;
 	}
 	
-	public List<SiteInfo> getDailyAlarmConfiguredSites() {
+	public List<SiteInfo> getDailyAlarmNotConfiguredSites() {
 		String alarmIngoreTag = "#testalarm_ignore";
 		String alarmDesc = "每日测试报警";
-		String sql = "select c.id from public.cfsupervisors c"
-				+ " inner join public.lgalarmrecall r on c.id = r.kidsupervisor "
-				+ " inner join public.lgvariable v on v.iddevice = r.iddevice and v.kidsupervisor = r.kidsupervisor "
-				+ " where v.description like '" + alarmDesc + "' and r.starttime > CURRENT_DATE" 
-				+ " group by c.id"
-				+ " union"
-				+ " select c.id from public.cfsupervisors c"
-				+ " inner join tags.supervisortags t on t.kidsupervisor = c.id " 
-				+ " where '" + alarmIngoreTag + "' = any(t.tags) "
-				+ " group by c.id";
-		List<SiteInfo> dailyAlarmConfiguredSites = new ArrayList<>();
+		String sql = "select s.id, s.description,s.ipaddress from public.cfsupervisors s "
+				+ " inner join private_wechat_receiver w on w.supervisor_id = s.id "
+				+ " where (s.id not in("
+				+ " select c.id from public.cfsupervisors c "
+				+ " inner join public.lgalarmrecall r on c.id = r.kidsupervisor  "
+				+ " inner join public.lgvariable v on v.iddevice = r.iddevice and v.kidsupervisor = r.kidsupervisor  "
+				+ " where v.description like '每日测试报警' and r.starttime > CURRENT_DATE "
+				+ " and r.inserttime <= (CURRENT_DATE + interval '10 hour 30 minute') group by c.id "
+				+ " union select c.id from public.cfsupervisors c "
+				+ " inner join tags.supervisortags t on t.kidsupervisor = c.id  where '" + alarmIngoreTag + "' = any(t.tags)  group by c.id"
+				+ ")) and s.probeissue = true and w.checknetwork = true";
+		List<SiteInfo> dailyAlarmNotConfiguredSites = new ArrayList<>();
 		try {
 			RecordSet rs = dataBaseMgr.executeQuery(sql);
 			for (int i = 0; i < rs.size(); i++) {
 				Record r = rs.get(i);
 				SiteInfo siteInfo = new SiteInfo();
 				siteInfo.setSupervisorId((int) r.get(0));
-				dailyAlarmConfiguredSites.add(siteInfo);
+				siteInfo.setDescription((String) r.get(1));
+				siteInfo.setIp((String) r.get(2));
+				dailyAlarmNotConfiguredSites.add(siteInfo);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return dailyAlarmConfiguredSites;
+		return dailyAlarmNotConfiguredSites;
 	}
 	
 	public static void main(String[] args) {
-		SiteInfoDAO.INSTANCE.getDailyAlarmConfiguredSites();
+		List<SiteInfo> list = SiteInfoDAO.INSTANCE.getList(null);
 	}
-	
 }

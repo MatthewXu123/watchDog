@@ -487,5 +487,9 @@ public class SiteInfo implements Comparable<SiteInfo> {
 		this.probeissue = probeissue;
 	}
 	
+	public boolean isInService(){
+		return this.deadline != null && this.deadline.after(new Date());
+	}
+	
 
 }

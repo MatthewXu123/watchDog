@@ -1,12 +1,16 @@
 
 package watchDog.bean.config;
 
+import java.util.Arrays;
+
 /**
  * Description:
  * @author Matthew Xu
  * @date Dec 25, 2020
  */
 public class MailDTO {
+	
+	private String identifier;
 	
 	private String fromAddress;
 	
@@ -56,6 +60,21 @@ public class MailDTO {
 
 	public void setMailSmtpPort(String mailSmtpPort) {
 		this.mailSmtpPort = mailSmtpPort;
+	}
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+	@Override
+	public String toString() {
+		return "MailDTO [identifier=" + identifier + ", fromAddress=" + fromAddress + ", authCode=" + authCode
+				+ ", toAddresses=" + Arrays.toString(toAddresses) + ", mailSmtpHost=" + mailSmtpHost + ", mailSmtpPort="
+				+ mailSmtpPort + "]";
 	}
 	
 }
